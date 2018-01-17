@@ -21,9 +21,11 @@ import org.usfirst.frc.team1731.robot.ShooterAimingParameters;
 import org.usfirst.frc.team1731.robot.loops.Loop;
 import org.usfirst.frc.team1731.robot.loops.Looper;
 
-import com.ctre.CANTalon;
-import com.ctre.CANTalon.StatusFrameRate;
-import com.ctre.CANTalon.VelocityMeasurementPeriod;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import com.ctre.phoenix.motorcontrol.SensorCollection;
+import com.ctre.phoenix.motorcontrol.VelocityMeasPeriod;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.SPI;
@@ -89,7 +91,7 @@ public class Drive extends Subsystem {
     private DriveControlState mDriveControlState;
 
     // Hardware
-    private final CANTalon mLeftMaster, mRightMaster, mLeftSlave, mRightSlave;
+    private final TalonSRX mLeftMaster, mRightMaster, mLeftSlave, mRightSlave;
     private final Solenoid mShifter;
     private final NavX mNavXBoard;
 
@@ -166,12 +168,17 @@ public class Drive extends Subsystem {
     private Drive() {
         // Start all Talons in open loop mode.
         mLeftMaster = CANTalonFactory.createDefaultTalon(Constants.kLeftDriveMasterId);
-        mLeftMaster.changeControlMode(CANTalon.TalonControlMode.PercentVbus);
-        mLeftMaster.setFeedbackDevice(CANTalon.FeedbackDevice.CtreMagEncoder_Relative);
-        mLeftMaster.reverseSensor(true);
-        mLeftMaster.reverseOutput(false);
-        CANTalon.FeedbackDeviceStatus leftSensorPresent = mLeftMaster
+        //  mLeftMaster.changeControlMode(CANTalon.TalonControlMode.PercentVbus);
+        mLeftMaster.set(ControlMode.PercentOutput, 0);
+        //mLeftMaster.setFeedbackDevice(TalonSRX.FeedbackDevice.CtreMagEncoder_Relative);
+        mLeftMaster.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, Constants.kTimeoutMs);
+        //mLeftMaster.reverseSensor(true);
+        mLeftMaster.setInverted(true);
+        //mLeftMaster.reverseOutput(false);
+        mLeftMaster.setSensorPhase(false);
+        //CANTalon.FeedbackDeviceStatus leftSensorPresent = mLeftMaster
                 .isSensorPresent(CANTalon.FeedbackDevice.CtreMagEncoder_Relative);
+        SensorCollection leftSensors = mLeftMaster.getSensorCollection();
         if (leftSensorPresent != CANTalon.FeedbackDeviceStatus.FeedbackStatusPresent) {
             DriverStation.reportError("Could not detect left encoder: " + leftSensorPresent, false);
         }

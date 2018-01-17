@@ -270,6 +270,8 @@ public class Constants extends ConstantsBase {
             { 130.0, 3275.0 },
     };
 
+	public static int kTimeoutMs = 10;
+
     static {
         for (double[] pair : kFlywheelDistanceRpmValues) {
             kFlywheelAutoAimMap.put(new InterpolatingDouble(pair[0]), new InterpolatingDouble(pair[1]));
