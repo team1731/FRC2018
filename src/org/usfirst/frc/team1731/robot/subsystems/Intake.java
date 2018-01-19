@@ -4,7 +4,7 @@ import java.util.Arrays;
 
 import org.usfirst.frc.team1731.lib.util.MovingAverage;
 import org.usfirst.frc.team1731.lib.util.Util;
-import org.usfirst.frc.team1731.lib.util.drivers.CANTalonFactory;
+import org.usfirst.frc.team1731.lib.util.drivers.TalonSRXFactory;
 import org.usfirst.frc.team1731.robot.Constants;
 import org.usfirst.frc.team1731.robot.loops.Looper;
 

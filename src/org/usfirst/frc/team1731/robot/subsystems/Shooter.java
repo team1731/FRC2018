@@ -6,7 +6,7 @@ import java.util.Optional;
 import org.usfirst.frc.team1731.lib.util.CircularBuffer;
 import org.usfirst.frc.team1731.lib.util.ReflectingCSVWriter;
 import org.usfirst.frc.team1731.lib.util.Util;
-import org.usfirst.frc.team1731.lib.util.drivers.CANTalonFactory;
+import org.usfirst.frc.team1731.lib.util.drivers.TalonSRXFactory;
 import org.usfirst.frc.team1731.robot.Constants;
 import org.usfirst.frc.team1731.robot.RobotState;
 import org.usfirst.frc.team1731.robot.ShooterAimingParameters;

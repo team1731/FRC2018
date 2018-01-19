@@ -2,14 +2,15 @@ package org.usfirst.frc.team1731.lib.util.drivers;
 
 import edu.wpi.first.wpilibj.MotorSafety;
 
-import com.ctre.CANTalon;
-import com.ctre.CANTalon.TalonControlMode;
+import com.ctre.phoenix.motorcontrol.VelocityMeasPeriod;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+//import com.ctre.TalonSRX.TalonControlMode;
 
 /**
- * Creates CANTalon objects and configures all the parameters we care about to factory defaults. Closed-loop and sensor
+ * Creates TalonSRX objects and configures all the parameters we care about to factory defaults. Closed-loop and sensor
  * parameters are not set, as these are expected to be set by the application.
  */
-public class CANTalonFactory {
+public class TalonSRXFactory {
 
     public static class Configuration {
         public boolean LIMIT_SWITCH_NORMALLY_OPEN = true;
@@ -36,8 +37,9 @@ public class CANTalonFactory {
         public int ANALOG_TEMP_VBAT_STATUS_FRAME_RATE_MS = 100;
         public int PULSE_WIDTH_STATUS_FRAME_RATE_MS = 100;
 
-        public CANTalon.VelocityMeasurementPeriod VELOCITY_MEASUREMENT_PERIOD = CANTalon.VelocityMeasurementPeriod.Period_100Ms;
-        public int VELOCITY_MEASUREMENT_ROLLING_AVERAGE_WINDOW = 64;
+ //       public TalonSRX.VelocityMeasurementPeriod VELOCITY_MEASUREMENT_PERIOD = TalonSRX.VelocityMeasurementPeriod.Period_100Ms;
+        VelocityMeasPeriod VELOCITY_MEASUREMENT_PERIOD = VelocityMeasPeriod.Period_100Ms;
+        int VELOCITY_MEASUREMENT_ROLLING_AVERAGE_WINDOW = 64;
 
         public double VOLTAGE_COMPENSATION_RAMP_RATE = 0;
         public double VOLTAGE_RAMP_RATE = 0;
@@ -56,21 +58,21 @@ public class CANTalonFactory {
         kSlaveConfiguration.PULSE_WIDTH_STATUS_FRAME_RATE_MS = 1000;
     }
 
-    // Create a CANTalon with the default (out of the box) configuration.
-    public static CANTalon createDefaultTalon(int id) {
+    // Create a TalonSRX with the default (out of the box) configuration.
+    public static TalonSRX createDefaultTalon(int id) {
         return createTalon(id, kDefaultConfiguration);
     }
 
-    public static CANTalon createPermanentSlaveTalon(int id, int master_id) {
-        final CANTalon talon = createTalon(id, kSlaveConfiguration);
-        talon.changeControlMode(TalonControlMode.Follower);
+    public static TalonSRX createPermanentSlaveTalon(int id, int master_id) {
+        final TalonSRX talon = createTalon(id, kSlaveConfiguration);
+//        talon.changeControlMode(TalonControlMode.Follower);
         talon.set(master_id);
         return talon;
     }
 
-    public static CANTalon createTalon(int id, Configuration config) {
-        CANTalon talon = new LazyCANTalon(id, config.CONTROL_FRAME_PERIOD_MS);
-        talon.changeControlMode(CANTalon.TalonControlMode.Voltage);
+    public static TalonSRX createTalon(int id, Configuration config) {
+        TalonSRX talon = new LazyTalonSRX(id, config.CONTROL_FRAME_PERIOD_MS);
+        talon.changeControlMode(TalonSRX.TalonControlMode.Voltage);
         talon.changeMotionControlFramePeriod(config.MOTION_CONTROL_FRAME_PERIOD_MS);
         talon.clearIAccum();
         talon.ClearIaccum();
@@ -108,12 +110,12 @@ public class CANTalonFactory {
         talon.setVoltageCompensationRampRate(config.VOLTAGE_COMPENSATION_RAMP_RATE);
         talon.setVoltageRampRate(config.VOLTAGE_RAMP_RATE);
 
-        talon.setStatusFrameRateMs(CANTalon.StatusFrameRate.General, config.GENERAL_STATUS_FRAME_RATE_MS);
-        talon.setStatusFrameRateMs(CANTalon.StatusFrameRate.Feedback, config.FEEDBACK_STATUS_FRAME_RATE_MS);
-        talon.setStatusFrameRateMs(CANTalon.StatusFrameRate.QuadEncoder, config.QUAD_ENCODER_STATUS_FRAME_RATE_MS);
-        talon.setStatusFrameRateMs(CANTalon.StatusFrameRate.AnalogTempVbat,
+        talon.setStatusFrameRateMs(TalonSRX.StatusFrameRate.General, config.GENERAL_STATUS_FRAME_RATE_MS);
+        talon.setStatusFrameRateMs(TalonSRX.StatusFrameRate.Feedback, config.FEEDBACK_STATUS_FRAME_RATE_MS);
+        talon.setStatusFrameRateMs(TalonSRX.StatusFrameRate.QuadEncoder, config.QUAD_ENCODER_STATUS_FRAME_RATE_MS);
+        talon.setStatusFrameRateMs(TalonSRX.StatusFrameRate.AnalogTempVbat,
                 config.ANALOG_TEMP_VBAT_STATUS_FRAME_RATE_MS);
-        talon.setStatusFrameRateMs(CANTalon.StatusFrameRate.PulseWidth, config.PULSE_WIDTH_STATUS_FRAME_RATE_MS);
+        talon.setStatusFrameRateMs(TalonSRX.StatusFrameRate.PulseWidth, config.PULSE_WIDTH_STATUS_FRAME_RATE_MS);
 
         return talon;
     }
@@ -121,7 +123,7 @@ public class CANTalonFactory {
     /**
      * Run this on a fresh talon to produce good values for the defaults.
      */
-    public static String getFullTalonInfo(CANTalon talon) {
+    public static String getFullTalonInfo(TalonSRX talon) {
         StringBuilder sb = new StringBuilder().append("isRevLimitSwitchClosed = ")
                 .append(talon.isRevLimitSwitchClosed()).append("\n").append("getBusVoltage = ")
                 .append(talon.getBusVoltage()).append("\n").append("isForwardSoftLimitEnabled = ")
@@ -134,7 +136,7 @@ public class CANTalonFactory {
                 .append("getInverted = ").append(talon.getInverted()).append("\n")
                 .append("getPulseWidthRiseToRiseUs = ").append(talon.getPulseWidthRiseToRiseUs()).append("\n")
                 .append("getError = ").append(talon.getError()).append("\n").append("isSensorPresent = ")
-                .append(talon.isSensorPresent(CANTalon.FeedbackDevice.CtreMagEncoder_Relative)).append("\n")
+                .append(talon.isSensorPresent(TalonSRX.FeedbackDevice.CtreMagEncoder_Relative)).append("\n")
                 .append("isControlEnabled = ").append(talon.isControlEnabled()).append("\n").append("getTable = ")
                 .append(talon.getTable()).append("\n").append("isEnabled = ").append(talon.isEnabled()).append("\n")
                 .append("isZeroSensorPosOnRevLimitEnabled = ").append(talon.isZeroSensorPosOnRevLimitEnabled())

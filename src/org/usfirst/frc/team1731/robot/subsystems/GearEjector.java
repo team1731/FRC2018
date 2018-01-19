@@ -1,6 +1,6 @@
 package org.usfirst.frc.team1731.robot.subsystems;
 
-import org.usfirst.frc.team1731.lib.util.drivers.CANTalonFactory;
+import org.usfirst.frc.team1731.lib.util.drivers.TalonSRXFactory;
 import org.usfirst.frc.team1731.robot.Constants;
 import org.usfirst.frc.team1731.robot.loops.Loop;
 import org.usfirst.frc.team1731.robot.loops.Looper;
