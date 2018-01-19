@@ -290,10 +290,15 @@ public class Drive extends Subsystem {
     public synchronized void setBrakeMode(boolean on) {
         if (mIsBrakeMode != on) {
             mIsBrakeMode = on;
-            mRightMaster.enableBrakeMode(on);
-            mRightSlave.enableBrakeMode(on);
-            mLeftMaster.enableBrakeMode(on);
-            mLeftSlave.enableBrakeMode(on);
+           // mRightMaster.enableBrakeMode(on);
+            //mRightSlave.enableBrakeMode(on);
+           // mLeftMaster.enableBrakeMode(on);
+            //mLeftSlave.enableBrakeMode(on);
+            
+            mRightMaster.setNeutralMode(com.ctre.phoenix.motorcontrol.NeutralMode.Brake);
+            mRightSlave.setNeutralMode(com.ctre.phoenix.motorcontrol.NeutralMode.Brake);
+            mLeftMaster.setNeutralMode(com.ctre.phoenix.motorcontrol.NeutralMode.Brake);
+            mLeftSlave.setNeutralMode(com.ctre.phoenix.motorcontrol.NeutralMode.Brake);
         }
     }
 
@@ -306,15 +311,22 @@ public class Drive extends Subsystem {
     public void outputToSmartDashboard() {
         final double left_speed = getLeftVelocityInchesPerSec();
         final double right_speed = getRightVelocityInchesPerSec();
-        SmartDashboard.putNumber("left voltage (V)", mLeftMaster.getOutputVoltage());
-        SmartDashboard.putNumber("right voltage (V)", mRightMaster.getOutputVoltage());
+      //  SmartDashboard.putNumber("left voltage (V)", mLeftMaster.getOutputVoltage());
+        //SmartDashboard.putNumber("right voltage (V)", mRightMaster.getOutputVoltage());
+        
+        SmartDashboard.putNumber("left voltage (V)", mLeftMaster.getMotorOutputVoltage());
+        SmartDashboard.putNumber("right voltage (V)", mRightMaster.getMotorOutputVoltage());
         SmartDashboard.putNumber("left speed (ips)", left_speed);
         SmartDashboard.putNumber("right speed (ips)", right_speed);
         if (usesTalonVelocityControl(mDriveControlState)) {
             SmartDashboard.putNumber("left speed error (ips)",
-                    rpmToInchesPerSecond(mLeftMaster.getSetpoint()) - left_speed);
+                //    rpmToInchesPerSecond(mLeftMaster.getSetpoint()) - left_speed);
+            		
+            rpmToInchesPerSecond(mLeftMaster.getClosedLoopTarget(0)) - left_speed);
             SmartDashboard.putNumber("right speed error (ips)",
-                    rpmToInchesPerSecond(mRightMaster.getSetpoint()) - right_speed);
+                  //  rpmToInchesPerSecond(mRightMaster.getSetpoint()) - right_speed);
+            
+            rpmToInchesPerSecond(mRightMaster.getClosedLoopTarget(0)) - right_speed);
         } else {
             SmartDashboard.putNumber("left speed error (ips)", 0.0);
             SmartDashboard.putNumber("right speed error (ips)", 0.0);
@@ -328,20 +340,30 @@ public class Drive extends Subsystem {
                 SmartDashboard.putNumber("drive ATE", 0.0);
             }
         }
-        SmartDashboard.putNumber("left position (rotations)", mLeftMaster.getPosition());
-        SmartDashboard.putNumber("right position (rotations)", mRightMaster.getPosition());
+        //SmartDashboard.putNumber("left position (rotations)", mLeftMaster.getPosition()); 
+        //TOO DO need to divide by sensor units per rotation
+        SmartDashboard.putNumber("left position (rotations)", mLeftMaster.getSelectedSensorPosition(0));
+        //SmartDashboard.putNumber("right position (rotations)", mRightMaster.getPosition());
+        SmartDashboard.putNumber("right position (rotations)", mRightMaster.getSelectedSensorPosition(0));
         SmartDashboard.putNumber("gyro vel", getGyroVelocityDegreesPerSec());
         SmartDashboard.putNumber("gyro pos", getGyroAngle().getDegrees());
         SmartDashboard.putBoolean("drive on target", isOnTarget());
     }
 
     public synchronized void resetEncoders() {
-        mLeftMaster.setEncPosition(0);
-        mLeftMaster.setPosition(0);
-        mRightMaster.setPosition(0);
-        mRightMaster.setEncPosition(0);
-        mLeftSlave.setPosition(0);
-        mRightSlave.setPosition(0);
+        //mLeftMaster.setEncPosition(0);
+        //mLeftMaster.setPosition(0);
+        //mRightMaster.setPosition(0);
+        //mRightMaster.setEncPosition(0);
+        //mLeftSlave.setPosition(0);
+        //mRightSlave.setPosition(0);
+        
+        mLeftMaster.getSensorCollection().setQuadraturePosition(0, Constants.kTimeoutMs);
+        mLeftMaster.setSelectedSensorPosition(arg0, arg1, arg2);
+        mRightMaster.setSelectedSensorPosition(arg0, arg1, arg2);
+        mRightMaster.getSensorCollection().setQuadraturePosition(0, Constants.kTimeoutMs);
+        mLeftSlave.setSelectedSensorPosition(arg0, arg1, arg2);
+        mRightSlave.setSelectedSensorPosition(arg0, arg1, arg2);
     }
 
     @Override
