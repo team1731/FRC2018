@@ -9,7 +9,7 @@ import org.usfirst.frc.team1731.lib.util.Util;
 import org.usfirst.frc.team1731.lib.util.control.Lookahead;
 import org.usfirst.frc.team1731.lib.util.control.Path;
 import org.usfirst.frc.team1731.lib.util.control.PathFollower;
-import org.usfirst.frc.team1731.lib.util.drivers.CANTalonFactory;
+import org.usfirst.frc.team1731.lib.util.drivers.TalonSRXFactory;
 import org.usfirst.frc.team1731.lib.util.drivers.NavX;
 import org.usfirst.frc.team1731.lib.util.math.RigidTransform2d;
 import org.usfirst.frc.team1731.lib.util.math.Rotation2d;
@@ -25,6 +25,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.SensorCollection;
+import com.ctre.phoenix.motorcontrol.StatusFrame;
 import com.ctre.phoenix.motorcontrol.VelocityMeasPeriod;
 
 import edu.wpi.first.wpilibj.DriverStation;
@@ -167,7 +168,7 @@ public class Drive extends Subsystem {
 
     private Drive() {
         // Start all Talons in open loop mode.
-        mLeftMaster = CANTalonFactory.createDefaultTalon(Constants.kLeftDriveMasterId);
+        mLeftMaster = TalonSRXFactory.createDefaultTalon(Constants.kLeftDriveMasterId);
         //  mLeftMaster.changeControlMode(CANTalon.TalonControlMode.PercentVbus);
         mLeftMaster.set(ControlMode.PercentOutput, 0);
         //mLeftMaster.setFeedbackDevice(TalonSRX.FeedbackDevice.CtreMagEncoder_Relative);
@@ -176,38 +177,56 @@ public class Drive extends Subsystem {
         mLeftMaster.setInverted(true);
         //mLeftMaster.reverseOutput(false);
         mLeftMaster.setSensorPhase(false);
+        // TODO figure out how to detect encoders
         //CANTalon.FeedbackDeviceStatus leftSensorPresent = mLeftMaster
-                .isSensorPresent(CANTalon.FeedbackDevice.CtreMagEncoder_Relative);
-        SensorCollection leftSensors = mLeftMaster.getSensorCollection();
-        if (leftSensorPresent != CANTalon.FeedbackDeviceStatus.FeedbackStatusPresent) {
-            DriverStation.reportError("Could not detect left encoder: " + leftSensorPresent, false);
-        }
+        //        .isSensorPresent(CANTalon.FeedbackDevice.CtreMagEncoder_Relative);
+        //if (leftSensorPresent != CANTalon.FeedbackDeviceStatus.FeedbackStatusPresent) {
+        //    DriverStation.reportError("Could not detect left encoder: " + leftSensorPresent, false);
+        //}
 
-        mLeftSlave = CANTalonFactory.createPermanentSlaveTalon(Constants.kLeftDriveSlaveId,
+        mLeftSlave = TalonSRXFactory.createPermanentSlaveTalon(Constants.kLeftDriveSlaveId,
                 Constants.kLeftDriveMasterId);
-        mLeftSlave.reverseOutput(false);
-        mLeftMaster.setStatusFrameRateMs(StatusFrameRate.Feedback, 5);
+        //mLeftSlave.reverseOutput(false);
+        mLeftSlave.setSensorPhase(false);
+        //mLeftMaster.setStatusFrameRateMs(StatusFrameRate.Feedback, 5);
+        //TODO - not sure if the next two lines are correct???
+        mLeftMaster.setStatusFramePeriod(StatusFrame.Status_2_Feedback0, 5, Constants.kTimeoutMs); 
+        mLeftMaster.setStatusFramePeriod(StatusFrame.Status_12_Feedback1, 5, Constants.kTimeoutMs); 
+     
+        mRightMaster = TalonSRXFactory.createDefaultTalon(Constants.kRightDriveMasterId);
 
-        mRightMaster = CANTalonFactory.createDefaultTalon(Constants.kRightDriveMasterId);
-        mRightMaster.changeControlMode(CANTalon.TalonControlMode.PercentVbus);
-        mRightMaster.reverseSensor(false);
-        mRightMaster.reverseOutput(true);
-        mRightMaster.setFeedbackDevice(CANTalon.FeedbackDevice.CtreMagEncoder_Relative);
-        CANTalon.FeedbackDeviceStatus rightSensorPresent = mRightMaster
-                .isSensorPresent(CANTalon.FeedbackDevice.CtreMagEncoder_Relative);
-        if (rightSensorPresent != CANTalon.FeedbackDeviceStatus.FeedbackStatusPresent) {
-            DriverStation.reportError("Could not detect right encoder: " + rightSensorPresent, false);
-        }
+       // mRightMaster.changeControlMode(CANTalon.TalonControlMode.PercentVbus);
+        mRightMaster.set(ControlMode.PercentOutput, 0);
+        //mRightMaster.reverseSensor(false);
+        mRightMaster.setInverted(true);
+       // mRightMaster.reverseOutput(true);
+        mRightMaster.setSensorPhase(false);
+        //mRightMaster.setFeedbackDevice(CANTalon.FeedbackDevice.CtreMagEncoder_Relative);
+        mRightMaster.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, Constants.kTimeoutMs);
+        
+        //TODO figure out how to detect encoders
+        //CANTalon.FeedbackDeviceStatus rightSensorPresent = mRightMaster
+        //        .isSensorPresent(CANTalon.FeedbackDevice.CtreMagEncoder_Relative);
+        //if (rightSensorPresent != CANTalon.FeedbackDeviceStatus.FeedbackStatusPresent) {
+        //    DriverStation.reportError("Could not detect right encoder: " + rightSensorPresent, false);
+        //}
 
-        mRightSlave = CANTalonFactory.createPermanentSlaveTalon(Constants.kRightDriverSlaveId,
+        mRightSlave = TalonSRXFactory.createPermanentSlaveTalon(Constants.kRightDriverSlaveId,
                 Constants.kRightDriveMasterId);
-        mRightSlave.reverseOutput(false);
-        mRightMaster.setStatusFrameRateMs(StatusFrameRate.Feedback, 5);
+        //mRightSlave.reverseOutput(false);
+        mRightSlave.setSensorPhase(false);
+        //mRightMaster.setStatusFrameRateMs(StatusFrameRate.Feedback, 5);
+        mRightMaster.setStatusFramePeriod(StatusFrame.Status_2_Feedback0, 5, Constants.kTimeoutMs); 
+        mRightMaster.setStatusFramePeriod(StatusFrame.Status_12_Feedback1, 5, Constants.kTimeoutMs);
 
-        mLeftMaster.SetVelocityMeasurementPeriod(VelocityMeasurementPeriod.Period_10Ms);
-        mLeftMaster.SetVelocityMeasurementWindow(32);
-        mRightMaster.SetVelocityMeasurementPeriod(VelocityMeasurementPeriod.Period_10Ms);
-        mRightMaster.SetVelocityMeasurementWindow(32);
+       // mLeftMaster.SetVelocityMeasurementPeriod(VelocityMeasurementPeriod.Period_10Ms);
+        mLeftMaster.configVelocityMeasurementPeriod(VelocityMeasPeriod.Period_10Ms, Constants.kTimeoutMs);
+       // mLeftMaster.SetVelocityMeasurementWindow(32);
+        mLeftMaster.configVelocityMeasurementWindow(32, Constants.kTimeoutMs);
+        //mRightMaster.SetVelocityMeasurementPeriod(VelocityMeasurementPeriod.Period_10Ms);
+        mRightMaster.configVelocityMeasurementPeriod(VelocityMeasPeriod.Period_10Ms, Constants.kTimeoutMs);
+       // mRightMaster.SetVelocityMeasurementWindow(32);
+        mRightMaster.configVelocityMeasurementWindow(32, Constants.kTimeoutMs);
 
         mShifter = Constants.makeSolenoidForId(Constants.kShifterSolenoidId);
 
@@ -238,17 +257,19 @@ public class Drive extends Subsystem {
      */
     public synchronized void setOpenLoop(DriveSignal signal) {
         if (mDriveControlState != DriveControlState.OPEN_LOOP) {
-            mLeftMaster.changeControlMode(CANTalon.TalonControlMode.PercentVbus);
-            mRightMaster.changeControlMode(CANTalon.TalonControlMode.PercentVbus);
-            mLeftMaster.configNominalOutputVoltage(0.0, 0.0);
-            mRightMaster.configNominalOutputVoltage(0.0, 0.0);
+           // mLeftMaster.changeControlMode(CANTalon.TalonControlMode.PercentVbus);
+            mLeftMaster.set(ControlMode.PercentOutput, signal.getLeft());
+            //mRightMaster.changeControlMode(CANTalon.TalonControlMode.PercentVbus);
+            mRightMaster.set(ControlMode.PercentOutput, -signal.getRight());
+            //mLeftMaster.configNominalOutputVoltage(0.0, 0.0);
+            //mRightMaster.configNominalOutputVoltage(0.0, 0.0);
             mDriveControlState = DriveControlState.OPEN_LOOP;
             setBrakeMode(false);
         }
         // Right side is reversed, but reverseOutput doesn't invert PercentVBus.
         // So set negative on the right master.
-        mRightMaster.set(-signal.getRight());
-        mLeftMaster.set(signal.getLeft());
+       // mRightMaster.set(-signal.getRight());
+       // mLeftMaster.set(signal.getLeft());
     }
 
     public boolean isHighGear() {
