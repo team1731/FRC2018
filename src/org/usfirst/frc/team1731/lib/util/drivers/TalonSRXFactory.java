@@ -2,6 +2,14 @@ package org.usfirst.frc.team1731.lib.util.drivers;
 
 import edu.wpi.first.wpilibj.MotorSafety;
 
+import org.usfirst.frc.team1731.robot.Constants;
+
+import com.ctre.phoenix.motorcontrol.ControlFrame;
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.LimitSwitchNormal;
+import com.ctre.phoenix.motorcontrol.LimitSwitchSource;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.VelocityMeasPeriod;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 //import com.ctre.TalonSRX.TalonControlMode;
@@ -14,10 +22,10 @@ public class TalonSRXFactory {
 
     public static class Configuration {
         public boolean LIMIT_SWITCH_NORMALLY_OPEN = true;
-        public double MAX_OUTPUT_VOLTAGE = 12;
+        public double MAX_OUTPUT_VOLTAGE = 1;
         public double NOMINAL_VOLTAGE = 0;
-        public double PEAK_VOLTAGE = 12;
-        public boolean ENABLE_BRAKE = false;
+        public double PEAK_VOLTAGE = 1;
+        public NeutralMode ENABLE_BRAKE = NeutralMode.Coast;
         public boolean ENABLE_CURRENT_LIMIT = false;
         public boolean ENABLE_SOFT_LIMIT = false;
         public boolean ENABLE_LIMIT_SWITCH = false;
@@ -41,8 +49,9 @@ public class TalonSRXFactory {
         VelocityMeasPeriod VELOCITY_MEASUREMENT_PERIOD = VelocityMeasPeriod.Period_100Ms;
         int VELOCITY_MEASUREMENT_ROLLING_AVERAGE_WINDOW = 64;
 
-        public double VOLTAGE_COMPENSATION_RAMP_RATE = 0;
-        public double VOLTAGE_RAMP_RATE = 0;
+  //      public double VOLTAGE_COMPENSATION_RAMP_RATE = 0;
+        public double OPEN_LOOP_RAMP_RATE = 0;
+        public double CLOSED_LOOP_RAMP_RATE = 0;
     }
 
     private static final Configuration kDefaultConfiguration = new Configuration();
@@ -66,16 +75,18 @@ public class TalonSRXFactory {
     public static TalonSRX createPermanentSlaveTalon(int id, int master_id) {
         final TalonSRX talon = createTalon(id, kSlaveConfiguration);
 //        talon.changeControlMode(TalonControlMode.Follower);
-        talon.set(master_id);
+        talon.set(ControlMode.Follower, master_id);
         return talon;
     }
 
     public static TalonSRX createTalon(int id, Configuration config) {
-        TalonSRX talon = new LazyTalonSRX(id, config.CONTROL_FRAME_PERIOD_MS);
-        talon.changeControlMode(TalonSRX.TalonControlMode.Voltage);
+        TalonSRX talon = new LazyTalonSRX(id);
+        talon.setControlFramePeriod(ControlFrame.Control_3_General,config.CONTROL_FRAME_PERIOD_MS);
+        talon.set(ControlMode.PercentOutput,0);
         talon.changeMotionControlFramePeriod(config.MOTION_CONTROL_FRAME_PERIOD_MS);
+        /*
         talon.clearIAccum();
-        talon.ClearIaccum();
+        talon.setIntegralAccumulator(arg0, arg1, arg2)
         talon.clearMotionProfileHasUnderrun();
         talon.clearMotionProfileTrajectories();
         talon.clearStickyFaults();
@@ -116,7 +127,46 @@ public class TalonSRXFactory {
         talon.setStatusFrameRateMs(TalonSRX.StatusFrameRate.AnalogTempVbat,
                 config.ANALOG_TEMP_VBAT_STATUS_FRAME_RATE_MS);
         talon.setStatusFrameRateMs(TalonSRX.StatusFrameRate.PulseWidth, config.PULSE_WIDTH_STATUS_FRAME_RATE_MS);
+        */
+        talon.setIntegralAccumulator(0,Constants.kPidIdx,Constants.kTimeoutMs);
+        talon.clearMotionProfileHasUnderrun(Constants.kTimeoutMs);
+        talon.clearMotionProfileTrajectories();
+        talon.clearStickyFaults(Constants.kTimeoutMs);
+        talon.configForwardLimitSwitchSource(LimitSwitchSource.FeedbackConnector,LimitSwitchNormal.NormallyOpen,Constants.kTimeoutMs);
+        talon.configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector,LimitSwitchNormal.NormallyOpen,Constants.kTimeoutMs);
+        talon.configNominalOutputForward(config.NOMINAL_VOLTAGE, Constants.kTimeoutMs);
+        talon.configNominalOutputReverse(-config.NOMINAL_VOLTAGE, Constants.kTimeoutMs);
+        talon.configPeakOutputForward(config.NOMINAL_VOLTAGE, Constants.kTimeoutMs);
+        talon.configPeakOutputReverse(-config.PEAK_VOLTAGE, Constants.kTimeoutMs);
+        talon.setNeutralMode(config.ENABLE_BRAKE);
+        talon.enableCurrentLimit(config.ENABLE_CURRENT_LIMIT);
+        talon.overrideSoftLimitsEnable(config.ENABLE_SOFT_LIMIT);
+        talon.overrideLimitSwitchesEnable(config.ENABLE_LIMIT_SWITCH);
+        talon.setInverted(false);
+        talon.setSensorPhase(false);
+        talon.getSensorCollection().setAnalogPosition(0, Constants.kTimeoutMs);
+        
+        talon.configForwardSoftLimitEnable(false, Constants.kTimeoutMs);
+        talon.configForwardSoftLimitThreshold(0, Constants.kTimeoutMs);
+        talon.configReverseSoftLimitEnable(false, Constants.kTimeoutMs);
+        talon.configReverseSoftLimitThreshold(0, Constants.kTimeoutMs);
+        
 
+        talon.setSelectedSensorPosition(0, Constants.kPidIdx, Constants.kTimeoutMs);
+        talon.selectProfileSlot(Constants.SlotIdx, Constants.kPidIdx);
+        talon.getSensorCollection().setPulseWidthPosition(0, Constants.kTimeoutMs);
+
+        talon.configVelocityMeasurementPeriod(config.VELOCITY_MEASUREMENT_PERIOD,Constants.kTimeoutMs);
+        talon.configVelocityMeasurementWindow(config.VELOCITY_MEASUREMENT_ROLLING_AVERAGE_WINDOW,Constants.kTimeoutMs);
+        talon.configOpenloopRamp(config.OPEN_LOOP_RAMP_RATE, Constants.kTimeoutMs);
+        talon.configClosedloopRamp(config.CLOSED_LOOP_RAMP_RATE, Constants.kTimeoutMs);
+
+        talon.setStatusFramePeriod(StatusFrameEnhanced.Status_1_General, config.GENERAL_STATUS_FRAME_RATE_MS, Constants.kTimeoutMs); 
+        talon.setStatusFramePeriod(StatusFrameEnhanced.Status_2_Feedback0, config.FEEDBACK_STATUS_FRAME_RATE_MS, Constants.kTimeoutMs);
+        talon.setStatusFramePeriod(StatusFrameEnhanced.Status_12_Feedback1, config.FEEDBACK_STATUS_FRAME_RATE_MS, Constants.kTimeoutMs);
+        talon.setStatusFramePeriod(StatusFrameEnhanced.Status_3_Quadrature, config.QUAD_ENCODER_STATUS_FRAME_RATE_MS, Constants.kTimeoutMs);
+        talon.setStatusFramePeriod(StatusFrameEnhanced.Status_4_AinTempVbat, config.ANALOG_TEMP_VBAT_STATUS_FRAME_RATE_MS, Constants.kTimeoutMs);
+        talon.setStatusFramePeriod(StatusFrameEnhanced.Status_8_PulseWidth, config.PULSE_WIDTH_STATUS_FRAME_RATE_MS, Constants.kTimeoutMs);
         return talon;
     }
 
@@ -124,7 +174,8 @@ public class TalonSRXFactory {
      * Run this on a fresh talon to produce good values for the defaults.
      */
     public static String getFullTalonInfo(TalonSRX talon) {
-        StringBuilder sb = new StringBuilder().append("isRevLimitSwitchClosed = ")
+        StringBuilder sb = new StringBuilder().append("TODO this needs to be udpdated...isRevLimitSwitchClosed = ");
+        		/*  TODO fix this!!
                 .append(talon.isRevLimitSwitchClosed()).append("\n").append("getBusVoltage = ")
                 .append(talon.getBusVoltage()).append("\n").append("isForwardSoftLimitEnabled = ")
                 .append(talon.isForwardSoftLimitEnabled()).append("\n").append("getFaultRevSoftLim = ")
@@ -201,7 +252,7 @@ public class TalonSRXFactory {
                 .append("getControlMode = ").append(talon.getControlMode()).append("\n")
                 .append("getMotionMagicAcceleration = ").append(talon.getMotionMagicAcceleration()).append("\n")
                 .append("getControlMode = ").append(talon.getControlMode());
-
+*/
         return sb.toString();
     }
 }

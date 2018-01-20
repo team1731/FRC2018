@@ -8,8 +8,8 @@ import org.usfirst.frc.team1731.robot.Constants;
 import org.usfirst.frc.team1731.robot.loops.Loop;
 import org.usfirst.frc.team1731.robot.loops.Looper;
 
-import com.ctre.CANTalon;
-import com.ctre.CANTalon.TalonControlMode;
+
+
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.VictorSP;
@@ -22,7 +22,7 @@ import edu.wpi.first.wpilibj.VictorSP;
  * @see Subsystem.java
  */
 @SuppressWarnings("unused")
-public class Feeder extends Subsystem {
+public class Elevator extends Subsystem {
     private static final double kReversing = -1.0;
     private static final double kUnjamInPeriod = .2 * kReversing;
     private static final double kUnjamOutPeriod = .4 * kReversing;
@@ -31,11 +31,11 @@ public class Feeder extends Subsystem {
     private static final double kFeedVoltage = 10.0;
     private static final double kExhaustVoltage = kFeedVoltage * kReversing / 12.0;
 
-    private static Feeder sInstance = null;
+    private static Elevator sInstance = null;
 
-    public static Feeder getInstance() {
+    public static Elevator getInstance() {
         if (sInstance == null) {
-            sInstance = new Feeder();
+            sInstance = new Elevator();
         }
         return sInstance;
     }
@@ -43,7 +43,7 @@ public class Feeder extends Subsystem {
     private final VictorSP mVictor; 
 //    private final CANTalon mMasterTalon, mSlaveTalon;
 
-    public Feeder() {
+    public Elevator() {
     	mVictor = new VictorSP(Constants.kFeederVictor);
 /*      mMasterTalon = CANTalonFactory.createDefaultTalon(Constants.kFeederMasterId);
         mMasterTalon.setFeedbackDevice(CANTalon.FeedbackDevice.CtreMagEncoder_Relative);
@@ -95,7 +95,7 @@ public class Feeder extends Subsystem {
         @Override
         public void onStart(double timestamp) {
             stop();
-            synchronized (Feeder.this) {
+            synchronized (Elevator.this) {
                 mSystemState = SystemState.IDLE;
                 mStateChanged = true;
                 mCurrentStateStartTime = timestamp;
@@ -104,7 +104,7 @@ public class Feeder extends Subsystem {
 
         @Override
         public void onLoop(double timestamp) {
-            synchronized (Feeder.this) {
+            synchronized (Elevator.this) {
                 SystemState newState;
                 switch (mSystemState) {
                 case IDLE:

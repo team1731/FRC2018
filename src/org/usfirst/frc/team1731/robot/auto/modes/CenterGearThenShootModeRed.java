@@ -6,7 +6,6 @@ import org.usfirst.frc.team1731.robot.auto.actions.BeginShootingAction;
 import org.usfirst.frc.team1731.robot.auto.actions.DeployIntakeAction;
 import org.usfirst.frc.team1731.robot.auto.actions.DrivePathAction;
 import org.usfirst.frc.team1731.robot.auto.actions.ResetPoseFromPathAction;
-import org.usfirst.frc.team1731.robot.auto.actions.ScoreGearAction;
 import org.usfirst.frc.team1731.robot.auto.actions.WaitAction;
 import org.usfirst.frc.team1731.robot.paths.CenterGearToShootRed;
 import org.usfirst.frc.team1731.robot.paths.PathContainer;
@@ -25,7 +24,6 @@ public class CenterGearThenShootModeRed extends AutoModeBase {
         runAction(new ResetPoseFromPathAction(gearPath));
         runAction(new DrivePathAction(gearPath));
         runAction(new DeployIntakeAction());
-        runAction(new ScoreGearAction());
         runAction(new DrivePathAction(new CenterGearToShootRed()));
         runAction(new BeginShootingAction());
         runAction(new WaitAction(15));

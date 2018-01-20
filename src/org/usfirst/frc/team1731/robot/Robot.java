@@ -18,11 +18,9 @@ import org.usfirst.frc.team1731.robot.loops.VisionProcessor;
 import org.usfirst.frc.team1731.robot.paths.profiles.PathAdapter;
 import org.usfirst.frc.team1731.robot.subsystems.ConnectionMonitor;
 import org.usfirst.frc.team1731.robot.subsystems.Drive;
-import org.usfirst.frc.team1731.robot.subsystems.Feeder;
-import org.usfirst.frc.team1731.robot.subsystems.GearEjector.WantedState;
+import org.usfirst.frc.team1731.robot.subsystems.Elevator;
 import org.usfirst.frc.team1731.robot.subsystems.Intake;
 import org.usfirst.frc.team1731.robot.subsystems.LED;
-import org.usfirst.frc.team1731.robot.subsystems.GearEjector;
 import org.usfirst.frc.team1731.robot.subsystems.Shooter;
 import org.usfirst.frc.team1731.robot.subsystems.Superstructure;
 import org.usfirst.frc.team1731.robot.vision.VisionServer;
@@ -50,7 +48,6 @@ public class Robot extends IterativeRobot {
     // Get subsystem instances
     private Drive mDrive = Drive.getInstance();
     private Superstructure mSuperstructure = Superstructure.getInstance();
-    private GearEjector mGearGrabber = GearEjector.getInstance();
     private LED mLED = LED.getInstance();
     private RobotState mRobotState = RobotState.getInstance();
     private AutoModeExecuter mAutoModeExecuter = null;
@@ -63,9 +60,8 @@ public class Robot extends IterativeRobot {
 //                    MotorGearGrabber.getInstance()));
     private final SubsystemManager mSubsystemManager = new SubsystemManager(
                             Arrays.asList(Drive.getInstance(), Superstructure.getInstance(), Shooter.getInstance(),
-                                    Feeder.getInstance(), Intake.getInstance(),
-                                    ConnectionMonitor.getInstance(), LED.getInstance(),
-                                    GearEjector.getInstance()));
+                                    Elevator.getInstance(), Intake.getInstance(),
+                                    ConnectionMonitor.getInstance(), LED.getInstance()));
 
     // Initialize other helper objects
     private CheesyDriveHelper mCheesyDriveHelper = new CheesyDriveHelper();
@@ -304,15 +300,7 @@ public class Robot extends IterativeRobot {
             boolean score_gear = mControlBoard.getScoreGearButton();
             boolean grab_gear = mControlBoard.getGrabGearButton();
 
-            if (score_gear && grab_gear) {
-                mGearGrabber.setWantedState(WantedState.CLEAR_BALLS);
-            } else if (score_gear) {
-                mGearGrabber.setWantedState(WantedState.SCORE);
-            } else if (grab_gear) {
-                mGearGrabber.setWantedState(WantedState.ACQUIRE);
-            } else {
-                mGearGrabber.setWantedState(WantedState.IDLE);
-            }
+
 
             mSuperstructure.setActuateHopper(mControlBoard.getActuateHopperButton());
             allPeriodic();
@@ -371,10 +359,9 @@ public class Robot extends IterativeRobot {
     public void testInit() {
         Timer.delay(0.5);
 
-        boolean results = Feeder.getInstance().checkSystem();
+        boolean results = Elevator.getInstance().checkSystem();
         results &= Drive.getInstance().checkSystem();
         results &= Intake.getInstance().checkSystem();
-        results &= GearEjector.getInstance().checkSystem();
         results &= Shooter.getInstance().checkSystem();
 
 

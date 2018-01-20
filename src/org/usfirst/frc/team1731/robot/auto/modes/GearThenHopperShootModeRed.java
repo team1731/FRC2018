@@ -13,7 +13,6 @@ import org.usfirst.frc.team1731.robot.auto.actions.DeployIntakeAction;
 import org.usfirst.frc.team1731.robot.auto.actions.DrivePathAction;
 import org.usfirst.frc.team1731.robot.auto.actions.ParallelAction;
 import org.usfirst.frc.team1731.robot.auto.actions.ResetPoseFromPathAction;
-import org.usfirst.frc.team1731.robot.auto.actions.ScoreGearAction;
 import org.usfirst.frc.team1731.robot.auto.actions.SeriesAction;
 import org.usfirst.frc.team1731.robot.auto.actions.SetFlywheelRPMAction;
 import org.usfirst.frc.team1731.robot.auto.actions.WaitAction;
@@ -49,7 +48,6 @@ public class GearThenHopperShootModeRed extends AutoModeBase {
         runAction(
                 new ParallelAction(Arrays.asList(new Action[] {
                         new SetFlywheelRPMAction(2900.0), // spin up flywheel to save time
-                        new ScoreGearAction()
                 })));
         runAction(new CorrectPoseAction(RigidTransform2d.fromTranslation(PathAdapter.getRedGearCorrection())));
         runAction(new DrivePathAction(new BoilerGearToHopperRed()));

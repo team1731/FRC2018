@@ -77,10 +77,13 @@ public class Constants extends ConstantsBase {
     public static int kDriveLowGearPositionIZone = 700;
     public static double kDriveLowGearPositionRampRate = 240.0; // V/s
     public static double kDriveLowGearNominalOutput = 0.5; // V
-    public static double kDriveLowGearMaxVelocity = 6.0 * 12.0 * 60.0 / (Math.PI * kDriveWheelDiameterInches); // 6 fps
-                                                                                                               // in RPM
-    public static double kDriveLowGearMaxAccel = 18.0 * 12.0 * 60.0 / (Math.PI * kDriveWheelDiameterInches); // 18 fps/s
-                                                                                                             // in RPM/s
+    
+    //TODO need to set these velocities and accellerations
+   // public static double kDriveLowGearMaxVelocity = 6.0 * 12.0 * 60.0 / (Math.PI * kDriveWheelDiameterInches); // 6 fps                                                                                                           // in RPM
+    public static int kDriveLowGearMaxVelocity = 3092;  //these are units of units per 100ms
+    
+    //public static double kDriveLowGearMaxAccel = 18.0 * 12.0 * 60.0 / (Math.PI * kDriveWheelDiameterInches); // 18 fps/s
+    public static int kDriveLowGearMaxAccel = 3092;  //These are   in units per 100ms                                                                                                       // in RPM/s
 
     public static double kDriveVoltageCompensationRampRate = 0.0;
 
@@ -189,6 +192,8 @@ public class Constants extends ConstantsBase {
 
 	public static final int kEjectSolenoid = 1;
 
+	public static final int SlotIdx = 0;
+
 
 
 
@@ -271,6 +276,8 @@ public class Constants extends ConstantsBase {
     };
 
 	public static int kTimeoutMs = 10;
+
+	public static int kPidIdx = 0;
 
     static {
         for (double[] pair : kFlywheelDistanceRpmValues) {
