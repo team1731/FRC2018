@@ -45,7 +45,7 @@ public class Superstructure extends Subsystem {
         }
         return mInstance;
     }
-
+    private final Climber mClimber = Climber.getInstance() ;
     private final Elevator mFeeder = Elevator.getInstance();
     private final Intake mIntake = Intake.getInstance();
     private final Shooter mShooter = Shooter.getInstance();
@@ -68,14 +68,17 @@ public class Superstructure extends Subsystem {
         UNJAMMING, // unjamming the feeder and hopper
         UNJAMMING_WITH_SHOOT, // unjamming while the flywheel spins
         JUST_FEED, // run hopper and feeder but not the shooter
-        EXHAUSTING, // exhaust the feeder, hopper, and intake
         HANGING, // run shooter in reverse, everything else is idle
-        RANGE_FINDING // blink the LED strip to let drivers know if they are at an optimal shooting range
+        RANGE_FINDING, // blink the LED strip to let drivers know if they are at an optimal shooting range
+        CLIMBING,
+        
+        
+  
     };
 
     // Desired function from user
     public enum WantedState {
-        IDLE, SHOOT, UNJAM, UNJAM_SHOOT, MANUAL_FEED, EXHAUST, HANG, RANGE_FINDING
+        IDLE, SHOOT, UNJAM, UNJAM_SHOOT, MANUAL_FEED, HANG, RANGE_FINDING, CLIMB
     }
 
     private SystemState mSystemState = SystemState.IDLE;
@@ -110,16 +113,11 @@ public class Superstructure extends Subsystem {
 
     private Loop mLoop = new Loop() {
 
-        // Every time we transition states, we update the current state start
-        // time and the state changed boolean (for one cycle)
-        private double mWantStateChangeStartTime;
-
         @Override
         public void onStart(double timestamp) {
             synchronized (Superstructure.this) {
                 mWantedState = WantedState.IDLE;
                 mCurrentStateStartTime = timestamp;
-                mWantStateChangeStartTime = timestamp;
                 mLastDisturbanceShooterTime = timestamp;
                 mSystemState = SystemState.IDLE;
                 mStateChanged = true;
@@ -152,7 +150,7 @@ public class Superstructure extends Subsystem {
                 case JUST_FEED:
                     newState = handleJustFeed();
                     break;
-                case EXHAUSTING:
+                case CLIMBING:
                     newState = handleExhaust();
                     break;
                 case HANGING:
@@ -200,8 +198,8 @@ public class Superstructure extends Subsystem {
             return SystemState.WAITING_FOR_ALIGNMENT;
         case MANUAL_FEED:
             return SystemState.JUST_FEED;
-        case EXHAUST:
-            return SystemState.EXHAUSTING;
+        case CLIMB:
+            return SystemState.CLIMBING;
         case HANG:
             return SystemState.HANGING;
         case RANGE_FINDING:
@@ -228,8 +226,8 @@ public class Superstructure extends Subsystem {
             return SystemState.WAITING_FOR_ALIGNMENT;
         case MANUAL_FEED:
             return SystemState.JUST_FEED;
-        case EXHAUST:
-            return SystemState.EXHAUSTING;
+        case CLIMB:
+            return SystemState.CLIMBING;
         case HANG:
             return SystemState.HANGING;
         case RANGE_FINDING:
@@ -259,8 +257,8 @@ public class Superstructure extends Subsystem {
             return SystemState.WAITING_FOR_ALIGNMENT;
         case MANUAL_FEED:
             return SystemState.JUST_FEED;
-        case EXHAUST:
-            return SystemState.EXHAUSTING;
+        case CLIMB:
+            return SystemState.CLIMBING;
         default:
             return SystemState.IDLE;
         }
@@ -286,8 +284,8 @@ public class Superstructure extends Subsystem {
             return SystemState.WAITING_FOR_FLYWHEEL;
         case MANUAL_FEED:
             return SystemState.JUST_FEED;
-        case EXHAUST:
-            return SystemState.EXHAUSTING;
+        case CLIMB:
+            return SystemState.CLIMBING;
         default:
             return SystemState.IDLE;
         }
@@ -385,8 +383,8 @@ public class Superstructure extends Subsystem {
                 return SystemState.WAITING_FOR_ALIGNMENT;
             case MANUAL_FEED:
                 return SystemState.JUST_FEED;
-            case EXHAUST:
-                return SystemState.EXHAUSTING;
+            case CLIMB:
+                return SystemState.CLIMBING;
             case HANG:
                 return SystemState.HANGING;
             case RANGE_FINDING:
@@ -410,8 +408,8 @@ public class Superstructure extends Subsystem {
             return SystemState.UNJAMMING_WITH_SHOOT;
         case SHOOT:
             return SystemState.WAITING_FOR_ALIGNMENT;
-        case EXHAUST:
-            return SystemState.EXHAUSTING;
+        case CLIMB:
+            return SystemState.CLIMBING;
         default:
             return SystemState.IDLE;
         }
@@ -432,8 +430,8 @@ public class Superstructure extends Subsystem {
             return SystemState.WAITING_FOR_ALIGNMENT;
         case MANUAL_FEED:
             return SystemState.JUST_FEED;
-        case EXHAUST:
-            return SystemState.EXHAUSTING;
+        case CLIMB:
+            return SystemState.CLIMBING;
         default:
             return SystemState.IDLE;
         }
@@ -441,7 +439,7 @@ public class Superstructure extends Subsystem {
 
     private SystemState handleExhaust() {
         mCompressor.setClosedLoopControl(false);
-        mFeeder.setWantedState(Elevator.WantedState.EXHAUST);
+        mFeeder.setWantedState(Elevator.WantedState.CLIMB);
 
 
         switch (mWantedState) {
@@ -453,8 +451,8 @@ public class Superstructure extends Subsystem {
             return SystemState.WAITING_FOR_ALIGNMENT;
         case MANUAL_FEED:
             return SystemState.JUST_FEED;
-        case EXHAUST:
-            return SystemState.EXHAUSTING;
+        case CLIMB:
+            return SystemState.CLIMBING;
         default:
             return SystemState.IDLE;
         }
