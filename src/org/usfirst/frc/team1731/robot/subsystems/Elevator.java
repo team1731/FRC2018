@@ -8,31 +8,44 @@ import org.usfirst.frc.team1731.robot.Constants;
 import org.usfirst.frc.team1731.robot.loops.Loop;
 import org.usfirst.frc.team1731.robot.loops.Looper;
 
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
+import com.ctre.PigeonImu.StatusFrameRate;
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.VelocityMeasPeriod;
 
+import edu.wpi.first.wpilibj.Talon;
 
+//import com.ctre.phoenix.motorcontrol.StatusFrameRate;
+//import com.ctre.phoenix.motorcontrol.VelocityMeasWindow;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.VictorSP;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
 
  * 
- * 1731 the feeder is the spinner thing that brings balls to the shooter.
+ * 1731 this system controls the elevator
  * 
  * @see Subsystem.java
  */
 @SuppressWarnings("unused")
 public class Elevator extends Subsystem {
-    private static final double kReversing = -1.0;
+	private Talon Elevator;
+	
+	
+	/*    private static final double kReversing = -1.0;
     private static final double kUnjamInPeriod = .2 * kReversing;
     private static final double kUnjamOutPeriod = .4 * kReversing;
     private static final double kUnjamInPower = 6.0 * kReversing / 12.0;
     private static final double kUnjamOutPower = -6.0 * kReversing / 12.0;
     private static final double kFeedVoltage = 10.0;
     private static final double kExhaustVoltage = kFeedVoltage * kReversing / 12.0;
-
+*/
     private static Elevator sInstance = null;
-
+    
     public static Elevator getInstance() {
         if (sInstance == null) {
             sInstance = new Elevator();
@@ -40,11 +53,36 @@ public class Elevator extends Subsystem {
         return sInstance;
     }
 
-    private final VictorSP mVictor; 
+    private final TalonSRX mTalon; 
 //    private final CANTalon mMasterTalon, mSlaveTalon;
 
-    public Elevator() {
-    	mVictor = new VictorSP(Constants.kFeederVictor);
+    
+    public void robotInit() {
+    	Elevator = new Talon(7);
+   
+    }
+    
+    public void teleopPeriodic() {
+    	
+    }
+    
+    	public Elevator() {
+    	mTalon = new TalonSRX(Constants.kElevatorTalon);
+    	mTalon.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0);
+    	mTalon.set(ControlMode.PercentOutput, 0);
+    	mTalon.configVelocityMeasurementWindow(10, 0);
+    	mTalon.configVelocityMeasurementPeriod(VelocityMeasPeriod.Period_5Ms, 0);
+    	mTalon.config_kP(Constants.SlotIdx, Constants.kElevatorTalonKP, Constants.kTimeoutMs );
+    	mTalon.config_kI(Constants.SlotIdx, Constants.kElevatorTalonKI, Constants.kTimeoutMs );
+    mTalon.config_kD(Constants.SlotIdx, Constants.kElevatorTalonKD, Constants.kTimeoutMs);
+ 	mTalon.config_kF(Constants.SlotIdx, Constants.kElevatorTalonKF, Constants.kTimeoutMs );
+ 	mTalon.setStatusFramePeriod(StatusFrameEnhanced.Status_12_Feedback1, 1000, 1000);
+ 	
+    	
+    	
+    	
+    	
+    	
 /*      mMasterTalon = CANTalonFactory.createDefaultTalon(Constants.kFeederMasterId);
         mMasterTalon.setFeedbackDevice(CANTalon.FeedbackDevice.CtreMagEncoder_Relative);
         mMasterTalon.changeControlMode(CANTalon.TalonControlMode.PercentVbus);
@@ -70,19 +108,14 @@ public class Elevator extends Subsystem {
         */
     }
 
-    public enum SystemState {
-        FEEDING, // feed balls into the shooter
-        UNJAMMING_IN, // used for unjamming fuel
-        UNJAMMING_OUT, // used for unjamming fuel
+    public enum SystemState {	
         IDLE, // stop all motors
-        EXHAUSTING // run feeder in reverse
+        EXHAUSTING // run elevator in reverse?
     }
 
     public enum WantedState {
-        IDLE,
-        UNJAM,
-        EXHAUST,
-        FEED,
+    		IDLE,   
+    		STOP,
     }
 
     private SystemState mSystemState = SystemState.IDLE;
@@ -104,7 +137,15 @@ public class Elevator extends Subsystem {
 
         @Override
         public void onLoop(double timestamp) {
-            synchronized (Elevator.this) {
+        		
+        	
+        	
+        	
+        	
+        	
+        		
+        	
+        		synchronized (Elevator.this) {
                 SystemState newState;
                 switch (mSystemState) {
                 case IDLE:
@@ -305,7 +346,7 @@ public class Elevator extends Subsystem {
         }
 */
 //        return !failure;
-        return true;
-    }
+//        return true;
+ //   }
 
 }

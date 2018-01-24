@@ -138,6 +138,13 @@ public class Constants extends ConstantsBase {
     public static double kFeederVoltageCompensationRampRate = 10.0;
     public static double kFeederFeedSpeedRpm = 5400.0;
     public static double kFeederSensorGearReduction = 3.0;
+    
+   //Elevator
+    public static double kElevatorTalonKP = 0.1;
+    public static double kElevatorTalonKI = 0.1;
+    public static double kElevatorTalonKD = 0.1;
+    public static double kElevatorTalonKF = 0.1;
+    
 
     // Hopper gains
     public static double kHopperRampRate = 48.0;
@@ -156,6 +163,9 @@ public class Constants extends ConstantsBase {
     public static final int kLeftDriveSlaveId = 3;
     public static final int kRightDriveMasterId = 4;
     public static final int kRightDriverSlaveId = 2;
+    
+    //Elevator
+    public static final int kElevatorTalon = 6;
    
     /* VICTORS */
     // Feeder
@@ -278,6 +288,12 @@ public class Constants extends ConstantsBase {
 	public static int kTimeoutMs = 10;
 
 	public static int kPidIdx = 0;
+
+	
+
+
+
+	
 
     static {
         for (double[] pair : kFlywheelDistanceRpmValues) {
