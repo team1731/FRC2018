@@ -93,7 +93,8 @@ public class Drive extends Subsystem {
 
     // Hardware
     private final TalonSRX mLeftMaster, mRightMaster, mLeftSlave, mRightSlave;
-    private final Solenoid mShifter;
+    private final Solenoid mShifter1;
+    private final Solenoid mShifter2;
     private final NavX mNavXBoard;
 
     // Controllers
@@ -199,7 +200,7 @@ public class Drive extends Subsystem {
        // mRightMaster.changeControlMode(CANTalon.TalonControlMode.PercentVbus);
         mRightMaster.set(ControlMode.PercentOutput, 0);
         //mRightMaster.reverseSensor(false);
-        mRightMaster.setInverted(true);
+        mRightMaster.setInverted(false); // was true);
        // mRightMaster.reverseOutput(true);
         mRightMaster.setSensorPhase(false);
         //mRightMaster.setFeedbackDevice(CANTalon.FeedbackDevice.CtreMagEncoder_Relative);
@@ -229,7 +230,8 @@ public class Drive extends Subsystem {
        // mRightMaster.SetVelocityMeasurementWindow(32);
         mRightMaster.configVelocityMeasurementWindow(32, Constants.kTimeoutMs);
 
-        mShifter = Constants.makeSolenoidForId(Constants.kShifterSolenoidId);
+        mShifter1 = Constants.makeSolenoidForId(Constants.kShifterSolenoidId1);
+        mShifter2 = Constants.makeSolenoidForId(Constants.kShifterSolenoidId2);
 
         reloadGains();
 
@@ -282,7 +284,8 @@ public class Drive extends Subsystem {
     public synchronized void setHighGear(boolean wantsHighGear) {
         if (wantsHighGear != mIsHighGear) {
             mIsHighGear = wantsHighGear;
-            mShifter.set(!wantsHighGear);
+            mShifter1.set(!wantsHighGear);
+            mShifter2.set(wantsHighGear);
         }
     }
 

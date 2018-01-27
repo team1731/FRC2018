@@ -185,12 +185,14 @@ public class Constants extends ConstantsBase {
 //    public static final int kGearGrabberId = 15;
 
     // Solenoids
-    public static final int kShifterSolenoidId = 0; // PCM 0, Solenoid 0
+    public static final int kShifterSolenoidId1 = 1; //was 0 // PCM 0, Solenoid 0
+    public static final int kShifterSolenoidId2 = 6;
+    
 //    public static final int kIntakeDeploySolenoidId = 1; // PCM 0, Solenoid 1
     public static final int kHopperSolenoidId = 2; // PCM 0, Solenoid 2
     public static final int kGearWristSolenoid = 7; // PCM 0, Solenoid 7
 
-	public static final int kEjectSolenoid = 1;
+	public static final int kEjectSolenoid = 3; //was 1
 
 	public static final int SlotIdx = 0;
 
