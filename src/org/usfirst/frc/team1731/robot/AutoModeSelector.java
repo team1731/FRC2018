@@ -4,16 +4,7 @@ import java.util.function.Supplier;
 
 import org.json.simple.JSONArray;
 import org.usfirst.frc.team1731.robot.auto.AutoModeBase;
-import org.usfirst.frc.team1731.robot.auto.modes.AutoDetectAllianceGearThenShootMode;
-import org.usfirst.frc.team1731.robot.auto.modes.BoilerGearThenShootModeBlue;
-import org.usfirst.frc.team1731.robot.auto.modes.BoilerGearThenShootModeRed;
-import org.usfirst.frc.team1731.robot.auto.modes.CenterGearThenShootModeBlue;
-import org.usfirst.frc.team1731.robot.auto.modes.CenterGearThenShootModeRed;
-import org.usfirst.frc.team1731.robot.auto.modes.GearThenHopperShootModeBlue;
-import org.usfirst.frc.team1731.robot.auto.modes.GearThenHopperShootModeRed;
-import org.usfirst.frc.team1731.robot.auto.modes.RamHopperShootModeBlue;
-import org.usfirst.frc.team1731.robot.auto.modes.RamHopperShootModeRed;
-import org.usfirst.frc.team1731.robot.auto.modes.StandStillMode;
+import org.usfirst.frc.team1731.robot.auto.modes.*;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -38,16 +29,20 @@ public class AutoModeSelector {
 
     private static final AutoModeCreator mDefaultMode = new AutoModeCreator(
             "AutoDetect Alliance Gear than Hopper Shoot",
-            () -> new AutoDetectAllianceGearThenShootMode());
+            () -> new AutoDetectAllianceSwitchThenPlaceMode());
     private static final AutoModeCreator[] mAllModes = {
-            new AutoModeCreator("Boiler Gear then 10 Ball Shoot Red", () -> new BoilerGearThenShootModeRed()),
-            new AutoModeCreator("Boiler Gear then 10 Ball Shoot Blue", () -> new BoilerGearThenShootModeBlue()),
-            new AutoModeCreator("Center Gear then Shoot Red", () -> new CenterGearThenShootModeRed()),
-            new AutoModeCreator("Center Gear then Shoot Blue", () -> new CenterGearThenShootModeBlue()),
-            new AutoModeCreator("Ram Hopper Blue", () -> new RamHopperShootModeBlue()),
-            new AutoModeCreator("Ram Hopper Red", () -> new RamHopperShootModeRed()),
-            new AutoModeCreator("Gear then Hopper Shoot Blue", () -> new GearThenHopperShootModeBlue()),
-            new AutoModeCreator("Gear then Hopper Shoot Red", () -> new GearThenHopperShootModeRed()),
+    		new AutoModeCreator("Auto test (from right side): Place cube on right switch", () -> new PlaceOnRightSwitch()),
+    		new AutoModeCreator("Auto test (from left side): Place cube on left switch", () -> new PlaceOnLeftSwitch()),
+            new AutoModeCreator("Left: Put cube on left switch", () -> new LeftPutCubeOnLeftSwitch()),
+            new AutoModeCreator("Left: Put cube on left switch and left scale", () -> new LeftPutCubeOnLeftSwitchAndLeftScale()),
+            new AutoModeCreator("Left: Put cube on right switch", () -> new LeftPutCubeOnRightSwitch()),
+            new AutoModeCreator("Middle-Left: Put cube on left switch", () -> new MiddleLeftPutCubeOnLeftSwitch()),
+            new AutoModeCreator("Middle-Left: Put cube on right switch", () -> new MiddleLeftPutCubeOnRightSwitch()),
+            new AutoModeCreator("Middle-Right: Put cube on left switch", () -> new MiddleRightPutCubeOnLeftSwitch()),
+            new AutoModeCreator("Middle-Right: Put cube on right switch", () -> new MiddleRightPutCubeOnRightSwitch()),
+            new AutoModeCreator("Right: Put cube on left switch", () -> new RightPutCubeOnLeftSwitch()),
+            new AutoModeCreator("Right: Put cube on right switch", () -> new RightPutCubeOnRightSwitch()),
+            new AutoModeCreator("Right: Put cube on right switch and right scale", () -> new RightPutCubeOnRightSwitchAndRightScale()),
             new AutoModeCreator("Standstill", () -> new StandStillMode()),
     };
 

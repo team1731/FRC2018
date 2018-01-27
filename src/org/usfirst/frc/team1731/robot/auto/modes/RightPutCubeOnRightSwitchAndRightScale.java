@@ -16,9 +16,9 @@ import org.usfirst.frc.team1731.robot.auto.actions.ResetPoseFromPathAction;
 import org.usfirst.frc.team1731.robot.auto.actions.SeriesAction;
 import org.usfirst.frc.team1731.robot.auto.actions.SetFlywheelRPMAction;
 import org.usfirst.frc.team1731.robot.auto.actions.WaitAction;
-import org.usfirst.frc.team1731.robot.paths.BoilerGearToHopperRed;
+import org.usfirst.frc.team1731.robot.paths.GoingSomeplace;
 import org.usfirst.frc.team1731.robot.paths.PathContainer;
-import org.usfirst.frc.team1731.robot.paths.StartToBoilerGearRed;
+import org.usfirst.frc.team1731.robot.paths.MiddleLeftToLeftSwitch;
 import org.usfirst.frc.team1731.robot.paths.profiles.PathAdapter;
 
 import edu.wpi.first.wpilibj.Timer;
@@ -31,28 +31,14 @@ import edu.wpi.first.wpilibj.Timer;
  * 
  * @see AutoModeBase
  */
-public class GearThenHopperShootModeRed extends AutoModeBase {
+public class RightPutCubeOnRightSwitchAndRightScale extends AutoModeBase {
 
     @Override
     protected void routine() throws AutoModeEndedException {
-        PathContainer gearPath = new StartToBoilerGearRed();
-        double start = Timer.getFPGATimestamp();
-        runAction(new ResetPoseFromPathAction(gearPath));
-        runAction(new ParallelAction(Arrays.asList(new Action[] {
-                new DrivePathAction(gearPath),
-                new ActuateHopperAction(true),
-                new SeriesAction(Arrays.asList(new Action[] {
-                        new WaitAction(1), new DeployIntakeAction(true)
-                }))
-        })));
-        runAction(
-                new ParallelAction(Arrays.asList(new Action[] {
-                        new SetFlywheelRPMAction(2900.0), // spin up flywheel to save time
-                })));
-        runAction(new CorrectPoseAction(RigidTransform2d.fromTranslation(PathAdapter.getRedGearCorrection())));
-        runAction(new DrivePathAction(new BoilerGearToHopperRed()));
-        System.out.println("Shoot Time: " + (Timer.getFPGATimestamp() - start));
-        runAction(new BeginShootingAction());
-        runAction(new WaitAction(15));
+    	PathContainer straightPath = new MiddleLeftToLeftSwitch();
+    	runAction(new ResetPoseFromPathAction(straightPath));
+    	runAction(new DrivePathAction(straightPath));
+    	runAction(new WaitAction(1));
+    	
     }
 }
