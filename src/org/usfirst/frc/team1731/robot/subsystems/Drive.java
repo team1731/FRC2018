@@ -402,11 +402,13 @@ public class Drive extends Subsystem {
            // mRightMaster.setProfile(kHighGearVelocityControlSlot);
            // mRightMaster.configNominalOutputVoltage(Constants.kDriveHighGearNominalOutput,
             //        -Constants.kDriveHighGearNominalOutput);
-        	mLeftMaster.set(ControlMode.Velocity, 0);
+        	// (ATTEMPT TO FIX DRIVING PROBLEM) mLeftMaster.set(ControlMode.Velocity, 0);
+        	mLeftMaster.set(ControlMode.Velocity, 2);
         	mLeftMaster.configNominalOutputForward(Constants.kDriveHighGearNominalOutput,Constants.kTimeoutMs);
         	mLeftMaster.configNominalOutputReverse(-Constants.kDriveHighGearNominalOutput, Constants.kTimeoutMs);
         	mLeftMaster.selectProfileSlot(kHighGearVelocityControlSlot, Constants.kPidIdx);
-        	mRightMaster.set(ControlMode.Velocity, 0);
+        	// (SEE ABOVE LEFTMASTER) mRightMaster.set(ControlMode.Velocity, 0);
+        	mRightMaster.set(ControlMode.Velocity, 2);
         	mRightMaster.configNominalOutputForward(Constants.kDriveHighGearNominalOutput,Constants.kTimeoutMs);
         	mRightMaster.configNominalOutputReverse(-Constants.kDriveHighGearNominalOutput, Constants.kTimeoutMs);
         	mRightMaster.selectProfileSlot(kHighGearVelocityControlSlot, Constants.kPidIdx);
