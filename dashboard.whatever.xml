@@ -1,0 +1,141 @@
+<xml version="1.0">
+<dashboard>
+	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.RobotPreferences">
+		<location x="126" y="680"/>
+	</static-widget>
+	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.ConnectionIndicator">
+		<location x="0" y="0"/>
+	</static-widget>
+	<widget field="Air Pressure psi" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="1172" y="43"/>
+	</widget>
+	<widget field="auto_options" type="String" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="1185" y="189"/>
+	</widget>
+	<widget field="left speed (ips)" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="1209" y="269"/>
+	</widget>
+	<widget field="right voltage (V)" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="1193" y="312"/>
+	</widget>
+	<widget field="gyro vel" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="1168" y="86"/>
+	</widget>
+	<widget field="right position (rotations)" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="132" y="6"/>
+		<width>236</width>
+		<height>44</height>
+	</widget>
+	<widget field="left position (rotations)" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="880" y="505"/>
+	</widget>
+	<widget field="robot_pose_y" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="851" y="552"/>
+	</widget>
+	<widget field="robot_pose_x" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="857" y="425"/>
+	</widget>
+	<widget field="looper_dt" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="702" y="210"/>
+	</widget>
+	<widget field="selected_auto_mode" type="String" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="560" y="312"/>
+	</widget>
+	<widget field="left voltage (V)" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="479" y="439"/>
+	</widget>
+	<widget field="drive on target" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="255" y="157"/>
+	</widget>
+	<widget field="Auto Selector" type="String" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="160" y="294"/>
+	</widget>
+	<widget field="goal_theta" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="546" y="99"/>
+	</widget>
+	<widget field="drive CTE" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="483" y="163"/>
+	</widget>
+	<widget field="drive ATE" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="87" y="214"/>
+	</widget>
+	<widget field="gyro pos" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="123" y="426"/>
+	</widget>
+	<widget field="robot_pose_theta" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="245" y="533"/>
+	</widget>
+	<widget field="goal_range" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="68" y="144"/>
+	</widget>
+	<widget field="right speed (ips)" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="352" y="604"/>
+	</widget>
+	<widget field="left speed error (ips)" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="599" y="676"/>
+	</widget>
+	<widget field="right speed error (ips)" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="679" y="33"/>
+	</widget>
+	<widget field="robot velocity" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="112" y="94"/>
+	</widget>
+</dashboard>
+<live-window>
+	<widget field="Ungrouped" type="LW Subsystem" class="edu.wpi.first.smartdashboard.livewindow.elements.LWSubsystem">
+		<widget field="VictorSP[4]" type="Speed Controller" class="edu.wpi.first.smartdashboard.livewindow.elements.SpeedController">
+			<location x="6" y="18"/>
+			<height>51</height>
+			<width>309</width>
+		</widget>
+		<widget field="Compressor[0]" type="Compressor" class="edu.wpi.first.smartdashboard.livewindow.elements.DigitalOutputController">
+			<location x="92" y="69"/>
+			<height>25</height>
+			<width>135</width>
+		</widget>
+		<widget field="DigitalOutput[9]" type="Digital Output" class="edu.wpi.first.smartdashboard.livewindow.elements.DigitalOutputController">
+			<location x="91" y="94"/>
+			<height>25</height>
+			<width>137</width>
+		</widget>
+		<widget field="DigitalOutput[8]" type="Digital Output" class="edu.wpi.first.smartdashboard.livewindow.elements.DigitalOutputController">
+			<location x="91" y="119"/>
+			<height>25</height>
+			<width>137</width>
+		</widget>
+		<widget field="VictorSP[1]" type="Speed Controller" class="edu.wpi.first.smartdashboard.livewindow.elements.SpeedController">
+			<location x="6" y="144"/>
+			<height>51</height>
+			<width>309</width>
+		</widget>
+		<widget field="AnalogInput[2]" type="Analog Input" class="edu.wpi.first.smartdashboard.livewindow.elements.SingleNumberDisplay">
+			<location x="6" y="195"/>
+			<height>22</height>
+			<width>309</width>
+		</widget>
+		<widget field="VictorSP[2]" type="Speed Controller" class="edu.wpi.first.smartdashboard.livewindow.elements.SpeedController">
+			<location x="6" y="217"/>
+			<height>51</height>
+			<width>309</width>
+		</widget>
+		<widget field="Solenoid[0,0]" type="Solenoid" class="edu.wpi.first.smartdashboard.livewindow.elements.DigitalOutputController">
+			<location x="98" y="268"/>
+			<height>25</height>
+			<width>123</width>
+		</widget>
+		<widget field="AnalogInput[3]" type="Analog Input" class="edu.wpi.first.smartdashboard.livewindow.elements.SingleNumberDisplay">
+			<location x="6" y="293"/>
+			<height>22</height>
+			<width>309</width>
+		</widget>
+		<widget field="Solenoid[0,2]" type="Solenoid" class="edu.wpi.first.smartdashboard.livewindow.elements.DigitalOutputController">
+			<location x="98" y="315"/>
+			<height>25</height>
+			<width>123</width>
+		</widget>
+		<location x="11" y="9"/>
+		<width>321</width>
+		<height>347</height>
+	</widget>
+</live-window>
+</xml>
