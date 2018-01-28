@@ -167,6 +167,7 @@ public class Drive extends Subsystem {
     };
 
     private Drive() {
+    	  DriverStation.reportError("Drive Constructor", false);
         // Start all Talons in open loop mode.
         mLeftMaster = TalonSRXFactory.createDefaultTalon(Constants.kLeftDriveMasterId);
         //  mLeftMaster.changeControlMode(CANTalon.TalonControlMode.PercentVbus);
@@ -187,7 +188,7 @@ public class Drive extends Subsystem {
         mLeftSlave = TalonSRXFactory.createPermanentSlaveTalon(Constants.kLeftDriveSlaveId,
                 Constants.kLeftDriveMasterId);
         //mLeftSlave.reverseOutput(false);
-        mLeftSlave.setSensorPhase(false);
+        mLeftSlave.setInverted(false);
         //mLeftMaster.setStatusFrameRateMs(StatusFrameRate.Feedback, 5);
 
         mLeftMaster.setStatusFramePeriod(StatusFrame.Status_2_Feedback0, 5, Constants.kTimeoutMs); 
@@ -214,7 +215,7 @@ public class Drive extends Subsystem {
         mRightSlave = TalonSRXFactory.createPermanentSlaveTalon(Constants.kRightDriverSlaveId,
                 Constants.kRightDriveMasterId);
         //mRightSlave.reverseOutput(false);
-        mRightSlave.setSensorPhase(false);
+        mRightSlave.setInverted(false);
         //mRightMaster.setStatusFrameRateMs(StatusFrameRate.Feedback, 5);
         mRightMaster.setStatusFramePeriod(StatusFrame.Status_2_Feedback0, 5, Constants.kTimeoutMs); 
         mRightMaster.setStatusFramePeriod(StatusFrame.Status_12_Feedback1, 5, Constants.kTimeoutMs);
@@ -256,7 +257,9 @@ public class Drive extends Subsystem {
      * Configure talons for open loop control
      */
     public synchronized void setOpenLoop(DriveSignal signal) {
+    	  DriverStation.reportError("setOpenLoop" + signal, false);
         if (mDriveControlState != DriveControlState.OPEN_LOOP) {
+      	  DriverStation.reportError("setOpenLoop inside" + signal, false);
            // mLeftMaster.changeControlMode(CANTalon.TalonControlMode.PercentVbus);
             mLeftMaster.set(ControlMode.PercentOutput, signal.getLeft());
             //mRightMaster.changeControlMode(CANTalon.TalonControlMode.PercentVbus);
@@ -268,8 +271,8 @@ public class Drive extends Subsystem {
         }
         // Right side is reversed, but reverseOutput doesn't invert PercentVBus.
         // So set negative on the right master.
-       // mRightMaster.set(-signal.getRight());
-       // mLeftMaster.set(signal.getLeft());
+        mRightMaster.set(ControlMode.PercentOutput,-signal.getRight());
+        mLeftMaster.set(ControlMode.PercentOutput, signal.getLeft());
     }
 
     public boolean isHighGear() {
@@ -558,11 +561,19 @@ public class Drive extends Subsystem {
      * Is called periodically when the robot is auto-aiming towards the boiler.
      */
     private void updateTurnToHeading(double timestamp) {
+<<<<<<< HEAD
      /*   if (Superstructure.getInstance().isShooting()) {
             // Do not update heading while shooting - just base lock. By not updating the setpoint, we will fight to
             // keep position.
             return;  */
         }
+=======
+ //       if (Superstructure.getInstance().isShooting()) {
+            // Do not update heading while shooting - just base lock. By not updating the setpoint, we will fight to
+            // keep position.
+ //           return;
+ //       }
+>>>>>>> dev
         final Rotation2d field_to_robot = mRobotState.getLatestFieldToVehicle().getValue().getRotation();
 
         // Figure out the rotation necessary to turn to face the goal.
@@ -897,7 +908,7 @@ public class Drive extends Subsystem {
         mRightSlave.set(ControlMode.PercentOutput,-6.0f);
         Timer.delay(4.0);
         final double currentRightSlave = mRightSlave.getOutputCurrent();
-        final double rpmRightSlave = mRightMaster.getSelectedSensorVelocity(Constants.kPidIdx);
+        final double rpmRightSlave = mRightSlave.getSelectedSensorVelocity(Constants.kPidIdx);
         mRightSlave.set(ControlMode.PercentOutput,0.0f);
 
         Timer.delay(2.0);
@@ -913,7 +924,7 @@ public class Drive extends Subsystem {
         mLeftSlave.set(ControlMode.PercentOutput,6.0f);
         Timer.delay(4.0);
         final double currentLeftSlave = mLeftSlave.getOutputCurrent();
-        final double rpmLeftSlave = mLeftMaster.getSelectedSensorVelocity(Constants.kPidIdx);
+        final double rpmLeftSlave = mLeftSlave.getSelectedSensorVelocity(Constants.kPidIdx);
         mLeftSlave.set(ControlMode.PercentOutput,0.0);
 
 
