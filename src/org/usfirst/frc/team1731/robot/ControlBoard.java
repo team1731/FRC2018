@@ -69,7 +69,7 @@ public class ControlBoard implements ControlBoardInterface {
     @Override
     public boolean getFeedButton() {
         return mButtonBoard.getRawAxis(1) < -0.1;
-    }
+   }
 
     @Override
     public boolean getIntakeButton() {
@@ -80,9 +80,8 @@ public class ControlBoard implements ControlBoardInterface {
     public boolean getShooterOpenLoopButton() {
         return false;
     }
-
     @Override
-    public boolean getExhaustButton() {
+    public boolean getCLIMBAxisLFT() {  //IMPORTANT
         return mButtonBoard.getRawAxis(0) < -0.1;
     }
 

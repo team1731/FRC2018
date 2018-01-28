@@ -81,8 +81,8 @@ public class GamepadControlBoard implements ControlBoardInterface {
     }
 
     @Override
-    public boolean getExhaustButton() {
-        return false;
+    public boolean getCLIMBAxisLFT() {
+        return mGamepad.getRawAxis(0) > 0.1;
     }
 
     @Override

@@ -7,7 +7,7 @@ import org.usfirst.frc.team1731.lib.util.drivers.TalonSRXFactory;
 import org.usfirst.frc.team1731.robot.Constants;
 import org.usfirst.frc.team1731.robot.loops.Loop;
 import org.usfirst.frc.team1731.robot.loops.Looper;
-
+import edu.wpi.first.wpilibj.VictorSP;
 
 
 
@@ -30,6 +30,7 @@ public class Climber extends Subsystem {
     private static final double kUnjamOutPower = -6.0 * kReversing / 12.0;
     private static final double kFeedVoltage = 10.0;
     private static final double kCLIMBVoltage = kFeedVoltage * kReversing / 12.0;
+   
 
     private static Climber sInstance = null;
 
@@ -44,7 +45,7 @@ public class Climber extends Subsystem {
 //    private final CANTalon mMasterTalon, mSlaveTalon;
 
     public Climber() {
-    	mVictor = new VictorSP(Constants.kFeederVictor);
+    	mVictor = new VictorSP(0);
         /*mMasterTalon = CANTalonFactory.createDefaultTalon(Constants.kFeederMasterId);
         mMasterTalon.setFeedbackDevice(CANTalon.FeedbackDevice.CtreMagEncoder_Relative);
         mMasterTalon.changeControlMode(CANTalon.TalonControlMode.PercentVbus);
@@ -84,7 +85,7 @@ public class Climber extends Subsystem {
         UNJAM,
        // FEED,
         CLIMB,
-        
+        STOP
         
     }
 
@@ -102,6 +103,7 @@ public class Climber extends Subsystem {
                 mSystemState = SystemState.IDLE;
                 mStateChanged = true;
                 mCurrentStateStartTime = timestamp;
+                mVictor.set(0) ;
             }
         }
 
@@ -125,6 +127,7 @@ public class Climber extends Subsystem {
                 case CLIMBING:
                     newState = handleCLIMB();
                     break;
+             
                 default:
                     newState = SystemState.IDLE;
                 }
@@ -153,13 +156,19 @@ public class Climber extends Subsystem {
             return SystemState.UNJAMMING_OUT;
         case CLIMB:
             return SystemState.CLIMBING;
+        case STOP :
+        	return SystemState.IDLE ;
+        
         default:
             return SystemState.IDLE;
         }
     }
 
     private SystemState handleIdle() {
-        setOpenLoop(0.0f);
+    	if (mStateChanged) { 
+    		mVictor.set(0);
+        }
+       // setOpenLoop(0.0f);
         return defaultStateTransfer();
     }
 
@@ -207,12 +216,17 @@ public class Climber extends Subsystem {
         	mVictor.set(1.0);
         }
         return defaultStateTransfer();
-    }
+   }
 
     private SystemState handleCLIMB() {
-       // setOpenLoop(kExhaustVoltage);
+      //  setOpenLoop(kCLIMBVoltage);
+    	if (mStateChanged) { 
+    		mVictor.set(.25);
+        }
         return defaultStateTransfer();
         //TurnOnMotor (Wench)//NEED TO DO
+      
+        
     }
 
     public synchronized void setWantedState(WantedState state) {

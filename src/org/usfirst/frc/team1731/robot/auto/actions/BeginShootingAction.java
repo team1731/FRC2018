@@ -15,7 +15,7 @@ public class BeginShootingAction extends RunOnceAction implements Action {
     @Override
     public void runOnce() {
         Drive.getInstance().setWantAimToGoal();
-        Superstructure.getInstance().setWantedState(Superstructure.WantedState.SHOOT);
+ //       Superstructure.getInstance().setWantedState(Superstructure.WantedState.SHOOT);
         Intake.getInstance().setOn(); // maybe intake a few missed balls if we're lucky
     }
 
