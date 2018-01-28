@@ -240,7 +240,7 @@ public class Robot extends IterativeRobot {
                     mDrive.setHighGear(!wantLowGear);
                 }
 
-                Intake.getInstance().setCurrentThrottle(mControlBoard.getThrottle());
+               // Intake.getInstance().setCurrentThrottle(mControlBoard.getThrottle());
 
                 boolean wantsExhaust = mControlBoard.getExhaustButton();
 
