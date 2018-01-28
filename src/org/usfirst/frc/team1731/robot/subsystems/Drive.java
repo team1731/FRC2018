@@ -176,7 +176,7 @@ public class Drive extends Subsystem {
         //mLeftMaster.setFeedbackDevice(TalonSRX.FeedbackDevice.CtreMagEncoder_Relative);
         mLeftMaster.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, Constants.kTimeoutMs);
         //mLeftMaster.reverseSensor(true);
-        mLeftMaster.setInverted(true);
+        mLeftMaster.setInverted(false);
         //mLeftMaster.reverseOutput(false);
         mLeftMaster.setSensorPhase(false);
 
@@ -284,8 +284,8 @@ public class Drive extends Subsystem {
     public synchronized void setHighGear(boolean wantsHighGear) {
         if (wantsHighGear != mIsHighGear) {
             mIsHighGear = wantsHighGear;
-            mShifter1.set(!wantsHighGear);
-            mShifter2.set(wantsHighGear);
+            mShifter1.set(wantsHighGear);
+            mShifter2.set(!wantsHighGear);
         }
     }
 

@@ -152,8 +152,8 @@ public class Constants extends ConstantsBase {
     // are attached to the master)
 
     // Drive
-    public static final int kLeftDriveMasterId = 1;
-    public static final int kLeftDriveSlaveId = 3;
+    public static final int kLeftDriveMasterId = 3;
+    public static final int kLeftDriveSlaveId = 1;
     public static final int kRightDriveMasterId = 4;
     public static final int kRightDriverSlaveId = 2;
    
