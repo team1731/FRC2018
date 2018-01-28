@@ -81,9 +81,9 @@ public class TalonSRXFactory {
 
     public static TalonSRX createTalon(int id, Configuration config) {
         TalonSRX talon = new LazyTalonSRX(id);
-        talon.setControlFramePeriod(ControlFrame.Control_3_General,config.CONTROL_FRAME_PERIOD_MS);
+   //     talon.setControlFramePeriod(ControlFrame.Control_3_General,config.CONTROL_FRAME_PERIOD_MS);
         talon.set(ControlMode.PercentOutput,0);
-        talon.changeMotionControlFramePeriod(config.MOTION_CONTROL_FRAME_PERIOD_MS);
+   //     talon.changeMotionControlFramePeriod(config.MOTION_CONTROL_FRAME_PERIOD_MS);
         /*
         talon.clearIAccum();
         talon.setIntegralAccumulator(arg0, arg1, arg2)
@@ -128,6 +128,8 @@ public class TalonSRXFactory {
                 config.ANALOG_TEMP_VBAT_STATUS_FRAME_RATE_MS);
         talon.setStatusFrameRateMs(TalonSRX.StatusFrameRate.PulseWidth, config.PULSE_WIDTH_STATUS_FRAME_RATE_MS);
         */
+        
+        /*
         talon.setIntegralAccumulator(0,Constants.kPidIdx,Constants.kTimeoutMs);
         talon.clearMotionProfileHasUnderrun(Constants.kTimeoutMs);
         talon.clearMotionProfileTrajectories();
@@ -136,7 +138,7 @@ public class TalonSRXFactory {
         talon.configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector,LimitSwitchNormal.NormallyOpen,Constants.kTimeoutMs);
         talon.configNominalOutputForward(config.NOMINAL_VOLTAGE, Constants.kTimeoutMs);
         talon.configNominalOutputReverse(-config.NOMINAL_VOLTAGE, Constants.kTimeoutMs);
-        talon.configPeakOutputForward(config.NOMINAL_VOLTAGE, Constants.kTimeoutMs);
+        talon.configPeakOutputForward(config.PEAK_VOLTAGE, Constants.kTimeoutMs);
         talon.configPeakOutputReverse(-config.PEAK_VOLTAGE, Constants.kTimeoutMs);
         talon.setNeutralMode(config.ENABLE_BRAKE);
         talon.enableCurrentLimit(config.ENABLE_CURRENT_LIMIT);
@@ -167,6 +169,8 @@ public class TalonSRXFactory {
         talon.setStatusFramePeriod(StatusFrameEnhanced.Status_3_Quadrature, config.QUAD_ENCODER_STATUS_FRAME_RATE_MS, Constants.kTimeoutMs);
         talon.setStatusFramePeriod(StatusFrameEnhanced.Status_4_AinTempVbat, config.ANALOG_TEMP_VBAT_STATUS_FRAME_RATE_MS, Constants.kTimeoutMs);
         talon.setStatusFramePeriod(StatusFrameEnhanced.Status_8_PulseWidth, config.PULSE_WIDTH_STATUS_FRAME_RATE_MS, Constants.kTimeoutMs);
+        */
+        
         return talon;
     }
 
