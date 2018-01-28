@@ -274,8 +274,8 @@ public class Constants extends ConstantsBase {
             { 125.0, 3225.0 },
             { 130.0, 3275.0 },
     };
-
-	public static int kTimeoutMs = 10;
+  
+	public static int kTimeoutMs = 10; // I think this should be more like 10 Brent - was 10 but not working.
 
 	public static int kPidIdx = 0;
 

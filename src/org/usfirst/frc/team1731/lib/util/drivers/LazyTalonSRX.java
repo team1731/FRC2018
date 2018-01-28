@@ -25,10 +25,10 @@ public class LazyTalonSRX extends TalonSRX {
 
     @Override
     public void set(ControlMode controlMode, double value) {
-        if (value != mLastSet || controlMode != mLastControlMode) {
-            mLastSet = value;
-            mLastControlMode = controlMode;
+       // if (value != mLastSet || controlMode != mLastControlMode) {
+       //     mLastSet = value;
+       //     mLastControlMode = controlMode;
             super.set(controlMode,value);
-        }
+        //}
     }
 }
