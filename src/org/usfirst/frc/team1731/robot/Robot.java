@@ -206,7 +206,7 @@ public class Robot extends IterativeRobot {
             double timestamp = Timer.getFPGATimestamp();
             
             boolean buttonB = mControlBoard.getButtonB();
-            System.out.println("buttonB=" + buttonB);
+           // System.out.println("buttonB=" + buttonB);
             
             // Drive base
             double throttle = mControlBoard.getThrottle();

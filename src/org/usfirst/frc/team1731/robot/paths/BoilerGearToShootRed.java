@@ -6,7 +6,7 @@ import org.usfirst.frc.team1731.lib.util.control.Path;
 import org.usfirst.frc.team1731.lib.util.math.RigidTransform2d;
 import org.usfirst.frc.team1731.lib.util.math.Rotation2d;
 import org.usfirst.frc.team1731.lib.util.math.Translation2d;
-import org.usfirst.frc.team1731.robot.auto.modes.BoilerGearThenShootModeRed;
+import org.usfirst.frc.team1731.robot.auto.modes.TestAuto;
 import org.usfirst.frc.team1731.robot.paths.PathBuilder.Waypoint;
 
 /**
@@ -14,7 +14,7 @@ import org.usfirst.frc.team1731.robot.paths.PathBuilder.Waypoint;
  * 
  * Used in BoilerGearThenShootModeRed
  * 
- * @see BoilerGearThenShootModeRed
+ * @see TestAuto
  * @see PathContainer
  */
 public class BoilerGearToShootRed implements PathContainer {
