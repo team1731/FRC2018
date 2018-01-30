@@ -15,7 +15,10 @@ import com.ctre.PigeonImu.StatusFrameRate;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.VelocityMeasPeriod;
 
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Talon;
+
 
 //import com.ctre.phoenix.motorcontrol.StatusFrameRate;
 //import com.ctre.phoenix.motorcontrol.VelocityMeasWindow;
@@ -33,17 +36,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  */
 @SuppressWarnings("unused")
 public class Elevator extends Subsystem {
-	private Talon Elevator;
+	private Joystick joystick2;
 	
-	
-	/*    private static final double kReversing = -1.0;
-    private static final double kUnjamInPeriod = .2 * kReversing;
-    private static final double kUnjamOutPeriod = .4 * kReversing;
-    private static final double kUnjamInPower = 6.0 * kReversing / 12.0;
-    private static final double kUnjamOutPower = -6.0 * kReversing / 12.0;
-    private static final double kFeedVoltage = 10.0;
-    private static final double kExhaustVoltage = kFeedVoltage * kReversing / 12.0;
-*/
     private static Elevator sInstance = null;
     
     public static Elevator getInstance() {
@@ -53,69 +47,24 @@ public class Elevator extends Subsystem {
         return sInstance;
     }
 
-    private final TalonSRX mTalon; 
-//    private final CANTalon mMasterTalon, mSlaveTalon;
-
+    //private final TalonSRX mTalon; 
+    private final VictorSP mVictor;
     
-    public void robotInit() {
-    	Elevator = new Talon(7);
-   
-    }
-    
-    public void teleopPeriodic() {
+    public Elevator() {
+    		mVictor = new VictorSP(0);
+    	}
     	
-    }
-    
-    	public Elevator() {
-    	mTalon = new TalonSRX(Constants.kElevatorTalon);
-    	mTalon.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0);
-    	mTalon.set(ControlMode.PercentOutput, 0);
-    	mTalon.configVelocityMeasurementWindow(10, 0);
-    	mTalon.configVelocityMeasurementPeriod(VelocityMeasPeriod.Period_5Ms, 0);
-    	mTalon.config_kP(Constants.SlotIdx, Constants.kElevatorTalonKP, Constants.kTimeoutMs );
-    	mTalon.config_kI(Constants.SlotIdx, Constants.kElevatorTalonKI, Constants.kTimeoutMs );
-    mTalon.config_kD(Constants.SlotIdx, Constants.kElevatorTalonKD, Constants.kTimeoutMs);
- 	mTalon.config_kF(Constants.SlotIdx, Constants.kElevatorTalonKF, Constants.kTimeoutMs );
- 	mTalon.setStatusFramePeriod(StatusFrameEnhanced.Status_12_Feedback1, 1000, 1000);
- 	
-    	
-    	
-    	
-    	
-    	
-/*      mMasterTalon = CANTalonFactory.createDefaultTalon(Constants.kFeederMasterId);
-        mMasterTalon.setFeedbackDevice(CANTalon.FeedbackDevice.CtreMagEncoder_Relative);
-        mMasterTalon.changeControlMode(CANTalon.TalonControlMode.PercentVbus);
-        mMasterTalon.SetVelocityMeasurementWindow(16);
-        mMasterTalon.SetVelocityMeasurementPeriod(CANTalon.VelocityMeasurementPeriod.Period_5Ms);
-
-        mMasterTalon.setVoltageRampRate(Constants.kFeederRampRate);
-        mMasterTalon.reverseOutput(false);
-        mMasterTalon.enableBrakeMode(true);
-
-        mMasterTalon.setP(Constants.kFeederKP);
-        mMasterTalon.setI(Constants.kFeederKI);
-        mMasterTalon.setD(Constants.kFeederKD);
-        mMasterTalon.setF(Constants.kFeederKF);
-        mMasterTalon.setVoltageCompensationRampRate(Constants.kFeederVoltageCompensationRampRate);
-        mMasterTalon.setNominalClosedLoopVoltage(12.0);
-
-        mMasterTalon.setStatusFrameRateMs(CANTalon.StatusFrameRate.Feedback, 1000);
-
-        mSlaveTalon = CANTalonFactory.createPermanentSlaveTalon(Constants.kFeederSlaveId, Constants.kFeederMasterId);
-        mSlaveTalon.reverseOutput(true);
-        mSlaveTalon.enableBrakeMode(true);
-        */
-    }
-
-    public enum SystemState {	
+    	public enum SystemState {	
         IDLE, // stop all motors
-        EXHAUSTING // run elevator in reverse?
+        MOVING_UP,//Run elevator up
+        MOVING_DOWN,//Run elevator in reverse
     }
 
     public enum WantedState {
     		IDLE,   
     		STOP,
+    		MOVE_UP,//Run elevator up
+        MOVE_DOWN,//Run elevator in reverse
     }
 
     private SystemState mSystemState = SystemState.IDLE;
@@ -132,51 +81,41 @@ public class Elevator extends Subsystem {
                 mSystemState = SystemState.IDLE;
                 mStateChanged = true;
                 mCurrentStateStartTime = timestamp;
+                DriverStation.reportError("Elevator SystemState: " + mSystemState, false);
             }
         }
 
         @Override
         public void onLoop(double timestamp) {
-        		
-        	
-        	
-        	
-        	
-        	
-        		
-        	
+   	
         		synchronized (Elevator.this) {
                 SystemState newState;
                 switch (mSystemState) {
                 case IDLE:
                     newState = handleIdle();
                     break;
-                case UNJAMMING_OUT:
-                    newState = handleUnjammingOut(timestamp, mCurrentStateStartTime);
+                case MOVING_UP:
+                    newState = handleMovingUp();
                     break;
-                case UNJAMMING_IN:
-                    newState = handleUnjammingIn(timestamp, mCurrentStateStartTime);
-                    break;
-                case FEEDING:
-                    newState = handleFeeding();
-                    break;
-                case EXHAUSTING:
-                    newState = handleExhaust();
+                case MOVING_DOWN:
+                    newState = handleMovingDown();
                     break;
                 default:
                     newState = SystemState.IDLE;
+                    
                 }
                 if (newState != mSystemState) {
-                    System.out.println("Feeder state " + mSystemState + " to " + newState);
+                    System.out.println("Elevator state " + mSystemState + " to " + newState);
                     mSystemState = newState;
                     mCurrentStateStartTime = timestamp;
+                    DriverStation.reportError("Elevator SystemState: " + mSystemState, false);
                     mStateChanged = true;
                 } else {
                     mStateChanged = false;
                 }
             }
         }
-
+        
         @Override
         public void onStop(double timestamp) {
             stop();
@@ -185,82 +124,52 @@ public class Elevator extends Subsystem {
 
     private SystemState defaultStateTransfer() {
         switch (mWantedState) {
-        case FEED:
-            return SystemState.FEEDING;
-        case UNJAM:
-            return SystemState.UNJAMMING_OUT;
-        case EXHAUST:
-            return SystemState.EXHAUSTING;
+        case MOVE_UP:
+            return SystemState.MOVING_UP;
+        case MOVE_DOWN:
+            return SystemState.MOVING_DOWN;
+        /*case STOP:
+            return SystemState.IDLE; */
         default:
             return SystemState.IDLE;
         }
     }
-
+    
     private SystemState handleIdle() {
-        setOpenLoop(0.0f);
+        //setOpenLoop(0.0f);
+        //if motor is not off, turn motor off
+		return defaultStateTransfer();
+    }
+    private SystemState handleMovingUp() {
+    		if (mStateChanged) {
+    			mVictor.set(0.25);
+    			//turn motor forward	
+    		}
         return defaultStateTransfer();
     }
-
-    private SystemState handleUnjammingOut(double now, double startStartedAt) {
-        setOpenLoop(kUnjamOutPower);
-        SystemState newState = SystemState.UNJAMMING_OUT;
-        if (now - startStartedAt > kUnjamOutPeriod) {
-            newState = SystemState.UNJAMMING_IN;
-        }
-        switch (mWantedState) {
-        case FEED:
-            return SystemState.FEEDING;
-        case UNJAM:
-            return newState;
-        case EXHAUST:
-            return SystemState.EXHAUSTING;
-        default:
-            return SystemState.IDLE;
-        }
-    }
-
-    private SystemState handleUnjammingIn(double now, double startStartedAt) {
-        setOpenLoop(kUnjamInPower);
-        SystemState newState = SystemState.UNJAMMING_IN;
-        if (now - startStartedAt > kUnjamInPeriod) {
-            newState = SystemState.UNJAMMING_OUT;
-        }
-        switch (mWantedState) {
-        case FEED:
-            return SystemState.FEEDING;
-        case UNJAM:
-            return newState;
-        case EXHAUST:
-            return SystemState.EXHAUSTING;
-        default:
-            return SystemState.IDLE;
-        }
-    }
-
+    private SystemState handleMovingDown() {
+    		if (mStateChanged) {
+    			mVictor.set(-0.25);
+    			//turn motor in reverse
+    		}
+        return defaultStateTransfer();
+   }
+ 
+ 
     private SystemState handleFeeding() {
         if (mStateChanged) {
-            // mMasterTalon.changeControlMode(TalonControlMode.Speed);
-            // mMasterTalon.setSetpoint(Constants.kFeederFeedSpeedRpm * Constants.kFeederSensorGearReduction);
-//            mMasterTalon.set(1.0);
         	mVictor.set(1.0);
         }
         return defaultStateTransfer();
     }
 
-    private SystemState handleExhaust() {
-        setOpenLoop(kExhaustVoltage);
-        return defaultStateTransfer();
-    }
-
     public synchronized void setWantedState(WantedState state) {
         mWantedState = state;
+        DriverStation.reportError("Elevator WantedState: " + mWantedState, false);
     }
 
     private void setOpenLoop(double voltage) {
- //       if (mStateChanged) {
- //           mMasterTalon.changeControlMode(CANTalon.TalonControlMode.PercentVbus);
- //       }
-        mVictor.set(voltage);
+    		mVictor.set(voltage);
     }
 
     @Override
@@ -284,69 +193,6 @@ public class Elevator extends Subsystem {
 
     public boolean checkSystem() {
         System.out.println("Testing FEEDER.-----------------------------------");
- /*       final double kCurrentThres = 0.5;
-        final double kRpmThes = 2000.0;
-
-        mSlaveTalon.changeControlMode(TalonControlMode.Voltage);
-        mMasterTalon.changeControlMode(TalonControlMode.Voltage);
-
-        mSlaveTalon.set(0.0);
-        mMasterTalon.set(0.0);
-
-        mMasterTalon.set(6.0f);
-        Timer.delay(4.0);
-        final double currentMaster = mMasterTalon.getOutputCurrent();
-        final double rpmMaster = mMasterTalon.getSpeed();
-        mMasterTalon.set(0.0f);
-
-        Timer.delay(2.0);
-
-        mSlaveTalon.set(-6.0f);
-        Timer.delay(4.0);
-        final double currentSlave = mSlaveTalon.getOutputCurrent();
-        final double rpmSlave = mMasterTalon.getSpeed();
-        mSlaveTalon.set(0.0f);
-
-        mSlaveTalon.changeControlMode(TalonControlMode.Follower);
-        mSlaveTalon.set(Constants.kFeederMasterId);
-
-        System.out.println("Feeder Master Current: " + currentMaster + " Slave Current: " + currentSlave
-                + " rpmMaster: " + rpmMaster + " rpmSlave: " + rpmSlave);
-
-        boolean failure = false;
-
-        if (currentMaster < kCurrentThres) {
-            failure = true;
-            System.out.println("!!!!!!!!!!!!!! Feeder Master Current Low !!!!!!!!!!!!!!!!");
-        }
-
-        if (currentSlave < kCurrentThres) {
-            failure = true;
-            System.out.println("!!!!!!!!!!!!!! Feeder Slave Current Low !!!!!!!!!!!!!!!!!");
-        }
-
-        if (!Util.allCloseTo(Arrays.asList(currentMaster, currentSlave), currentMaster, 5.0)) {
-            failure = true;
-            System.out.println("!!!!!!!!!!!!!!! Feeder currents different!!!!!!!!!!!!!!!");
-        }
-
-        if (rpmMaster < kRpmThes) {
-            failure = true;
-            System.out.println("!!!!!!!!!!!!!! Feeder Master RPM Low !!!!!!!!!!!!!!!!!!!!!!!!!");
-        }
-
-        if (rpmSlave < kRpmThes) {
-            failure = true;
-            System.out.println("!!!!!!!!!!!!!! Feeder Slave RPM Low !!!!!!!!!!!!!!!!!!!!!!!!!");
-        }
-
-        if (!Util.allCloseTo(Arrays.asList(rpmMaster, rpmSlave), rpmMaster, 250)) {
-            failure = true;
-            System.out.println("!!!!!!!!!!!!!! Feeder RPM different !!!!!!!!!!!!!!!!!!!!!!!!!");
-        }
-*/
-//        return !failure;
-//        return true;
- //   }
-
+        return false;
+    }
 }

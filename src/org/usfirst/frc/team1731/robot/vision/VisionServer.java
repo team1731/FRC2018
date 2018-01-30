@@ -43,7 +43,7 @@ public class VisionServer extends CrashTrackingRunnable {
         if (s_instance == null) {
             s_instance = new VisionServer(Constants.kAndroidAppTcpPort);
         }
-        return s_instance;
+        return null;// s_instance;
     }
 
     private boolean mIsConnect = false;
@@ -150,8 +150,8 @@ public class VisionServer extends CrashTrackingRunnable {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        new Thread(this).start();
-        new Thread(new AppMaintainanceThread()).start();
+        //new Thread(this).start();
+        //new Thread(new AppMaintainanceThread()).start();
     }
 
     public void restartAdb() {

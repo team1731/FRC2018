@@ -45,4 +45,8 @@ public interface ControlBoardInterface {
     boolean getRangeFinderButton();
 
     boolean getWantGearDriveLimit();
+
+	boolean getElevatorUpButton();
+	
+	boolean getElevatorDownButton();
 }

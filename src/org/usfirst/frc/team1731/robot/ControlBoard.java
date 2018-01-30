@@ -1,5 +1,6 @@
 package org.usfirst.frc.team1731.robot;
 
+import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 
 /**
@@ -29,6 +30,7 @@ public class ControlBoard implements ControlBoardInterface {
     private final Joystick mTurnStick;
     private final Joystick mButtonBoard;
 
+	
     protected ControlBoard() {
         mThrottleStick = new Joystick(0);
         mTurnStick = new Joystick(1);
@@ -96,6 +98,11 @@ public class ControlBoard implements ControlBoardInterface {
         return mButtonBoard.getRawButton(8);
     }
 
+    /*@Override
+    public boolean getElevatorClosedLoopButton() {
+        return mButtonBoard.getRawButton(8);
+    }*/
+    
     @Override
     public boolean getFlywheelSwitch() {
         return mButtonBoard.getRawAxis(3) < -0.1;
@@ -135,4 +142,15 @@ public class ControlBoard implements ControlBoardInterface {
     public boolean getWantGearDriveLimit() {
         return mButtonBoard.getRawButton(12);
     }
+
+	@Override
+	public boolean getElevatorUpButton() {
+		// TODO Auto-generated method stub
+		return mButtonBoard.getRawButton(5);
+	}
+	@Override
+	public boolean getElevatorDownButton() {
+		// TODO Auto-generated method stub
+		return mButtonBoard.getRawButton(6);
+	}
 }

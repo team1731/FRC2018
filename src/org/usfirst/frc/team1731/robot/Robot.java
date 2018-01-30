@@ -26,6 +26,7 @@ import org.usfirst.frc.team1731.robot.subsystems.Superstructure;
 import org.usfirst.frc.team1731.robot.vision.VisionServer;
 
 import edu.wpi.first.wpilibj.AnalogInput;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -204,6 +205,17 @@ public class Robot extends IterativeRobot {
     public void teleopPeriodic() {
         try {
             double timestamp = Timer.getFPGATimestamp();
+            
+            boolean elevatorUp = mControlBoard.getElevatorUpButton();
+            DriverStation.reportError("ElevatorUpButton: " + elevatorUp, false);
+            if (elevatorUp) {
+            		mSuperstructure.setWantedState(Superstructure.WantedState.ELEVATOR_UP);
+            }
+            boolean elevatorDown = mControlBoard.getElevatorDownButton();
+            DriverStation.reportError("ElevatorDownButton: " + elevatorDown, false);
+            if (elevatorDown) {
+            		mSuperstructure.setWantedState(Superstructure.WantedState.ELEVATOR_DOWN);
+            }
             // Drive base
             double throttle = mControlBoard.getThrottle();
             double turn = mControlBoard.getTurn();

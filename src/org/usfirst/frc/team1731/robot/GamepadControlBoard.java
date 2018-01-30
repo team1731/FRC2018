@@ -127,4 +127,15 @@ public class GamepadControlBoard implements ControlBoardInterface {
         // TODO Auto-generated method stub
         return false;
     }
+
+    @Override
+	public boolean getElevatorUpButton() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+    @Override
+   	public boolean getElevatorDownButton() {
+   		// TODO Auto-generated method stub
+   		return false;
+   	}
 }
