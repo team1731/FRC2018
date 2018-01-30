@@ -93,7 +93,8 @@ public class Drive extends Subsystem {
 
     // Hardware
     private final TalonSRX mLeftMaster, mRightMaster, mLeftSlave, mRightSlave;
-    private final Solenoid mShifter;
+    private final Solenoid mShifter1;
+    private final Solenoid mShifter2;
     private final NavX mNavXBoard;
 
     // Controllers
@@ -106,7 +107,7 @@ public class Drive extends Subsystem {
 
     // Hardware states
     private boolean mIsHighGear;
-    private boolean mIsBrakeMode;
+    private boolean mIsBrakeMode = true;
     private boolean mIsOnTarget = false;
     private boolean mIsApproaching = false;
 
@@ -175,7 +176,7 @@ public class Drive extends Subsystem {
         //mLeftMaster.setFeedbackDevice(TalonSRX.FeedbackDevice.CtreMagEncoder_Relative);
         mLeftMaster.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, Constants.kTimeoutMs);
         //mLeftMaster.reverseSensor(true);
-        mLeftMaster.setInverted(true);
+        mLeftMaster.setInverted(false);
         //mLeftMaster.reverseOutput(false);
         mLeftMaster.setSensorPhase(false);
 
@@ -199,7 +200,7 @@ public class Drive extends Subsystem {
        // mRightMaster.changeControlMode(CANTalon.TalonControlMode.PercentVbus);
         mRightMaster.set(ControlMode.PercentOutput, 0);
         //mRightMaster.reverseSensor(false);
-        mRightMaster.setInverted(true);
+        mRightMaster.setInverted(true); // was true);
        // mRightMaster.reverseOutput(true);
         mRightMaster.setSensorPhase(false);
         //mRightMaster.setFeedbackDevice(CANTalon.FeedbackDevice.CtreMagEncoder_Relative);
@@ -215,7 +216,7 @@ public class Drive extends Subsystem {
         mRightSlave = TalonSRXFactory.createPermanentSlaveTalon(Constants.kRightDriverSlaveId,
                 Constants.kRightDriveMasterId);
         //mRightSlave.reverseOutput(false);
-        mRightSlave.setInverted(false);
+        mRightSlave.setInverted(true);
         //mRightMaster.setStatusFrameRateMs(StatusFrameRate.Feedback, 5);
         mRightMaster.setStatusFramePeriod(StatusFrame.Status_2_Feedback0, 5, Constants.kTimeoutMs); 
         mRightMaster.setStatusFramePeriod(StatusFrame.Status_12_Feedback1, 5, Constants.kTimeoutMs);
@@ -229,7 +230,8 @@ public class Drive extends Subsystem {
        // mRightMaster.SetVelocityMeasurementWindow(32);
         mRightMaster.configVelocityMeasurementWindow(32, Constants.kTimeoutMs);
 
-        mShifter = Constants.makeSolenoidForId(Constants.kShifterSolenoidId);
+        mShifter1 = Constants.makeSolenoidForId(Constants.kShifterSolenoidId1);
+        mShifter2 = Constants.makeSolenoidForId(Constants.kShifterSolenoidId2);
 
         reloadGains();
 
@@ -257,21 +259,28 @@ public class Drive extends Subsystem {
      * Configure talons for open loop control
      */
     public synchronized void setOpenLoop(DriveSignal signal) {
-    	  DriverStation.reportError("setOpenLoop" + signal, false);
+    	//  DriverStation.reportError("setOpenLoop" + signal, false);
         if (mDriveControlState != DriveControlState.OPEN_LOOP) {
       	  DriverStation.reportError("setOpenLoop inside" + signal, false);
            // mLeftMaster.changeControlMode(CANTalon.TalonControlMode.PercentVbus);
             mLeftMaster.set(ControlMode.PercentOutput, signal.getLeft());
             //mRightMaster.changeControlMode(CANTalon.TalonControlMode.PercentVbus);
-            mRightMaster.set(ControlMode.PercentOutput, -signal.getRight());
+            mRightMaster.set(ControlMode.PercentOutput, signal.getRight());
             //mLeftMaster.configNominalOutputVoltage(0.0, 0.0);
             //mRightMaster.configNominalOutputVoltage(0.0, 0.0);
+            mLeftMaster.configNominalOutputForward(0, 0);
+            mLeftMaster.configNominalOutputReverse(0, 0);
+            mRightMaster.configNominalOutputForward(0, 0);
+            mRightMaster.configNominalOutputReverse(0, 0);
             mDriveControlState = DriveControlState.OPEN_LOOP;
             setBrakeMode(false);
         }
         // Right side is reversed, but reverseOutput doesn't invert PercentVBus.
         // So set negative on the right master.
-        mRightMaster.set(ControlMode.PercentOutput,-signal.getRight());
+        SmartDashboard.putNumber("right signal", signal.getRight());
+        SmartDashboard.putNumber("left signal", signal.getLeft());
+  	 // DriverStation.reportError("setOpenLoop" + signal, false);
+        mRightMaster.set(ControlMode.PercentOutput, signal.getRight());
         mLeftMaster.set(ControlMode.PercentOutput, signal.getLeft());
     }
 
@@ -282,7 +291,8 @@ public class Drive extends Subsystem {
     public synchronized void setHighGear(boolean wantsHighGear) {
         if (wantsHighGear != mIsHighGear) {
             mIsHighGear = wantsHighGear;
-            mShifter.set(!wantsHighGear);
+            mShifter1.set(wantsHighGear);
+            mShifter2.set(!wantsHighGear);
         }
     }
 
@@ -297,12 +307,19 @@ public class Drive extends Subsystem {
             //mRightSlave.enableBrakeMode(on);
            // mLeftMaster.enableBrakeMode(on);
             //mLeftSlave.enableBrakeMode(on);
-            
-            mRightMaster.setNeutralMode(com.ctre.phoenix.motorcontrol.NeutralMode.Brake);
-            mRightSlave.setNeutralMode(com.ctre.phoenix.motorcontrol.NeutralMode.Brake);
-            mLeftMaster.setNeutralMode(com.ctre.phoenix.motorcontrol.NeutralMode.Brake);
-            mLeftSlave.setNeutralMode(com.ctre.phoenix.motorcontrol.NeutralMode.Brake);
+            if (mIsBrakeMode) {
+	            mRightMaster.setNeutralMode(com.ctre.phoenix.motorcontrol.NeutralMode.Brake);
+	            mRightSlave.setNeutralMode(com.ctre.phoenix.motorcontrol.NeutralMode.Brake);
+	            mLeftMaster.setNeutralMode(com.ctre.phoenix.motorcontrol.NeutralMode.Brake);
+	            mLeftSlave.setNeutralMode(com.ctre.phoenix.motorcontrol.NeutralMode.Brake); 
+	        } else {
+	            mRightMaster.setNeutralMode(com.ctre.phoenix.motorcontrol.NeutralMode.Coast);
+	            mRightSlave.setNeutralMode(com.ctre.phoenix.motorcontrol.NeutralMode.Coast);
+	            mLeftMaster.setNeutralMode(com.ctre.phoenix.motorcontrol.NeutralMode.Coast);
+	            mLeftSlave.setNeutralMode(com.ctre.phoenix.motorcontrol.NeutralMode.Coast);
+	        }
         }
+        	
     }
 
     @Override
@@ -345,9 +362,9 @@ public class Drive extends Subsystem {
         }
         //SmartDashboard.putNumber("left position (rotations)", mLeftMaster.getPosition()); 
         //TOO DO need to divide by sensor units per rotation
-        SmartDashboard.putNumber("left position (rotations)", mLeftMaster.getSelectedSensorPosition(0));
+        SmartDashboard.putNumber("left position (inches)", getLeftDistanceInches());
         //SmartDashboard.putNumber("right position (rotations)", mRightMaster.getPosition());
-        SmartDashboard.putNumber("right position (rotations)", mRightMaster.getSelectedSensorPosition(0));
+        SmartDashboard.putNumber("right position (rotations)", getRightDistanceInches());
         SmartDashboard.putNumber("gyro vel", getGyroVelocityDegreesPerSec());
         SmartDashboard.putNumber("gyro pos", getGyroAngle().getDegrees());
         SmartDashboard.putBoolean("drive on target", isOnTarget());
@@ -402,11 +419,13 @@ public class Drive extends Subsystem {
            // mRightMaster.setProfile(kHighGearVelocityControlSlot);
            // mRightMaster.configNominalOutputVoltage(Constants.kDriveHighGearNominalOutput,
             //        -Constants.kDriveHighGearNominalOutput);
-        	mLeftMaster.set(ControlMode.Velocity, 0);
+        	// (ATTEMPT TO FIX DRIVING PROBLEM) mLeftMaster.set(ControlMode.Velocity, 0);
+        	mLeftMaster.set(ControlMode.Velocity, 2);
         	mLeftMaster.configNominalOutputForward(Constants.kDriveHighGearNominalOutput,Constants.kTimeoutMs);
         	mLeftMaster.configNominalOutputReverse(-Constants.kDriveHighGearNominalOutput, Constants.kTimeoutMs);
         	mLeftMaster.selectProfileSlot(kHighGearVelocityControlSlot, Constants.kPidIdx);
-        	mRightMaster.set(ControlMode.Velocity, 0);
+        	// (SEE ABOVE LEFTMASTER) mRightMaster.set(ControlMode.Velocity, 0);
+        	mRightMaster.set(ControlMode.Velocity, 2);
         	mRightMaster.configNominalOutputForward(Constants.kDriveHighGearNominalOutput,Constants.kTimeoutMs);
         	mRightMaster.configNominalOutputReverse(-Constants.kDriveHighGearNominalOutput, Constants.kTimeoutMs);
         	mRightMaster.selectProfileSlot(kHighGearVelocityControlSlot, Constants.kPidIdx);
@@ -457,8 +476,8 @@ public class Drive extends Subsystem {
                     ? Constants.kDriveHighGearMaxSetpoint / max_desired : 1.0;
  //           mLeftMaster.set(inchesPerSecondToRpm(left_inches_per_sec * scale));
  //           mRightMaster.set(inchesPerSecondToRpm(right_inches_per_sec * scale));
-              mLeftMaster.set(ControlMode.Velocity, inchesPerSecondToRpm(left_inches_per_sec * scale));
-              mRightMaster.set(ControlMode.Velocity, inchesPerSecondToRpm(right_inches_per_sec * scale));
+              mLeftMaster.set(ControlMode.Velocity, inchesPerSecondToUnitsPer100ms(left_inches_per_sec * scale));
+              mRightMaster.set(ControlMode.Velocity, inchesPerSecondToUnitsPer100ms(right_inches_per_sec * scale));
         } else {
             System.out.println("Hit a bad velocity control state");
             //mLeftMaster.set(0);
@@ -505,25 +524,29 @@ public class Drive extends Subsystem {
     private static double inchesPerSecondToRpm(double inches_per_second) {
         return inchesToRotations(inches_per_second) * 60;
     }
+    
+    private static double inchesPerSecondToUnitsPer100ms(double inches_per_second) {
+    	return (inchesPerSecondToRpm(inches_per_second)*(4096)/600);
+    }
 
     public double getLeftDistanceInches() {
      //   return rotationsToInches(mLeftMaster.getPosition());
-        return rotationsToInches(mLeftMaster.getSelectedSensorPosition(Constants.kPidIdx));
+        return rotationsToInches(mLeftMaster.getSelectedSensorPosition(Constants.kPidIdx)/4096);
     }
 
     public double getRightDistanceInches() {
      //   return rotationsToInches(mRightMaster.getPosition());
-        return rotationsToInches(mRightMaster.getSelectedSensorPosition(Constants.kPidIdx));
+        return rotationsToInches(mRightMaster.getSelectedSensorPosition(Constants.kPidIdx)/4096);
     }
 
     public double getLeftVelocityInchesPerSec() {
        // return rpmToInchesPerSecond(mLeftMaster.getSpeed());
-    	return rpmToInchesPerSecond(mLeftMaster.getSelectedSensorVelocity(Constants.kPidIdx));
+    	return rpmToInchesPerSecond((mLeftMaster.getSelectedSensorVelocity(Constants.kPidIdx)*(600/4096)));
     }
 
     public double getRightVelocityInchesPerSec() {
         //return rpmToInchesPerSecond(mRightMaster.getSpeed());
-    	return rpmToInchesPerSecond(mRightMaster.getSelectedSensorVelocity(Constants.kPidIdx));
+    	return rpmToInchesPerSecond((mRightMaster.getSelectedSensorVelocity(Constants.kPidIdx)*(600/4096)));
     }
 
     public synchronized Rotation2d getGyroAngle() {
@@ -888,7 +911,7 @@ public class Drive extends Subsystem {
         
         
         //mRightMaster.set(-6.0f);
-        mRightMaster.set(ControlMode.PercentOutput,-6.0f);
+        mRightMaster.set(ControlMode.PercentOutput,0.6f);
         Timer.delay(4.0);
         final double currentRightMaster = mRightMaster.getOutputCurrent();
         //final double rpmRightMaster = mRightMaster.getSpeed();
@@ -897,7 +920,7 @@ public class Drive extends Subsystem {
         mRightMaster.set(ControlMode.PercentOutput,0);
         Timer.delay(2.0);
 
-        mRightSlave.set(ControlMode.PercentOutput,-6.0f);
+        mRightSlave.set(ControlMode.PercentOutput,0.6f);
         Timer.delay(4.0);
         final double currentRightSlave = mRightSlave.getOutputCurrent();
         final double rpmRightSlave = mRightSlave.getSelectedSensorVelocity(Constants.kPidIdx);
@@ -905,7 +928,7 @@ public class Drive extends Subsystem {
 
         Timer.delay(2.0);
 
-        mLeftMaster.set(ControlMode.PercentOutput,6.0f);
+        mLeftMaster.set(ControlMode.PercentOutput,0.6f);
         Timer.delay(4.0);
         final double currentLeftMaster = mLeftMaster.getOutputCurrent();
         final double rpmLeftMaster = mLeftMaster.getSelectedSensorVelocity(Constants.kPidIdx);
@@ -913,7 +936,7 @@ public class Drive extends Subsystem {
 
         Timer.delay(2.0);
 
-        mLeftSlave.set(ControlMode.PercentOutput,6.0f);
+        mLeftSlave.set(ControlMode.PercentOutput,0.6f);
         Timer.delay(4.0);
         final double currentLeftSlave = mLeftSlave.getOutputCurrent();
         final double rpmLeftSlave = mLeftSlave.getSelectedSensorVelocity(Constants.kPidIdx);

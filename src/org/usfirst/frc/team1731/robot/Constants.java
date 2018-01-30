@@ -34,17 +34,17 @@ public class Constants extends ConstantsBase {
     public static double kShooterTuningRpm = 3500.0;
 
     /* ROBOT PHYSICAL CONSTANTS */
-
+    // encoder has 4096 /3 tics per revolution
     // Wheels  was 3.4149
-    public static double kDriveWheelDiameterInches = 4.00;
-    public static double kTrackWidthInches = 24.00;
+    public static double kDriveWheelDiameterInches = 5.00*3;  //divide by three because gear ratio on encoder is 3:1
+    public static double kTrackWidthInches = 22.00;
     public static double kTrackScrubFactor = 0.924;
 
     // Geometry
-    public static double kCenterToFrontBumperDistance = 16.33;
+    public static double kCenterToFrontBumperDistance = 19.25; //16.33;
     public static double kCenterToIntakeDistance = 23.11;
-    public static double kCenterToRearBumperDistance = 16.99;
-    public static double kCenterToSideBumperDistance = 17.225;
+    public static double kCenterToRearBumperDistance = 19.25; //16.99;
+    public static double kCenterToSideBumperDistance = 16.75; //17.225;
 
     // Shooting suggestions
     public static double kOnTargetErrorThreshold = 3.0;
@@ -80,7 +80,7 @@ public class Constants extends ConstantsBase {
     
     //TODO need to set these velocities and accellerations
    // public static double kDriveLowGearMaxVelocity = 6.0 * 12.0 * 60.0 / (Math.PI * kDriveWheelDiameterInches); // 6 fps                                                                                                           // in RPM
-    public static int kDriveLowGearMaxVelocity = 3092;  //these are units of units per 100ms
+    public static int kDriveLowGearMaxVelocity = 3092;  //these are units of units per 100ms - bdl - this number works out to 3.29 ft/sec
     
     //public static double kDriveLowGearMaxAccel = 18.0 * 12.0 * 60.0 / (Math.PI * kDriveWheelDiameterInches); // 18 fps/s
     public static int kDriveLowGearMaxAccel = 3092;  //These are   in units per 100ms                                                                                                       // in RPM/s
@@ -159,8 +159,8 @@ public class Constants extends ConstantsBase {
     // are attached to the master)
 
     // Drive
-    public static final int kLeftDriveMasterId = 1;
-    public static final int kLeftDriveSlaveId = 3;
+    public static final int kLeftDriveMasterId = 3;
+    public static final int kLeftDriveSlaveId = 1;
     public static final int kRightDriveMasterId = 4;
     public static final int kRightDriverSlaveId = 2;
     
@@ -195,12 +195,14 @@ public class Constants extends ConstantsBase {
 //    public static final int kGearGrabberId = 15;
 
     // Solenoids
-    public static final int kShifterSolenoidId = 0; // PCM 0, Solenoid 0
+    public static final int kShifterSolenoidId1 = 1; //was 0 // PCM 0, Solenoid 0
+    public static final int kShifterSolenoidId2 = 6;
+    
 //    public static final int kIntakeDeploySolenoidId = 1; // PCM 0, Solenoid 1
     public static final int kHopperSolenoidId = 2; // PCM 0, Solenoid 2
     public static final int kGearWristSolenoid = 7; // PCM 0, Solenoid 7
 
-	public static final int kEjectSolenoid = 1;
+	public static final int kEjectSolenoid = 3; //was 1
 
 	public static final int SlotIdx = 0;
 

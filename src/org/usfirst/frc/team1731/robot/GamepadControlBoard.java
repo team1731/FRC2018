@@ -138,4 +138,8 @@ public class GamepadControlBoard implements ControlBoardInterface {
    		// TODO Auto-generated method stub
    		return false;
    	}
+    @Override
+	public boolean getButtonB() {
+		return mGamepad.getRawButton(2);
+	}
 }

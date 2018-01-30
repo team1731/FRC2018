@@ -216,6 +216,9 @@ public class Robot extends IterativeRobot {
             if (elevatorDown) {
             		mSuperstructure.setWantedState(Superstructure.WantedState.ELEVATOR_DOWN);
             }
+            boolean buttonB = mControlBoard.getButtonB();
+           // System.out.println("buttonB=" + buttonB);
+            
             // Drive base
             double throttle = mControlBoard.getThrottle();
             double turn = mControlBoard.getTurn();

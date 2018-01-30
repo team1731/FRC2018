@@ -9,6 +9,7 @@ import org.usfirst.frc.team1731.robot.auto.actions.EndShootingAction;
 import org.usfirst.frc.team1731.robot.auto.actions.ResetPoseFromPathAction;
 import org.usfirst.frc.team1731.robot.auto.actions.WaitAction;
 import org.usfirst.frc.team1731.robot.paths.BoilerGearToShootRed;
+import org.usfirst.frc.team1731.robot.paths.DriveForward;
 import org.usfirst.frc.team1731.robot.paths.PathContainer;
 import org.usfirst.frc.team1731.robot.paths.StartToBoilerGearRed;
 
@@ -17,18 +18,18 @@ import org.usfirst.frc.team1731.robot.paths.StartToBoilerGearRed;
  * 
  * @see AutoModeBase
  */
-public class BoilerGearThenShootModeRed extends AutoModeBase {
+public class TestAuto extends AutoModeBase {
 
     @Override
     protected void routine() throws AutoModeEndedException {
         runAction(new WaitAction(2));
-        PathContainer gearPath = new StartToBoilerGearRed();
-        runAction(new ResetPoseFromPathAction(gearPath));
-        runAction(new DrivePathAction(gearPath));
-        runAction(new DeployIntakeAction());
-        runAction(new DrivePathAction(new BoilerGearToShootRed()));
-        runAction(new BeginShootingAction());
+        PathContainer forwardPath = new DriveForward();
+      //  PathContainer backPath = new DriveBack();
+        runAction(new ResetPoseFromPathAction(forwardPath));
+        runAction(new DrivePathAction(forwardPath));
         runAction(new WaitAction(15));
-        runAction(new EndShootingAction());
+      //  runAction(new ResetPoseFromPathAction(backPath));
+     //   runAction(new DrivePathAction(backPath));
+        runAction(new WaitAction(15));
     }
 }
