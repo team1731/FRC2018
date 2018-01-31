@@ -6,7 +6,7 @@ import org.json.simple.JSONArray;
 import org.usfirst.frc.team1731.robot.auto.AutoModeBase;
 import org.usfirst.frc.team1731.robot.auto.modes.AutoDetectAllianceGearThenShootMode;
 import org.usfirst.frc.team1731.robot.auto.modes.BoilerGearThenShootModeBlue;
-import org.usfirst.frc.team1731.robot.auto.modes.BoilerGearThenShootModeRed;
+import org.usfirst.frc.team1731.robot.auto.modes.TestAuto;
 import org.usfirst.frc.team1731.robot.auto.modes.CenterGearThenShootModeBlue;
 import org.usfirst.frc.team1731.robot.auto.modes.CenterGearThenShootModeRed;
 import org.usfirst.frc.team1731.robot.auto.modes.GearThenHopperShootModeBlue;
@@ -40,7 +40,7 @@ public class AutoModeSelector {
             "AutoDetect Alliance Gear than Hopper Shoot",
             () -> new AutoDetectAllianceGearThenShootMode());
     private static final AutoModeCreator[] mAllModes = {
-            new AutoModeCreator("Boiler Gear then 10 Ball Shoot Red", () -> new BoilerGearThenShootModeRed()),
+            new AutoModeCreator("Boiler Gear then 10 Ball Shoot Red", () -> new TestAuto()),
             new AutoModeCreator("Boiler Gear then 10 Ball Shoot Blue", () -> new BoilerGearThenShootModeBlue()),
             new AutoModeCreator("Center Gear then Shoot Red", () -> new CenterGearThenShootModeRed()),
             new AutoModeCreator("Center Gear then Shoot Blue", () -> new CenterGearThenShootModeBlue()),
@@ -49,6 +49,7 @@ public class AutoModeSelector {
             new AutoModeCreator("Gear then Hopper Shoot Blue", () -> new GearThenHopperShootModeBlue()),
             new AutoModeCreator("Gear then Hopper Shoot Red", () -> new GearThenHopperShootModeRed()),
             new AutoModeCreator("Standstill", () -> new StandStillMode()),
+            new AutoModeCreator("TestAuto", () -> new TestAuto())
     };
 
     public static void initAutoModeSelector() {

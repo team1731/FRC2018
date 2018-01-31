@@ -30,7 +30,9 @@ public interface ControlBoardInterface {
     boolean getUnjamButton();
 
     boolean getShooterClosedLoopButton();
-
+    
+    boolean getButtonB();
+    
     boolean getFlywheelSwitch();
 
     boolean getHangButton();

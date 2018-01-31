@@ -96,6 +96,11 @@ public class ControlBoard implements ControlBoardInterface {
     }
 
     @Override
+    public boolean getButtonB() {
+        return mButtonBoard.getRawButton(2);
+    }
+
+    @Override
     public boolean getFlywheelSwitch() {
         return mButtonBoard.getRawAxis(3) < -0.1;
     }
