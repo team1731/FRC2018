@@ -58,5 +58,17 @@ public class AutoDetectAllianceSwitchThenPlaceMode extends AutoModeBase {
         	break;
         }
         */
+        
+        /*
+        	This is my thinking space
+        		Set a variable for our known starting position. Make it an enum, right now it's an integer.
+        		Set a boolean for "alliance trust". We don't know if the people we'll be working with are actually good or not until we're there
+        		Alliance trust will make the robot behave differently. Mainly if it'll keep going for the scale.
+        		Put the cube the robot starts with on the switch.
+        		If we don't trust our alliance, and the scale is on the opposite side, pick up another cube and smash a box in there.
+        		If time allows, keep grabbing boxes and putting them in the scale
+        		Maybe we can go into teleop holding a box?
+        */
+         */
     }
 }
