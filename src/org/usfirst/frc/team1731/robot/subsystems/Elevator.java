@@ -28,12 +28,14 @@ import edu.wpi.first.wpilibj.VictorSP;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
-
  * 
  * 1731 this system controls the elevator
  * 
  * @see Subsystem.java
  */
+
+//stemrobotics.cs.pdx.edu/sites/default/files/WPILib_programming.pdf
+
 @SuppressWarnings("unused")
 public class Elevator extends Subsystem {
 	private Joystick joystick2;
@@ -51,10 +53,10 @@ public class Elevator extends Subsystem {
     private final VictorSP mVictor;
     
     public Elevator() {
-    		mVictor = new VictorSP(0);
-    	}
+    	mVictor = new VictorSP(0);
+    }
     	
-    	public enum SystemState {	
+    public enum SystemState {	
         IDLE, // stop all motors
         MOVING_UP,//Run elevator up
         MOVING_DOWN,//Run elevator in reverse
@@ -64,14 +66,14 @@ public class Elevator extends Subsystem {
     		IDLE,   
     		STOP,
     		MOVE_UP,//Run elevator up
-        MOVE_DOWN,//Run elevator in reverse
+    		MOVE_DOWN,//Run elevator in reverse
     }
 
     private SystemState mSystemState = SystemState.IDLE;
     private WantedState mWantedState = WantedState.IDLE;
 
     private double mCurrentStateStartTime;
-    private boolean mStateChanged;
+    private boolean mStateChanged = false;
 
     private Loop mLoop = new Loop() {
         @Override
@@ -88,22 +90,22 @@ public class Elevator extends Subsystem {
         @Override
         public void onLoop(double timestamp) {
    	
-        		synchronized (Elevator.this) {
+        	synchronized (Elevator.this) {
                 SystemState newState;
                 switch (mSystemState) {
-                case IDLE:
-                    newState = handleIdle();
-                    break;
-                case MOVING_UP:
-                    newState = handleMovingUp();
-                    break;
-                case MOVING_DOWN:
-                    newState = handleMovingDown();
-                    break;
-                default:
-                    newState = SystemState.IDLE;
-                    
+                    case IDLE:
+                        newState = handleIdle();
+                        break;
+                    case MOVING_UP:
+                        newState = handleMovingUp();
+                        break;
+                    case MOVING_DOWN:
+                        newState = handleMovingDown();
+                        break;
+                    default:
+                        newState = SystemState.IDLE;                    
                 }
+
                 if (newState != mSystemState) {
                     System.out.println("Elevator state " + mSystemState + " to " + newState);
                     mSystemState = newState;
@@ -124,34 +126,37 @@ public class Elevator extends Subsystem {
 
     private SystemState defaultStateTransfer() {
         switch (mWantedState) {
-        case MOVE_UP:
-            return SystemState.MOVING_UP;
-        case MOVE_DOWN:
-            return SystemState.MOVING_DOWN;
-        /*case STOP:
-            return SystemState.IDLE; */
-        default:
-            return SystemState.IDLE;
+            case MOVE_UP:
+                return SystemState.MOVING_UP;
+            case MOVE_DOWN:
+                return SystemState.MOVING_DOWN;
+            /*case STOP:
+                return SystemState.IDLE; */
+            default:
+                return SystemState.IDLE;
         }
     }
     
     private SystemState handleIdle() {
         //setOpenLoop(0.0f);
         //if motor is not off, turn motor off
+        if (mStateChanged) {
+            mVictor.set(0); //turn motor off    
+        }
 		return defaultStateTransfer();
     }
+
     private SystemState handleMovingUp() {
-    		if (mStateChanged) {
-    			mVictor.set(0.25);
-    			//turn motor forward	
-    		}
+        if (mStateChanged) {
+        		mVictor.set(0.25); //turn motor forward	
+        }
         return defaultStateTransfer();
     }
+
     private SystemState handleMovingDown() {
-    		if (mStateChanged) {
-    			mVictor.set(-0.25);
-    			//turn motor in reverse
-    		}
+		if (mStateChanged) {
+			mVictor.set(-0.25); //turn motor in reverse
+		}
         return defaultStateTransfer();
    }
  
@@ -164,8 +169,10 @@ public class Elevator extends Subsystem {
     }
 
     public synchronized void setWantedState(WantedState state) {
-        mWantedState = state;
-        DriverStation.reportError("Elevator WantedState: " + mWantedState, false);
+        if (state != mWantedState) {
+            mWantedState = state;
+            DriverStation.reportError("Elevator WantedState: " + mWantedState, false);
+        }
     }
 
     private void setOpenLoop(double voltage) {
@@ -179,6 +186,7 @@ public class Elevator extends Subsystem {
 
     @Override
     public void stop() {
+        mVictor.set(0);
         setWantedState(WantedState.IDLE);
     }
 

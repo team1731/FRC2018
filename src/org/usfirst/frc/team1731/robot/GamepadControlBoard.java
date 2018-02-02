@@ -142,4 +142,8 @@ public class GamepadControlBoard implements ControlBoardInterface {
 	public boolean getButtonB() {
 		return mGamepad.getRawButton(2);
 	}
+    @Override
+   	public boolean getButtonA() {
+   		return mGamepad.getRawButton(1);
+   	}
 }

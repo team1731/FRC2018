@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.DriverStation;
 
 /**
  * The superstructure subsystem is the overarching superclass containing all components of the superstructure: the
@@ -71,13 +72,22 @@ public class Superstructure extends Subsystem {
         EXHAUSTING, // exhaust the feeder, hopper, and intake
         HANGING, // run shooter in reverse, everything else is idle
         RANGE_FINDING, // blink the LED strip to let drivers know if they are at an optimal shooting range
-        ELEVATOR_UP,
-        ELEVATOR_DOWN,
+        //ELEVATOR_UP,
+        //ELEVATOR_DOWN,
     };
 
     // Desired function from user
     public enum WantedState {
-        IDLE, SHOOT, ELEVATOR_UP, ELEVATOR_DOWN, UNJAM, UNJAM_SHOOT, MANUAL_FEED, EXHAUST, HANG, RANGE_FINDING
+        IDLE,
+        SHOOT,
+        //ELEVATOR_UP,
+        //ELEVATOR_DOWN,
+        UNJAM,
+        UNJAM_SHOOT,
+        MANUAL_FEED,
+        EXHAUST,
+        HANG,
+        RANGE_FINDING
     }
 
     private SystemState mSystemState = SystemState.IDLE;
@@ -145,12 +155,12 @@ public class Superstructure extends Subsystem {
                 case SHOOTING:
                     newState = handleShooting(timestamp);
                     break;
-                case ELEVATOR_UP:
-                		newState = handleElevatorUp(timestamp);
-                		break;
-                case ELEVATOR_DOWN:
-            			newState = handleElevatorDown(timestamp);
-            			break;
+                //case ELEVATOR_UP:
+                		//newState = handleElevatorUp(timestamp);
+                		//break;
+                //case ELEVATOR_DOWN:
+            			//newState = handleElevatorDown(timestamp);
+            			//break;
                 case UNJAMMING_WITH_SHOOT:
                     newState = handleUnjammingWithShoot(timestamp);
                     break;
@@ -188,18 +198,29 @@ public class Superstructure extends Subsystem {
             }
         }
 
+        /*
         private SystemState handleElevatorUp(double timestamp) {
 			// TODO Auto-generated method stub
-			mElevator.setWantedState(Elevator.WantedState.MOVE_UP);
-			return SystemState.ELEVATOR_UP;
-		}
+			if (mStateChanged) {
+                mElevator.setWantedState(Elevator.WantedState.MOVE_UP);
+	    	}
+
+	        switch (mWantedState) {
+		        case ELEVATOR_UP:
+		        		return SystemState.ELEVATOR_UP;
+		        default:
+		            return SystemState.IDLE;
+	        }
+
+        }
 
         private SystemState handleElevatorDown(double timestamp) {
 			// TODO Auto-generated method stub
 			mElevator.setWantedState(Elevator.WantedState.MOVE_DOWN);
 			return SystemState.ELEVATOR_DOWN;
 		}
-        
+        */
+
 		@Override
         public void onStop(double timestamp) {
             stop();
@@ -209,7 +230,7 @@ public class Superstructure extends Subsystem {
     private SystemState handleRangeFinding() {
         autoSpinShooter(false);
         mLED.setWantedState(LED.WantedState.FIND_RANGE);
-        mElevator.setWantedState(Elevator.WantedState.IDLE);
+        //mElevator.setWantedState(Elevator.WantedState.IDLE);
 
         switch (mWantedState) {
         case UNJAM:
@@ -218,10 +239,10 @@ public class Superstructure extends Subsystem {
             return SystemState.UNJAMMING_WITH_SHOOT;
         case SHOOT:
             return SystemState.WAITING_FOR_ALIGNMENT;
-        case ELEVATOR_UP:
-        		return SystemState.ELEVATOR_UP;
-        case ELEVATOR_DOWN:
-    			return SystemState.ELEVATOR_DOWN;
+        //case ELEVATOR_UP:
+        //		return SystemState.ELEVATOR_UP;
+        //case ELEVATOR_DOWN:
+    		//	return SystemState.ELEVATOR_DOWN;
         case MANUAL_FEED:
             return SystemState.JUST_FEED;
         case EXHAUST:
@@ -240,6 +261,7 @@ public class Superstructure extends Subsystem {
             stop();
             mLED.setWantedState(LED.WantedState.OFF);
             mElevator.setWantedState(Elevator.WantedState.IDLE);
+            DriverStation.reportError("Superstructure: Set Elevator IDLE: " + mSystemState, false);
         }
         mCompressor.setClosedLoopControl(!mCompressorOverride);
 
@@ -250,6 +272,10 @@ public class Superstructure extends Subsystem {
             return SystemState.UNJAMMING_WITH_SHOOT;
         case SHOOT:
             return SystemState.WAITING_FOR_ALIGNMENT;
+        //case ELEVATOR_UP:
+    	//	return SystemState.ELEVATOR_UP;
+        //case ELEVATOR_DOWN:
+		//	return SystemState.ELEVATOR_DOWN;
         case MANUAL_FEED:
             return SystemState.JUST_FEED;
         case EXHAUST:
@@ -265,7 +291,7 @@ public class Superstructure extends Subsystem {
 
     private SystemState handleWaitingForAlignment() {
         mCompressor.setClosedLoopControl(false);
-        mElevator.setWantedState(Elevator.WantedState.IDLE);
+        //mElevator.setWantedState(Elevator.WantedState.IDLE);
         setWantIntakeOnForShooting();
 
         // Don't care about this return value - check the drive directly.
@@ -292,7 +318,7 @@ public class Superstructure extends Subsystem {
 
     private SystemState handleWaitingForFlywheel() {
         mCompressor.setClosedLoopControl(false);
-        mElevator.setWantedState(Elevator.WantedState.IDLE);
+        //mElevator.setWantedState(Elevator.WantedState.IDLE);
         setWantIntakeOnForShooting();
 
         if (autoSpinShooter(true)) {
@@ -320,7 +346,7 @@ public class Superstructure extends Subsystem {
     private SystemState handleShooting(double timestamp) {
         // Don't auto spin anymore - just hold the last setpoint
         mCompressor.setClosedLoopControl(false);
-        mElevator.setWantedState(Elevator.WantedState.IDLE);
+        //mElevator.setWantedState(Elevator.WantedState.IDLE);
         mLED.setWantedState(LED.WantedState.FIND_RANGE);
         setWantIntakeOnForShooting();
 
@@ -369,7 +395,7 @@ public class Superstructure extends Subsystem {
     private SystemState handleUnjammingWithShoot(double timestamp) {
         // Don't auto spin anymore - just hold the last setpoint
         mCompressor.setClosedLoopControl(false);
-        mElevator.setWantedState(Elevator.WantedState.IDLE);
+        //mElevator.setWantedState(Elevator.WantedState.IDLE);
 
         // Make sure to reverse the floor.
 
@@ -392,7 +418,7 @@ public class Superstructure extends Subsystem {
     private SystemState handleShootingSpinDown(double timestamp) {
         // Don't auto spin anymore - just hold the last setpoint
         mCompressor.setClosedLoopControl(false);
-        mElevator.setWantedState(Elevator.WantedState.IDLE);
+        //mElevator.setWantedState(Elevator.WantedState.IDLE);
 
         // Turn off the floor.
 
@@ -425,7 +451,7 @@ public class Superstructure extends Subsystem {
     private SystemState handleUnjamming() {
         mShooter.stop();
         mCompressor.setClosedLoopControl(false);
-        mElevator.setWantedState(Elevator.WantedState.IDLE);
+        //mElevator.setWantedState(Elevator.WantedState.IDLE);
 
         switch (mWantedState) {
         case UNJAM:
@@ -443,7 +469,7 @@ public class Superstructure extends Subsystem {
 
     private SystemState handleJustFeed() {
         mCompressor.setClosedLoopControl(false);
-        mElevator.setWantedState(Elevator.WantedState.IDLE);
+        //mElevator.setWantedState(Elevator.WantedState.IDLE);
 
         mIntake.setOnWhileShooting();
 
@@ -465,9 +491,7 @@ public class Superstructure extends Subsystem {
 
     private SystemState handleExhaust() {
         mCompressor.setClosedLoopControl(false);
-        mElevator.setWantedState(Elevator.WantedState.IDLE);
-
-
+        //mElevator.setWantedState(Elevator.WantedState.IDLE);
 
         switch (mWantedState) {
         case UNJAM:
@@ -488,7 +512,7 @@ public class Superstructure extends Subsystem {
 
     private SystemState handleHang() {
         mCompressor.setClosedLoopControl(false);
-        mElevator.setWantedState(Elevator.WantedState.IDLE);
+        //mElevator.setWantedState(Elevator.WantedState.IDLE);
         mShooter.setOpenLoop(-12.0);
 
         switch (mWantedState) {
@@ -585,6 +609,7 @@ public class Superstructure extends Subsystem {
 
     public synchronized void setWantedState(WantedState wantedState) {
         mWantedState = wantedState;
+        
     }
 
     public synchronized void setShooterOpenLoop(double voltage) {
@@ -617,6 +642,18 @@ public class Superstructure extends Subsystem {
     @Override
     public void registerEnabledLoops(Looper enabledLooper) {
         enabledLooper.register(mLoop);
+    }
+
+    public void setWantedElevatorIdle() {
+        mElevator.setWantedState(Elevator.WantedState.IDLE);
+    }
+
+    public void setWantedElevatorMovingUp() {
+        mElevator.setWantedState(Elevator.WantedState.MOVE_UP);
+    }
+
+    public void setWantedElevatorMovingDown() {
+        mElevator.setWantedState(Elevator.WantedState.MOVE_DOWN);
     }
 
     public void setWantIntakeReversed() {

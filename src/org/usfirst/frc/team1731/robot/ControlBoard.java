@@ -1,6 +1,6 @@
 package org.usfirst.frc.team1731.robot;
 
-import edu.wpi.first.wpilibj.GenericHID;
+//import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 
 /**
@@ -106,6 +106,11 @@ public class ControlBoard implements ControlBoardInterface {
     @Override
     public boolean getButtonB() {
         return mButtonBoard.getRawButton(2);
+    }
+    
+    @Override
+    public boolean getButtonA() {
+        return mButtonBoard.getRawButton(1);
     }
 
     @Override

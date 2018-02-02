@@ -205,7 +205,7 @@ public class Robot extends IterativeRobot {
     public void teleopPeriodic() {
         try {
             double timestamp = Timer.getFPGATimestamp();
-            
+            /*
             boolean elevatorUp = mControlBoard.getElevatorUpButton();
             DriverStation.reportError("ElevatorUpButton: " + elevatorUp, false);
             if (elevatorUp) {
@@ -216,9 +216,21 @@ public class Robot extends IterativeRobot {
             if (elevatorDown) {
             		mSuperstructure.setWantedState(Superstructure.WantedState.ELEVATOR_DOWN);
             }
+            */
             boolean buttonB = mControlBoard.getButtonB();
-           // System.out.println("buttonB=" + buttonB);
-            
+            boolean buttonA = mControlBoard.getButtonA();
+            DriverStation.reportError("ButtonA: " + buttonA + "ButtonB: " + buttonB, false);
+            if (buttonA | buttonB) {
+            		if (buttonB) {
+            			mSuperstructure.setWantedElevatorMovingUp();
+            		} else if (buttonA) {
+            			mSuperstructure.setWantedElevatorMovingDown();
+            		} 
+            } else {
+                mSuperstructure.setWantedElevatorIdle();
+            }
+
+
             // Drive base
             double throttle = mControlBoard.getThrottle();
             double turn = mControlBoard.getTurn();

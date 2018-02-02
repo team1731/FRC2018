@@ -31,6 +31,8 @@ public interface ControlBoardInterface {
     boolean getShooterClosedLoopButton();
     
     boolean getButtonB();
+     
+    boolean getButtonA();
     
     boolean getFlywheelSwitch();
 
