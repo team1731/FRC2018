@@ -5,6 +5,8 @@ package org.usfirst.frc.team1731.robot;
  */
 public interface ControlBoardInterface {
     // DRIVER CONTROLS
+    double getElevatorControl();
+
     double getThrottle();
 
     double getTurn();

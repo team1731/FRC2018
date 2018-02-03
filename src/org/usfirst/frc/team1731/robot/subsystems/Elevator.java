@@ -14,6 +14,7 @@ import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.PigeonImu.StatusFrameRate;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.VelocityMeasPeriod;
+import com.ctre.phoenix.ParamEnum;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
@@ -24,7 +25,7 @@ import edu.wpi.first.wpilibj.Talon;
 //import com.ctre.phoenix.motorcontrol.VelocityMeasWindow;
 
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.VictorSP;
+//import edu.wpi.first.wpilibj.VictorSP;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
@@ -38,7 +39,15 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 @SuppressWarnings("unused")
 public class Elevator extends Subsystem {
-	private Joystick joystick2;
+	//private Joystick joystick2;
+
+    private static final double kReversing = -1.0;
+    private static final double kUnjamInPeriod = .2 * kReversing;
+    private static final double kUnjamOutPeriod = .4 * kReversing;
+    private static final double kUnjamInPower = 6.0 * kReversing / 12.0;
+    private static final double kUnjamOutPower = -6.0 * kReversing / 12.0;
+    private static final double kFeedVoltage = 10.0;
+    private static final double kExhaustVoltage = kFeedVoltage * kReversing / 12.0;
 	
     private static Elevator sInstance = null;
     
@@ -49,30 +58,59 @@ public class Elevator extends Subsystem {
         return sInstance;
     }
 
-    //private final TalonSRX mTalon; 
-    private final VictorSP mVictor;
+    private final TalonSRX mTalon; 
+    //private final VictorSP mVictor;
     
     public Elevator() {
-    	mVictor = new VictorSP(0);
+        mTalon = new TalonSRX(Constants.kElevatorTalon);
+        mTalon.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0);
+        mTalon.set(ControlMode.PercentOutput, 0);
+        mTalon.configVelocityMeasurementWindow(10, 0);
+        mTalon.configVelocityMeasurementPeriod(VelocityMeasPeriod.Period_5Ms, 0);
+        mTalon.config_kP(Constants.SlotIdx, Constants.kElevatorTalonKP, Constants.kTimeoutMs );
+        mTalon.config_kI(Constants.SlotIdx, Constants.kElevatorTalonKI, Constants.kTimeoutMs );
+        mTalon.config_kD(Constants.SlotIdx, Constants.kElevatorTalonKD, Constants.kTimeoutMs);
+        mTalon.config_kF(Constants.SlotIdx, Constants.kElevatorTalonKF, Constants.kTimeoutMs );
+        mTalon.setStatusFramePeriod(StatusFrameEnhanced.Status_12_Feedback1, 1000, 1000);
+        mTalon.setSelectedSensorPosition(0, 0, 10);
+        
+        /* choose to ensure sensor is positive when output is positive */
+        mTalon.setSensorPhase(Constants.kSensorPhase);
+
+        /* choose based on what direction you want forward/positive to be.
+         * This does not affect sensor phase. */ 
+        mTalon.setInverted(Constants.kMotorInvert);
+
+        /* set the peak and nominal outputs, 12V means full */
+        mTalon.configNominalOutputForward(0, Constants.kTimeoutMs);
+        mTalon.configNominalOutputReverse(0, Constants.kTimeoutMs);
+        mTalon.configPeakOutputForward(1, Constants.kTimeoutMs);
+        mTalon.configPeakOutputReverse(-1, Constants.kTimeoutMs);
+        /*
+         * set the allowable closed-loop error, Closed-Loop output will be
+         * neutral within this range. See Table in Section 17.2.1 for native
+         * units per rotation.
+         */
+        mTalon.configAllowableClosedloopError(0, Constants.kPIDLoopIdx, Constants.kTimeoutMs);
+
     }
     	
     public enum SystemState {	
-        IDLE, // stop all motors
-        MOVING_UP,//Run elevator up
-        MOVING_DOWN,//Run elevator in reverse
+        IDLE,   // stop all motors
+        MOVING, // moving
     }
 
     public enum WantedState {
     		IDLE,   
-    		STOP,
-    		MOVE_UP,//Run elevator up
-    		MOVE_DOWN,//Run elevator in reverse
+        MOVING, // moving
+        STOP,
     }
 
     private SystemState mSystemState = SystemState.IDLE;
     private WantedState mWantedState = WantedState.IDLE;
 
     private double mCurrentStateStartTime;
+    private double mWantedPosition = 0;
     private boolean mStateChanged = false;
 
     private Loop mLoop = new Loop() {
@@ -82,6 +120,7 @@ public class Elevator extends Subsystem {
             synchronized (Elevator.this) {
                 mSystemState = SystemState.IDLE;
                 mStateChanged = true;
+                mWantedPosition = 0;
                 mCurrentStateStartTime = timestamp;
                 DriverStation.reportError("Elevator SystemState: " + mSystemState, false);
             }
@@ -96,18 +135,15 @@ public class Elevator extends Subsystem {
                     case IDLE:
                         newState = handleIdle();
                         break;
-                    case MOVING_UP:
-                        newState = handleMovingUp();
-                        break;
-                    case MOVING_DOWN:
-                        newState = handleMovingDown();
+                    case MOVING:
+                        newState = handleMoving();
                         break;
                     default:
                         newState = SystemState.IDLE;                    
                 }
 
                 if (newState != mSystemState) {
-                    System.out.println("Elevator state " + mSystemState + " to " + newState);
+                    //System.out.println("Elevator state " + mSystemState + " to " + newState);
                     mSystemState = newState;
                     mCurrentStateStartTime = timestamp;
                     DriverStation.reportError("Elevator SystemState: " + mSystemState, false);
@@ -126,10 +162,8 @@ public class Elevator extends Subsystem {
 
     private SystemState defaultStateTransfer() {
         switch (mWantedState) {
-            case MOVE_UP:
-                return SystemState.MOVING_UP;
-            case MOVE_DOWN:
-                return SystemState.MOVING_DOWN;
+            case MOVING:
+                return SystemState.MOVING;
             /*case STOP:
                 return SystemState.IDLE; */
             default:
@@ -141,42 +175,36 @@ public class Elevator extends Subsystem {
         //setOpenLoop(0.0f);
         //if motor is not off, turn motor off
         if (mStateChanged) {
-            mVictor.set(0); //turn motor off    
+            mTalon.set(ControlMode.Position, 0);
         }
 		return defaultStateTransfer();
     }
 
-    private SystemState handleMovingUp() {
-        if (mStateChanged) {
-        		mVictor.set(0.25); //turn motor forward	
-        }
+    private SystemState handleMoving() {
+        /* 10 Rotations * 4096 u/rev in either direction */
+        //targetPositionRotations = mWantedPosition * 4096;
+        DriverStation.reportError("Elevator SetPosition: " + Double.toString(mWantedPosition), false);
+        mTalon.set(ControlMode.Position, mWantedPosition * 4096);
+
         return defaultStateTransfer();
     }
 
-    private SystemState handleMovingDown() {
-		if (mStateChanged) {
-			mVictor.set(-0.25); //turn motor in reverse
-		}
-        return defaultStateTransfer();
-   }
- 
- 
-    private SystemState handleFeeding() {
-        if (mStateChanged) {
-        	mVictor.set(1.0);
+    public synchronized void setWantedPosition(double position) {
+        if (position != mWantedPosition) {
+            mWantedPosition = position;
+            mWantedState = WantedState.MOVING;
+            DriverStation.reportError("Elevator WantedPosition: " + Double.toString(mWantedPosition), false);
+            //double current_position = mTalon.getSelectedSensorPosition(0);
+            //DriverStation.reportError("Elevator Current Position: " + Double.toString(current_position), false);    
         }
-        return defaultStateTransfer();
     }
+
 
     public synchronized void setWantedState(WantedState state) {
         if (state != mWantedState) {
             mWantedState = state;
             DriverStation.reportError("Elevator WantedState: " + mWantedState, false);
         }
-    }
-
-    private void setOpenLoop(double voltage) {
-    		mVictor.set(voltage);
     }
 
     @Override
@@ -186,7 +214,7 @@ public class Elevator extends Subsystem {
 
     @Override
     public void stop() {
-        mVictor.set(0);
+        // mVictor.set(0);
         setWantedState(WantedState.IDLE);
     }
 

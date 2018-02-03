@@ -14,7 +14,7 @@ public class GamepadControlBoard implements ControlBoardInterface {
     private final Joystick mGamepad;
 
     protected GamepadControlBoard() {
-        mGamepad = new Joystick(0);
+        mGamepad = new Joystick(2);
     }
 
     @Override
@@ -146,4 +146,10 @@ public class GamepadControlBoard implements ControlBoardInterface {
    	public boolean getButtonA() {
    		return mGamepad.getRawButton(1);
    	}
+
+	@Override
+	public double getElevatorControl() {
+		return mGamepad.getRawAxis(5);
+		//return 0.3;
+	}
 }

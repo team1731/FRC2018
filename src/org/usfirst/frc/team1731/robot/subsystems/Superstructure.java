@@ -644,16 +644,8 @@ public class Superstructure extends Subsystem {
         enabledLooper.register(mLoop);
     }
 
-    public void setWantedElevatorIdle() {
-        mElevator.setWantedState(Elevator.WantedState.IDLE);
-    }
-
-    public void setWantedElevatorMovingUp() {
-        mElevator.setWantedState(Elevator.WantedState.MOVE_UP);
-    }
-
-    public void setWantedElevatorMovingDown() {
-        mElevator.setWantedState(Elevator.WantedState.MOVE_DOWN);
+    public void setWantedElevatorPosition(double position) {
+        mElevator.setWantedPosition(position);
     }
 
     public void setWantIntakeReversed() {

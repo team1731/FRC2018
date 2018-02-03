@@ -217,17 +217,14 @@ public class Robot extends IterativeRobot {
             		mSuperstructure.setWantedState(Superstructure.WantedState.ELEVATOR_DOWN);
             }
             */
-            boolean buttonB = mControlBoard.getButtonB();
-            boolean buttonA = mControlBoard.getButtonA();
-            DriverStation.reportError("ButtonA: " + buttonA + "ButtonB: " + buttonB, false);
-            if (buttonA | buttonB) {
-            		if (buttonB) {
-            			mSuperstructure.setWantedElevatorMovingUp();
-            		} else if (buttonA) {
-            			mSuperstructure.setWantedElevatorMovingDown();
-            		} 
+            double elevator_axis = -1 * mControlBoard.getElevatorControl();
+            //double elevator_axis = 0.6;
+            //boolean buttonA = mControlBoard.getButtonA();
+            //DriverStation.reportError("Elevator Position Joystick: " + Double.toString(elevator_axis), false);
+            if (elevator_axis > 0.1) {
+                mSuperstructure.setWantedElevatorPosition(elevator_axis * 1000);
             } else {
-                mSuperstructure.setWantedElevatorIdle();
+                mSuperstructure.setWantedElevatorPosition(0);
             }
 
 

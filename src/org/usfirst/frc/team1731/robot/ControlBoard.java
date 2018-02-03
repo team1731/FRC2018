@@ -39,6 +39,18 @@ public class ControlBoard implements ControlBoardInterface {
 
     // DRIVER CONTROLS
     @Override
+    public boolean getRangeFinderButton() {
+        return mButtonBoard.getRawButton(7);
+    }
+
+	@Override
+	public double getElevatorControl() {
+		// TODO Auto-generated method stub
+		//return mButtonBoard.getRawAxis(5);
+		return 0.4;
+		//return -mTurnStick.getY();
+	}
+    @Override
     public double getThrottle() {
         return -mThrottleStick.getRawAxis(1);
     }
@@ -141,11 +153,6 @@ public class ControlBoard implements ControlBoardInterface {
     @Override
     public boolean getBlinkLEDButton() {
         return mButtonBoard.getRawButton(9);
-    }
-
-    @Override
-    public boolean getRangeFinderButton() {
-        return mButtonBoard.getRawButton(7);
     }
 
     @Override
