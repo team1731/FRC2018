@@ -11,7 +11,7 @@ import org.usfirst.frc.team1731.robot.loops.Looper;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
-import com.ctre.PigeonImu.StatusFrameRate;
+//import com.ctre.PigeonImu.StatusFrameRate;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.VelocityMeasPeriod;
 import com.ctre.phoenix.ParamEnum;
@@ -64,9 +64,10 @@ public class Elevator extends Subsystem {
     public Elevator() {
         mTalon = new TalonSRX(Constants.kElevatorTalon);
         mTalon.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0);
-        mTalon.set(ControlMode.PercentOutput, 0);
+        mTalon.set(ControlMode.Position, 0);
         mTalon.configVelocityMeasurementWindow(10, 0);
         mTalon.configVelocityMeasurementPeriod(VelocityMeasPeriod.Period_5Ms, 0);
+        mTalon.selectProfileSlot(0, 0);
         mTalon.config_kP(Constants.SlotIdx, Constants.kElevatorTalonKP, Constants.kTimeoutMs );
         mTalon.config_kI(Constants.SlotIdx, Constants.kElevatorTalonKI, Constants.kTimeoutMs );
         mTalon.config_kD(Constants.SlotIdx, Constants.kElevatorTalonKD, Constants.kTimeoutMs);
@@ -79,7 +80,7 @@ public class Elevator extends Subsystem {
 
         /* choose based on what direction you want forward/positive to be.
          * This does not affect sensor phase. */ 
-        mTalon.setInverted(Constants.kMotorInvert);
+        mTalon.setInverted(true); //Constants.kMotorInvert);
 
         /* set the peak and nominal outputs, 12V means full */
         mTalon.configNominalOutputForward(0, Constants.kTimeoutMs);
@@ -122,6 +123,7 @@ public class Elevator extends Subsystem {
                 mStateChanged = true;
                 mWantedPosition = 0;
                 mCurrentStateStartTime = timestamp;
+                mTalon.setSelectedSensorPosition(0, 0, 10);                
                 DriverStation.reportError("Elevator SystemState: " + mSystemState, false);
             }
         }
@@ -184,7 +186,7 @@ public class Elevator extends Subsystem {
         /* 10 Rotations * 4096 u/rev in either direction */
         //targetPositionRotations = mWantedPosition * 4096;
         DriverStation.reportError("Elevator SetPosition: " + Double.toString(mWantedPosition), false);
-        mTalon.set(ControlMode.Position, mWantedPosition * 4096);
+        mTalon.set(ControlMode.Position, mWantedPosition); // * 4096);
 
         return defaultStateTransfer();
     }
@@ -193,9 +195,8 @@ public class Elevator extends Subsystem {
         if (position != mWantedPosition) {
             mWantedPosition = position;
             mWantedState = WantedState.MOVING;
-            DriverStation.reportError("Elevator WantedPosition: " + Double.toString(mWantedPosition), false);
-            //double current_position = mTalon.getSelectedSensorPosition(0);
-            //DriverStation.reportError("Elevator Current Position: " + Double.toString(current_position), false);    
+        } else if (position == 0) {
+        	mWantedState = WantedState.IDLE;
         }
     }
 
@@ -209,7 +210,10 @@ public class Elevator extends Subsystem {
 
     @Override
     public void outputToSmartDashboard() {
-        // SmartDashboard.putNumber("feeder_speed", mMasterTalon.get() / Constants.kFeederSensorGearReduction);
+        SmartDashboard.putNumber("ElevWantPos", mWantedPosition);
+        SmartDashboard.putNumber("ElevCurPos", mTalon.getSelectedSensorPosition(0));
+        SmartDashboard.putNumber("ElevQuadPos", mTalon.getSensorCollection().getQuadraturePosition());
+        SmartDashboard.putBoolean("ElevRevSw", mTalon.getSensorCollection().isRevLimitSwitchClosed());
     }
 
     @Override

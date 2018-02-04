@@ -222,7 +222,7 @@ public class Robot extends IterativeRobot {
             //boolean buttonA = mControlBoard.getButtonA();
             //DriverStation.reportError("Elevator Position Joystick: " + Double.toString(elevator_axis), false);
             if (elevator_axis > 0.1) {
-                mSuperstructure.setWantedElevatorPosition(elevator_axis * 1000);
+                mSuperstructure.setWantedElevatorPosition(elevator_axis * 100000);
             } else {
                 mSuperstructure.setWantedElevatorPosition(0);
             }
