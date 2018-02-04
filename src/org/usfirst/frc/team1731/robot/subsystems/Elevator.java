@@ -11,7 +11,7 @@ import org.usfirst.frc.team1731.robot.loops.Looper;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
-import com.ctre.PigeonImu.StatusFrameRate;
+// com.ctre.PigeonImu.StatusFrameRate;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.VelocityMeasPeriod;
 
