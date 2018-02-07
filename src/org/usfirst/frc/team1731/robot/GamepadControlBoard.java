@@ -12,16 +12,31 @@ import edu.wpi.first.wpilibj.Joystick;
 public class GamepadControlBoard implements ControlBoardInterface {
 
     private final Joystick mGamepad;
+    private final Joystick mExtreme3D;
 
     protected GamepadControlBoard() {
-        mGamepad = new Joystick(2);
+    	mExtreme3D = new Joystick(0);
+        mGamepad = new Joystick(1);
     }
+    
+    @Override
+    public boolean getGrabCubeButton() {
+        return mExtreme3D.getRawButton(8);
+    }
+    
+    @Override
+    public boolean getOverTheTopButton() {
+        return mExtreme3D.getRawButton(9);
+    }
+
 
     @Override
     public double getThrottle() {
         return -mGamepad.getRawAxis(1);
     }
 
+    boolean getGrabCubeButton = false;  
+    
     @Override
     public double getTurn() {
         return mGamepad.getRawAxis(4);
@@ -149,7 +164,7 @@ public class GamepadControlBoard implements ControlBoardInterface {
 
 	@Override
 	public double getElevatorControl() {
-		return mGamepad.getRawAxis(5);
+		return mExtreme3D.getRawAxis(3);
 		//return 0.3;
 	}
 }

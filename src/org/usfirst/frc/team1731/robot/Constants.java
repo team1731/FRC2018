@@ -36,7 +36,7 @@ public class Constants extends ConstantsBase {
     /* ROBOT PHYSICAL CONSTANTS */
     // encoder has 4096 /3 tics per revolution
     // Wheels  was 3.4149
-    public static double kDriveWheelDiameterInches = 5.00*3;  //divide by three because gear ratio on encoder is 3:1
+    public static double kDriveWheelDiameterInches = 15;  //divide by three because gear ratio on encoder is 3:1
     public static double kTrackWidthInches = 22.00;
     public static double kTrackScrubFactor = 0.924;
 
@@ -64,7 +64,7 @@ public class Constants extends ConstantsBase {
     public static double kDriveHighGearVelocityKd = 6.0;
     public static double kDriveHighGearVelocityKf = .15;
     public static int kDriveHighGearVelocityIZone = 0;
-    public static double kDriveHighGearVelocityRampRate = 240.0;
+    public static double kDriveHighGearVelocityRampRate = 0.05;// 240.0;
     public static double kDriveHighGearNominalOutput = 0.5;
     public static double kDriveHighGearMaxSetpoint = 17.0 * 12.0; // 17 fps
 
@@ -75,10 +75,10 @@ public class Constants extends ConstantsBase {
     public static double kDriveLowGearPositionKd = 100.0;
     public static double kDriveLowGearPositionKf = .45;
     public static int kDriveLowGearPositionIZone = 700;
-    public static double kDriveLowGearPositionRampRate = 240.0; // V/s
+    public static double kDriveLowGearPositionRampRate = 0.05; //240.0; // V/s
     public static double kDriveLowGearNominalOutput = 0.5; // V
     
-    //TODO need to set these velocities and accellerations
+    //TODO need to set these velocities and accellerations  This is for the talon motion magic so I think you need to do the tics per 100ms thing
    // public static double kDriveLowGearMaxVelocity = 6.0 * 12.0 * 60.0 / (Math.PI * kDriveWheelDiameterInches); // 6 fps                                                                                                           // in RPM
     public static int kDriveLowGearMaxVelocity = 3092;  //these are units of units per 100ms - bdl - this number works out to 3.29 ft/sec
     
@@ -140,7 +140,7 @@ public class Constants extends ConstantsBase {
     public static double kFeederSensorGearReduction = 3.0;
     
    //Elevator
-    public static double kElevatorTalonKP = 0.1;
+    public static double kElevatorTalonKP = 1;
     public static double kElevatorTalonKI = 0.0;
     public static double kElevatorTalonKD = 0.0;
     public static double kElevatorTalonKF = 0.0;
@@ -223,11 +223,18 @@ public class Constants extends ConstantsBase {
     public static final int kShifterSolenoidId1 = 1; //was 0 // PCM 0, Solenoid 0
     public static final int kShifterSolenoidId2 = 6;
     
+    public static final int kOverTheTopSolenoid1 = 2; 
+    public static final int kOverTheTopSolenoid2 = 5;
+    
+    public static final int kGrabberSolenoid1 = 3; 
+    public static final int kGrabberSolenoid2 = 4;
+    
+    
 //    public static final int kIntakeDeploySolenoidId = 1; // PCM 0, Solenoid 1
-    public static final int kHopperSolenoidId = 2; // PCM 0, Solenoid 2
+//    public static final int kHopperSolenoidId = 2; // PCM 0, Solenoid 2
     public static final int kGearWristSolenoid = 7; // PCM 0, Solenoid 7
 
-	public static final int kEjectSolenoid = 3; //was 1
+//	public static final int kEjectSolenoid = 3; //was 1
 
 	public static final int SlotIdx = 0;
 

@@ -194,7 +194,6 @@ public class Drive extends Subsystem {
 
         mLeftMaster.setStatusFramePeriod(StatusFrame.Status_2_Feedback0, 5, Constants.kTimeoutMs); 
         mLeftMaster.setStatusFramePeriod(StatusFrame.Status_12_Feedback1, 5, Constants.kTimeoutMs); 
-     
         mRightMaster = TalonSRXFactory.createDefaultTalon(Constants.kRightDriveMasterId);
 
        // mRightMaster.changeControlMode(CANTalon.TalonControlMode.PercentVbus);
@@ -277,8 +276,7 @@ public class Drive extends Subsystem {
         }
         // Right side is reversed, but reverseOutput doesn't invert PercentVBus.
         // So set negative on the right master.
-        SmartDashboard.putNumber("right signal", signal.getRight());
-        SmartDashboard.putNumber("left signal", signal.getLeft());
+
   	 // DriverStation.reportError("setOpenLoop" + signal, false);
         mRightMaster.set(ControlMode.PercentOutput, signal.getRight());
         mLeftMaster.set(ControlMode.PercentOutput, signal.getLeft());
@@ -333,7 +331,8 @@ public class Drive extends Subsystem {
         final double right_speed = getRightVelocityInchesPerSec();
       //  SmartDashboard.putNumber("left voltage (V)", mLeftMaster.getOutputVoltage());
         //SmartDashboard.putNumber("right voltage (V)", mRightMaster.getOutputVoltage());
-        
+       // SmartDashboard.putNumber("right signal", signal.getRight());
+      //  SmartDashboard.putNumber("left signal", signal.getLeft());
         SmartDashboard.putNumber("left voltage (V)", mLeftMaster.getMotorOutputVoltage());
         SmartDashboard.putNumber("right voltage (V)", mRightMaster.getMotorOutputVoltage());
         SmartDashboard.putNumber("left speed (ips)", left_speed);
@@ -364,7 +363,7 @@ public class Drive extends Subsystem {
         //TOO DO need to divide by sensor units per rotation
         SmartDashboard.putNumber("left position (inches)", getLeftDistanceInches());
         //SmartDashboard.putNumber("right position (rotations)", mRightMaster.getPosition());
-        SmartDashboard.putNumber("right position (rotations)", getRightDistanceInches());
+        SmartDashboard.putNumber("right position (inches)", getRightDistanceInches());
         SmartDashboard.putNumber("gyro vel", getGyroVelocityDegreesPerSec());
         SmartDashboard.putNumber("gyro pos", getGyroAngle().getDegrees());
         SmartDashboard.putBoolean("drive on target", isOnTarget());
@@ -510,10 +509,13 @@ public class Drive extends Subsystem {
     }
 
     private static double rotationsToInches(double rotations) {
+   //     System.out.println("rotations: " + rotations );
         return rotations * (Constants.kDriveWheelDiameterInches * Math.PI);
+
     }
 
     private static double rpmToInchesPerSecond(double rpm) {
+   //     System.out.println("rpm: " + rpm );
         return rotationsToInches(rpm) / 60;
     }
 
@@ -526,27 +528,31 @@ public class Drive extends Subsystem {
     }
     
     private static double inchesPerSecondToUnitsPer100ms(double inches_per_second) {
-    	return (inchesPerSecondToRpm(inches_per_second)*(4096)/600);
+    	return ((inchesPerSecondToRpm(inches_per_second))*(4096.0)/600.0);
     }
 
     public double getLeftDistanceInches() {
      //   return rotationsToInches(mLeftMaster.getPosition());
-        return rotationsToInches(mLeftMaster.getSelectedSensorPosition(Constants.kPidIdx)/4096);
+    //	 System.out.println("sensorcollection" + mLeftMaster.getSensorCollection().getQuadraturePosition());
+    //	 System.out.println("sensorposition" + mLeftMaster.getSelectedSensorPosition(Constants.kPidIdx));
+
+        return rotationsToInches(mLeftMaster.getSelectedSensorPosition(Constants.kPidIdx)/4096.0);
     }
 
     public double getRightDistanceInches() {
      //   return rotationsToInches(mRightMaster.getPosition());
-        return rotationsToInches(mRightMaster.getSelectedSensorPosition(Constants.kPidIdx)/4096);
+        return rotationsToInches(mRightMaster.getSelectedSensorPosition(Constants.kPidIdx)/4096.0);
     }
 
     public double getLeftVelocityInchesPerSec() {
        // return rpmToInchesPerSecond(mLeftMaster.getSpeed());
-    	return rpmToInchesPerSecond((mLeftMaster.getSelectedSensorVelocity(Constants.kPidIdx)*(600/4096)));
+    	return rpmToInchesPerSecond((mLeftMaster.getSelectedSensorVelocity(Constants.kPidIdx)*(600.0/4096.0)));
+       // return rpmToInchesPerSecond((mLeftMaster.getSelectedSensorVelocity(Constants.kPidIdx)*(0.1464)));
     }
 
     public double getRightVelocityInchesPerSec() {
         //return rpmToInchesPerSecond(mRightMaster.getSpeed());
-    	return rpmToInchesPerSecond((mRightMaster.getSelectedSensorVelocity(Constants.kPidIdx)*(600/4096)));
+    	return rpmToInchesPerSecond((mRightMaster.getSelectedSensorVelocity(Constants.kPidIdx)*(600.0/4096.0)));
     }
 
     public synchronized Rotation2d getGyroAngle() {

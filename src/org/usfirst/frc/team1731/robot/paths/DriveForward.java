@@ -15,8 +15,9 @@ public class DriveForward implements PathContainer {
     public Path buildPath() {
         ArrayList<Waypoint> sWaypoints = new ArrayList<Waypoint>();
         sWaypoints.add(new Waypoint(20,250,0,0));
-        sWaypoints.add(new Waypoint(80,250,0,0));
-
+        sWaypoints.add(new Waypoint(35,250,15,60));
+        sWaypoints.add(new Waypoint(44,220,0,30));
+        sWaypoints.add(new Waypoint(44,210,0,0));
         return PathBuilder.buildPathFromWaypoints(sWaypoints);
     }
     

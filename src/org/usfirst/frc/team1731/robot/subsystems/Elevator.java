@@ -83,10 +83,10 @@ public class Elevator extends Subsystem {
         mTalon.setInverted(true); //Constants.kMotorInvert);
 
         /* set the peak and nominal outputs, 12V means full */
-        mTalon.configNominalOutputForward(0, Constants.kTimeoutMs);
-        mTalon.configNominalOutputReverse(0, Constants.kTimeoutMs);
+        mTalon.configNominalOutputForward(.2, Constants.kTimeoutMs);
+        mTalon.configNominalOutputReverse(.2, Constants.kTimeoutMs);
         mTalon.configPeakOutputForward(1, Constants.kTimeoutMs);
-        mTalon.configPeakOutputReverse(-1, Constants.kTimeoutMs);
+        mTalon.configPeakOutputReverse(-0.5, Constants.kTimeoutMs);
         /*
          * set the allowable closed-loop error, Closed-Loop output will be
          * neutral within this range. See Table in Section 17.2.1 for native
@@ -124,7 +124,7 @@ public class Elevator extends Subsystem {
                 mWantedPosition = 0;
                 mCurrentStateStartTime = timestamp;
                 mTalon.setSelectedSensorPosition(0, 0, 10);                
-                DriverStation.reportError("Elevator SystemState: " + mSystemState, false);
+              //  DriverStation.reportError("Elevator SystemState: " + mSystemState, false);
             }
         }
 
@@ -185,7 +185,7 @@ public class Elevator extends Subsystem {
     private SystemState handleMoving() {
         /* 10 Rotations * 4096 u/rev in either direction */
         //targetPositionRotations = mWantedPosition * 4096;
-        DriverStation.reportError("Elevator SetPosition: " + Double.toString(mWantedPosition), false);
+       // DriverStation.reportError("Elevator SetPosition: " + Double.toString(mWantedPosition), false);
         mTalon.set(ControlMode.Position, mWantedPosition); // * 4096);
 
         return defaultStateTransfer();

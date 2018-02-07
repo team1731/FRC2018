@@ -4,7 +4,8 @@ package org.usfirst.frc.team1731.robot;
  * A basic framework for robot controls that other controller classes implement
  */
 public interface ControlBoardInterface {
-    // DRIVER CONTROLS
+
+	// DRIVER CONTROLS
     double getElevatorControl();
 
     double getThrottle();
@@ -55,4 +56,8 @@ public interface ControlBoardInterface {
 	boolean getElevatorUpButton();
 	
 	boolean getElevatorDownButton();
+
+	boolean getGrabCubeButton();
+
+	boolean getOverTheTopButton();
 }

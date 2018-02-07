@@ -170,4 +170,16 @@ public class ControlBoard implements ControlBoardInterface {
 		// TODO Auto-generated method stub
 		return mButtonBoard.getRawButton(6);
 	}
+
+	@Override
+	public boolean getGrabCubeButton() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean getOverTheTopButton() {
+		// TODO Auto-generated method stub
+		return false;
+	}
 }
