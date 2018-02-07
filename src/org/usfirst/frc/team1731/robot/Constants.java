@@ -177,7 +177,12 @@ public class Constants extends ConstantsBase {
 
 //	  public static final int kIntakeMasterId = 5;
 //    public static final int kIntakeSlaveId = 10;
-	public static final int kIntakeVictor = 2;
+	
+	//
+	// NOTE: these are Victor SPX (CANbus)
+	//
+	public static final int kIntakeVictorLeft = 6;
+	public static final int kIntakeVictorRight = 8;
 
     // Hopper / Floor
 //    public static final int kHopperMasterId = 6;

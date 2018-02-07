@@ -22,6 +22,8 @@ public interface ControlBoardInterface {
 
     boolean getIntakeButton();
 
+	boolean getOuttakeButton();
+	
     boolean getShooterOpenLoopButton();
 
     boolean getExhaustButton();
@@ -53,4 +55,5 @@ public interface ControlBoardInterface {
 	boolean getElevatorUpButton();
 	
 	boolean getElevatorDownButton();
+
 }

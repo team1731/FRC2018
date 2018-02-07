@@ -288,6 +288,8 @@ public class Robot extends IterativeRobot {
                     mSuperstructure.setWantIntakeReversed();
                 } else if (mControlBoard.getIntakeButton()) {
                     mSuperstructure.setWantIntakeOn();
+                } else if (mControlBoard.getOuttakeButton()) {
+                    mSuperstructure.setWantOuttakeOn();
                 } else if (!mSuperstructure.isShooting()) {
                     mSuperstructure.setWantIntakeStopped();
                 }

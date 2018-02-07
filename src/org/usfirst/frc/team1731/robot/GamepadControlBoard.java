@@ -58,6 +58,12 @@ public class GamepadControlBoard implements ControlBoardInterface {
     }
 
     @Override
+    public boolean getOuttakeButton() {
+        // L1
+        return mGamepad.getRawButton(6);
+    }
+
+    @Override
     public boolean getFeedButton() {
         // X
         return false;

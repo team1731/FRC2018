@@ -668,6 +668,10 @@ public class Superstructure extends Subsystem {
         mIntake.setOn();
     }
 
+	public void setWantOuttakeOn() {
+        mIntake.setReverse();
+	}
+
     public void setWantIntakeOnForShooting() {
         mIntake.setOnWhileShooting();
     }

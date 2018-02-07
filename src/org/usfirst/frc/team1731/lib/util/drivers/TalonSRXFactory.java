@@ -84,7 +84,7 @@ public class TalonSRXFactory {
    //     talon.setControlFramePeriod(ControlFrame.Control_3_General,config.CONTROL_FRAME_PERIOD_MS);
         talon.set(ControlMode.PercentOutput,0);
    //     talon.changeMotionControlFramePeriod(config.MOTION_CONTROL_FRAME_PERIOD_MS);
-        /*
+        /* OLD TALON CODE - (2017 CTR drivers)
         talon.clearIAccum();
         talon.setIntegralAccumulator(arg0, arg1, arg2)
         talon.clearMotionProfileHasUnderrun();

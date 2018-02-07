@@ -8,6 +8,9 @@ import org.usfirst.frc.team1731.lib.util.drivers.TalonSRXFactory;
 import org.usfirst.frc.team1731.robot.Constants;
 import org.usfirst.frc.team1731.robot.loops.Looper;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.can.VictorSPX;
+
 //import com.ctre.CANTalon;
 
 import edu.wpi.first.wpilibj.Solenoid;
@@ -33,12 +36,15 @@ public class Intake extends Subsystem {
     // hardware
 //    private CANTalon mMasterTalon, mSlaveTalon;
 //    private Solenoid mDeploySolenoid;
-    private final VictorSP mVictor;
+    private final VictorSPX mVictorLeft;
+    private final VictorSPX mVictorRight;
 
     private MovingAverage mThrottleAverage = new MovingAverage(50);
 
     private Intake() {
-    	mVictor = new VictorSP(Constants.kIntakeVictor);
+    	mVictorLeft = new VictorSPX(Constants.kIntakeVictorLeft);
+    	mVictorRight = new VictorSPX(Constants.kIntakeVictorRight);
+    	//mVictor = new VictorSP(Constants.kIntakeVictor);
 /*        mMasterTalon = CANTalonFactory.createDefaultTalon(Constants.kIntakeMasterId);
         mMasterTalon.setStatusFrameRateMs(CANTalon.StatusFrameRate.General, 1000);
         mMasterTalon.setStatusFrameRateMs(CANTalon.StatusFrameRate.Feedback, 1000);
@@ -120,8 +126,8 @@ public class Intake extends Subsystem {
 
     private void setOpenLoop(double voltage) {
         // voltage = -voltage; // Flip so +V = intake
-        mVictor.set(-voltage);
-        mVictor.set(voltage);
+        mVictorLeft.set(ControlMode.PercentOutput, -voltage);
+        mVictorRight.set(ControlMode.PercentOutput, voltage);
     }
 
     public boolean checkSystem() {
