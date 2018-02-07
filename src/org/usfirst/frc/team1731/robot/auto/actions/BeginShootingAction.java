@@ -2,7 +2,7 @@ package org.usfirst.frc.team1731.robot.auto.actions;
 
 import org.usfirst.frc.team1731.robot.subsystems.Drive;
 import org.usfirst.frc.team1731.robot.subsystems.Intake;
-import org.usfirst.frc.team1731.robot.subsystems.Superstructure;
+//import org.usfirst.frc.team1731.robot.subsystems.Superstructure;
 
 /**
  * Action to begin shooting.

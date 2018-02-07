@@ -1,23 +1,23 @@
 package org.usfirst.frc.team1731.robot.subsystems;
 
-import java.util.Arrays;
-import java.util.Optional;
+//import java.util.Arrays;
+//import java.util.Optional;
 
 import org.usfirst.frc.team1731.lib.util.CircularBuffer;
-import org.usfirst.frc.team1731.lib.util.ReflectingCSVWriter;
-import org.usfirst.frc.team1731.lib.util.Util;
-import org.usfirst.frc.team1731.lib.util.drivers.TalonSRXFactory;
+//import org.usfirst.frc.team1731.lib.util.ReflectingCSVWriter;
+//import org.usfirst.frc.team1731.lib.util.Util;
+//import org.usfirst.frc.team1731.lib.util.drivers.TalonSRXFactory;
 import org.usfirst.frc.team1731.robot.Constants;
-import org.usfirst.frc.team1731.robot.RobotState;
-import org.usfirst.frc.team1731.robot.ShooterAimingParameters;
+//import org.usfirst.frc.team1731.robot.RobotState;
+//import org.usfirst.frc.team1731.robot.ShooterAimingParameters;
 import org.usfirst.frc.team1731.robot.loops.Loop;
 import org.usfirst.frc.team1731.robot.loops.Looper;
 
-import com.ctre.CANTalon;
+//import com.ctre.CANTalon;
 
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+//import edu.wpi.first.wpilibj.DriverStation;
+//import edu.wpi.first.wpilibj.Timer;
+//import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.VictorSP;
 
 /**
@@ -80,9 +80,9 @@ public class Shooter extends Subsystem {
 
     // Used for transitioning from spin-up to hold loop.
     private boolean mOnTarget = false;
-    private double mOnTargetStartTime = Double.POSITIVE_INFINITY;
+  //  private double mOnTargetStartTime = Double.POSITIVE_INFINITY;
 
-    private ShooterDebugOutput mDebug = new ShooterDebugOutput();
+   // private ShooterDebugOutput mDebug = new ShooterDebugOutput();
 
  //   private final ReflectingCSVWriter<ShooterDebugOutput> mCSVWriter;
 
@@ -176,7 +176,7 @@ public class Shooter extends Subsystem {
                     mControlMethod = ControlMethod.OPEN_LOOP;
                     mKfEstimator.clear();
                     mOnTarget = false;
-                    mOnTargetStartTime = Double.POSITIVE_INFINITY;
+             //       mOnTargetStartTime = Double.POSITIVE_INFINITY;
                 }
             }
 
@@ -190,7 +190,7 @@ public class Shooter extends Subsystem {
                         // Reset all state.
                         mKfEstimator.clear();
                         mOnTarget = false;
-                        mOnTargetStartTime = Double.POSITIVE_INFINITY;
+      //                  mOnTargetStartTime = Double.POSITIVE_INFINITY;
                     }
                 }
             }
@@ -277,15 +277,6 @@ public class Shooter extends Subsystem {
     private void resetHold() {
         mKfEstimator.clear();
         mOnTarget = false;
-    }
-
-    /**
-     * Estimate the kF value from current RPM and voltage
-     */
-    private double estimateKf(double rpm, double voltage) {
-        final double speed_in_ticks_per_100ms = 4096.0 / 600.0 * rpm;
-        final double output = 1023.0 / 12.0 * voltage;
-        return output / speed_in_ticks_per_100ms;
     }
 
     /**

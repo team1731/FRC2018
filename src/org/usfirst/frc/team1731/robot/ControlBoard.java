@@ -73,7 +73,7 @@ public class ControlBoard implements ControlBoardInterface {
 
     @Override
     public boolean getIntakeButton() {
-        return mButtonBoard.getRawAxis(2) < -0.1;
+        return false;
     }
 
     @Override
@@ -81,10 +81,15 @@ public class ControlBoard implements ControlBoardInterface {
         return false;
     }
     @Override
-    public boolean getCLIMBAxisLFT() {  //IMPORTANT
-        return mButtonBoard.getRawAxis(0) < -0.1;
+    public boolean getCLIMBAxisLFT() {  
+        return mButtonBoard.getRawAxis(2) >0.25;
     }
-
+    @Override
+    public boolean getCLIMBAxisRHT() {
+    	return mButtonBoard.getRawAxis(3) >0.25;
+    }
+    
+    
     @Override
     public boolean getUnjamButton() {
         return mButtonBoard.getRawButton(4);
@@ -102,7 +107,7 @@ public class ControlBoard implements ControlBoardInterface {
 
     @Override
     public boolean getFlywheelSwitch() {
-        return mButtonBoard.getRawAxis(3) < -0.1;
+        return false;
     }
 
     @Override

@@ -23,7 +23,7 @@ import edu.wpi.first.wpilibj.VictorSP;
  */
 @SuppressWarnings("unused")
 public class Climber extends Subsystem {
-    private static final double kReversing = -1.0;
+    private static final double kReversing = -1.0;   
     private static final double kUnjamInPeriod = .2 * kReversing;
     private static final double kUnjamOutPeriod = .4 * kReversing;
     private static final double kUnjamInPower = 6.0 * kReversing / 12.0;
@@ -39,13 +39,14 @@ public class Climber extends Subsystem {
             sInstance = new Climber();
         }
         return sInstance;
+         
     }
 
-    private final VictorSP mVictor; 
+    private final VictorSP ClimbMotor; 
 //    private final CANTalon mMasterTalon, mSlaveTalon;
 
     public Climber() {
-    	mVictor = new VictorSP(0);
+    	ClimbMotor = new VictorSP(Constants.kLeftDriveMasterId);
         /*mMasterTalon = CANTalonFactory.createDefaultTalon(Constants.kFeederMasterId);
         mMasterTalon.setFeedbackDevice(CANTalon.FeedbackDevice.CtreMagEncoder_Relative);
         mMasterTalon.changeControlMode(CANTalon.TalonControlMode.PercentVbus);
@@ -103,7 +104,7 @@ public class Climber extends Subsystem {
                 mSystemState = SystemState.IDLE;
                 mStateChanged = true;
                 mCurrentStateStartTime = timestamp;
-                mVictor.set(0) ;
+                ClimbMotor.set(.25) ;
             }
         }
 
@@ -166,7 +167,7 @@ public class Climber extends Subsystem {
 
     private SystemState handleIdle() {
     	if (mStateChanged) { 
-    		mVictor.set(0);
+    		ClimbMotor.set(.25); 
         }
        // setOpenLoop(0.0f);
         return defaultStateTransfer();
@@ -213,15 +214,15 @@ public class Climber extends Subsystem {
             // mMasterTalon.changeControlMode(TalonControlMode.Speed);
             // mMasterTalon.setSetpoint(Constants.kFeederFeedSpeedRpm * Constants.kFeederSensorGearReduction);
 //            mMasterTalon.set(1.0);
-        	mVictor.set(1.0);
+        	ClimbMotor.set(1.0);
         }
         return defaultStateTransfer();
    }
 
     private SystemState handleCLIMB() {
-      //  setOpenLoop(kCLIMBVoltage);
+        setOpenLoop(kCLIMBVoltage);
     	if (mStateChanged) { 
-    		mVictor.set(.25);
+    		ClimbMotor.set(.25);
         }
         return defaultStateTransfer();
         //TurnOnMotor (Wench)//NEED TO DO
@@ -237,7 +238,7 @@ public class Climber extends Subsystem {
  //       if (mStateChanged) {
  //           mMasterTalon.changeControlMode(CANTalon.TalonControlMode.PercentVbus);
  //       }
-        mVictor.set(voltage);
+        ClimbMotor.set(voltage);
     }
 
     @Override

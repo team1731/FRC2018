@@ -26,6 +26,8 @@ public interface ControlBoardInterface {
     boolean getShooterOpenLoopButton();
 
     boolean getCLIMBAxisLFT();
+    
+    boolean getCLIMBAxisRHT();
 
     boolean getUnjamButton();
 

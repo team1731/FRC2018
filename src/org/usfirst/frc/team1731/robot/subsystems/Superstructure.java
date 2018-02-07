@@ -1,14 +1,14 @@
 package org.usfirst.frc.team1731.robot.subsystems;
 
-import java.util.Optional;
+//import java.util.Optional;
 
-import org.usfirst.frc.team1731.lib.util.CircularBuffer;
-import org.usfirst.frc.team1731.lib.util.InterpolatingDouble;
+//import org.usfirst.frc.team1731.lib.util.CircularBuffer;
+//import org.usfirst.frc.team1731.lib.util.InterpolatingDouble;
 import org.usfirst.frc.team1731.lib.util.drivers.RevRoboticsAirPressureSensor;
 import org.usfirst.frc.team1731.robot.Constants;
 import org.usfirst.frc.team1731.robot.Robot;
-import org.usfirst.frc.team1731.robot.RobotState;
-import org.usfirst.frc.team1731.robot.ShooterAimingParameters;
+//import org.usfirst.frc.team1731.robot.RobotState;
+//import org.usfirst.frc.team1731.robot.ShooterAimingParameters;
 import org.usfirst.frc.team1731.robot.loops.Loop;
 import org.usfirst.frc.team1731.robot.loops.Looper;
 
@@ -89,9 +89,9 @@ public class Superstructure extends Subsystem {
 
     private boolean mCompressorOverride = false;
 
-    private CircularBuffer mShooterRpmBuffer = new CircularBuffer(Constants.kShooterJamBufferSize);
-    private double mLastDisturbanceShooterTime;
-    private double mCurrentStateStartTime;
+   // private CircularBuffer mShooterRpmBuffer = new CircularBuffer(Constants.kShooterJamBufferSize);
+    //private double mLastDisturbanceShooterTime;
+   // private double mCurrentStateStartTime;
     private boolean mStateChanged;
 
     public boolean isDriveOnTarget() {
@@ -117,8 +117,8 @@ public class Superstructure extends Subsystem {
         public void onStart(double timestamp) {
             synchronized (Superstructure.this) {
                 mWantedState = WantedState.IDLE;
-                mCurrentStateStartTime = timestamp;
-                mLastDisturbanceShooterTime = timestamp;
+           //     mCurrentStateStartTime = timestamp;
+             //   mLastDisturbanceShooterTime = timestamp;
                 mSystemState = SystemState.IDLE;
                 mStateChanged = true;
             }
@@ -170,7 +170,7 @@ public class Superstructure extends Subsystem {
                     System.out.println("Superstructure state " + mSystemState + " to " + newState + " Timestamp: "
                             + Timer.getFPGATimestamp());
                     mSystemState = newState;
-                    mCurrentStateStartTime = timestamp;
+    //                mCurrentStateStartTime = timestamp;
                     mStateChanged = true;
                 } else {
                     mStateChanged = false;
@@ -183,31 +183,6 @@ public class Superstructure extends Subsystem {
             stop();
         }
     };
-
-    private SystemState handleRangeFinding() {
- //       autoSpinShooter(false);
-        mLED.setWantedState(LED.WantedState.FIND_RANGE);
-        mFeeder.setWantedState(Elevator.WantedState.FEED);
-
-        switch (mWantedState) {
-     /*   case UNJAM:
-            return SystemState.UNJAMMING; */
-    /*    case UNJAM_SHOOT:
-            return SystemState.UNJAMMING_WITH_SHOOT; */
- /*       case SHOOT:
-            return SystemState.WAITING_FOR_ALIGNMENT; */
-  /*      case MANUAL_FEED:
-            return SystemState.JUST_FEED; */
-        case CLIMB:
-            return SystemState.CLIMBING;
-        case HANG:
-            return SystemState.HANGING; 
-   /*     case RANGE_FINDING:
-            return SystemState.RANGE_FINDING;  */
-        default:
-            return SystemState.IDLE;
-        }
-    }
 
     private SystemState handleIdle(boolean stateChanged) {
         if (stateChanged) {
@@ -237,32 +212,7 @@ public class Superstructure extends Subsystem {
         }
     }
 
-    private SystemState handleWaitingForAlignment() {
-        mCompressor.setClosedLoopControl(false);
-        mFeeder.setWantedState(Elevator.WantedState.FEED);
-        setWantIntakeOnForShooting();
-
-        // Don't care about this return value - check the drive directly.
- //       autoSpinShooter(false);
-        if (isDriveOnTarget()) {
-            RobotState.getInstance().resetVision();
-    //        return SystemState.WAITING_FOR_FLYWHEEL;
-        }
-        switch (mWantedState) {
-     //   case UNJAM:
-       //     return SystemState.UNJAMMING;
-      //  case UNJAM_SHOOT:
-        //    return SystemState.UNJAMMING_WITH_SHOOT;
-     //   case SHOOT:
-       //     return SystemState.WAITING_FOR_ALIGNMENT;
-     //   case MANUAL_FEED:
-       //     return SystemState.JUST_FEED;
-        case CLIMB:
-            return SystemState.CLIMBING;
-        default:
-            return SystemState.IDLE;
-        }
-    }
+    
 
   //  private SystemState handleWaitingForFlywheel() {
    //     mCompressor.setClosedLoopControl(false);
@@ -339,103 +289,6 @@ public class Superstructure extends Subsystem {
      //       return SystemState.SHOOTING_SPIN_DOWN;
     //    }
   //  }
-
-    private SystemState handleUnjammingWithShoot(double timestamp) {
-        // Don't auto spin anymore - just hold the last setpoint
-        mCompressor.setClosedLoopControl(false);
-        mFeeder.setWantedState(Elevator.WantedState.FEED);
-
-        // Make sure to reverse the floor.
-
-        mLED.setWantedState(LED.WantedState.FIND_RANGE);
-        setWantIntakeOnForShooting();
-
-  //      switch (mWantedState) {
-//        case UNJAM_SHOOT:
-    //        return SystemState.UNJAMMING_WITH_SHOOT;
-      //  case SHOOT:
-    //        if (timestamp - mCurrentStateStartTime > Constants.kShooterUnjamDuration) {
-        //        return SystemState.SHOOTING;
-       //     }
-       //     return SystemState.UNJAMMING_WITH_SHOOT;
-      //  default:
-       //     return SystemState.SHOOTING;
-      //  }
-   // }
-
-   // private SystemState handleShootingSpinDown(double timestamp) {
-        // Don't auto spin anymore - just hold the last setpoint
-    //    mCompressor.setClosedLoopControl(false);
-      //  mFeeder.setWantedState(Elevator.WantedState.FEED);
-
-        // Turn off the floor.
-
-      //  mLED.setWantedState(LED.WantedState.FIND_RANGE);
-        //setWantIntakeOnForShooting();
-
-       // if (timestamp - mCurrentStateStartTime > Constants.kShooterSpinDownTime) {
-            switch (mWantedState) {
-     //       case UNJAM:
-       //         return SystemState.UNJAMMING;
-      //      case UNJAM_SHOOT:
-        //        return SystemState.UNJAMMING_WITH_SHOOT;
-       //     case SHOOT:
-         //       return SystemState.WAITING_FOR_ALIGNMENT;
-          //  case MANUAL_FEED:
-            //    return SystemState.JUST_FEED;
-            case CLIMB:
-                return SystemState.CLIMBING;
-          //  case HANG:
-            //    return SystemState.HANGING;
-        //    case RANGE_FINDING:
-         //       return SystemState.RANGE_FINDING;
-            default:
-                return SystemState.IDLE;
-            }
-        }
-     //   return SystemState.SHOOTING_SPIN_DOWN;
-   // }
-
-    private SystemState handleUnjamming() {
-        mShooter.stop();
-        mCompressor.setClosedLoopControl(false);
-        mFeeder.setWantedState(Elevator.WantedState.UNJAM);
-        mLED.setWantedState(LED.WantedState.FIND_RANGE);
-        switch (mWantedState) {
-     //   case UNJAM:
-       //     return SystemState.UNJAMMING;
-     //   case UNJAM_SHOOT:
-       //     return SystemState.UNJAMMING_WITH_SHOOT;
-     //   case SHOOT:
-       //     return SystemState.WAITING_FOR_ALIGNMENT;
-        case CLIMB:
-            return SystemState.CLIMBING;
-        default:
-            return SystemState.IDLE;
-        }
-    }
-
-    private SystemState handleJustFeed() {
-        mCompressor.setClosedLoopControl(false);
-        mFeeder.setWantedState(Elevator.WantedState.FEED);
-
-        mIntake.setOnWhileShooting();
-
-        switch (mWantedState) {
-     //   case UNJAM:
-       //     return SystemState.UNJAMMING;
-     //   case UNJAM_SHOOT:
-       //     return SystemState.UNJAMMING_WITH_SHOOT;
-      //  case SHOOT:
-        //    return SystemState.WAITING_FOR_ALIGNMENT;
-     //   case MANUAL_FEED:
-       //     return SystemState.JUST_FEED;
-        case CLIMB:
-            return SystemState.CLIMBING;
-        default:
-            return SystemState.IDLE;
-        }
-    }
 
     private SystemState handleCLIMBING() {
         mCompressor.setClosedLoopControl(false);

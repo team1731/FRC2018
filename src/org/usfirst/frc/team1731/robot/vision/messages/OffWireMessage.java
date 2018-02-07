@@ -1,6 +1,6 @@
 package org.usfirst.frc.team1731.robot.vision.messages;
 
-import java.text.ParseException;
+//import java.text.ParseException;
 
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;

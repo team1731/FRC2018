@@ -24,7 +24,7 @@ import org.usfirst.frc.team1731.robot.loops.Looper;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
-import com.ctre.phoenix.motorcontrol.SensorCollection;
+//import com.ctre.phoenix.motorcontrol.SensorCollection;
 import com.ctre.phoenix.motorcontrol.StatusFrame;
 import com.ctre.phoenix.motorcontrol.VelocityMeasPeriod;
 
@@ -584,19 +584,19 @@ public class Drive extends Subsystem {
      * Is called periodically when the robot is auto-aiming towards the boiler.
      */
     private void updateTurnToHeading(double timestamp) {
-<<<<<<< HEAD
+//	    <<<<<<< HEAD
      /*   if (Superstructure.getInstance().isShooting()) {
             // Do not update heading while shooting - just base lock. By not updating the setpoint, we will fight to
             // keep position.
             return;  */
         }
-=======
- //       if (Superstructure.getInstance().isShooting()) {
+  //  =======
+	    //       if (Superstructure.getInstance().isShooting()) {
             // Do not update heading while shooting - just base lock. By not updating the setpoint, we will fight to
             // keep position.
  //           return;
  //       }
->>>>>>> dev
+//>>>>>>> dev
         final Rotation2d field_to_robot = mRobotState.getLatestFieldToVehicle().getValue().getRotation();
 
         // Figure out the rotation necessary to turn to face the goal.
@@ -650,7 +650,7 @@ public class Drive extends Subsystem {
             mIsOnTarget = false;
         }
     }
-
+    
     /**
      * Drives the robot straight forwards until it is at an optimal shooting distance. Then sends the robot into the
      * AIM_TO_GOAL state for one final alignment

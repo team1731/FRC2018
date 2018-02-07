@@ -21,16 +21,16 @@ import org.usfirst.frc.team1731.robot.subsystems.Drive;
 import org.usfirst.frc.team1731.robot.subsystems.Elevator;
 import org.usfirst.frc.team1731.robot.subsystems.Intake;
 import org.usfirst.frc.team1731.robot.subsystems.LED;
-import edu.wpi.first.wpilibj.VictorSP;
+//import edu.wpi.first.wpilibj.VictorSP;
 import org.usfirst.frc.team1731.robot.subsystems.Shooter;
 import org.usfirst.frc.team1731.robot.subsystems.Superstructure;
-import org.usfirst.frc.team1731.robot.vision.VisionServer;
+//import org.usfirst.frc.team1731.robot.vision.VisionServer;
 
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.IterativeRobot;
-import edu.wpi.first.wpilibj.Joystick;
+//import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+//import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 
 /**
@@ -54,7 +54,7 @@ public class Robot extends IterativeRobot {
     private LED mLED = LED.getInstance();
     private RobotState mRobotState = RobotState.getInstance();
     private AutoModeExecuter mAutoModeExecuter = null;
-    private Joystick joystick1; //This is for testing purposes
+  //  private Joystick joystick1; //This is for testing purposes
    
     // Create subsystem manager
 //    private final SubsystemManager mSubsystemManager = new SubsystemManager(
@@ -114,9 +114,9 @@ public class Robot extends IterativeRobot {
 
             // Pre calculate the paths we use for auto.
             PathAdapter.calculatePaths();
-            joystick1 = new Joystick (0); //For testing use
-            double value;
-            value = joystick1.getX();
+//            joystick1 = new Joystick (0); //For testing use
+      //      double value;
+    //        value = joystick1.getX();
 
         } catch (Throwable t) {
             CrashTracker.logThrowableCrash(t);
@@ -210,16 +210,16 @@ public class Robot extends IterativeRobot {
     @Override
     public void teleopPeriodic() {
         try {
-            double timestamp = Timer.getFPGATimestamp();
+       //     double timestamp = Timer.getFPGATimestamp();
             
-            boolean buttonB = mControlBoard.getButtonB();
+          //  boolean buttonB = mControlBoard.getButtonB();
            // System.out.println("buttonB=" + buttonB);
             
             // Drive base
             double throttle = mControlBoard.getThrottle();
             double turn = mControlBoard.getTurn();
-            boolean buttonValue;//Testing Purposes
-            buttonValue = joystick1.getRawButton(1);//Testing purposes
+      //      boolean buttonValue;//Testing Purposes
+        //    buttonValue = joystick1.getRawButton(1);//Testing purposes
 
             boolean wants_aim_button = mControlBoard.getAimButton();
             // wants_aim_button = !mDelayedAimButton.update(timestamp, !wants_aim_button);
@@ -310,8 +310,8 @@ public class Robot extends IterativeRobot {
                 }
             }
 
-            boolean score_gear = mControlBoard.getScoreGearButton();
-            boolean grab_gear = mControlBoard.getGrabGearButton();
+ //           boolean score_gear = mControlBoard.getScoreGearButton();
+   //         boolean grab_gear = mControlBoard.getGrabGearButton();
 
 
 
