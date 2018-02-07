@@ -129,7 +129,6 @@ public class TalonSRXFactory {
         talon.setStatusFrameRateMs(TalonSRX.StatusFrameRate.PulseWidth, config.PULSE_WIDTH_STATUS_FRAME_RATE_MS);
         */
         
-        //RDB: was /*
         talon.setIntegralAccumulator(0,Constants.kPidIdx,Constants.kTimeoutMs);
         talon.clearMotionProfileHasUnderrun(Constants.kTimeoutMs);
         talon.clearMotionProfileTrajectories();
@@ -169,7 +168,6 @@ public class TalonSRXFactory {
         talon.setStatusFramePeriod(StatusFrameEnhanced.Status_3_Quadrature, config.QUAD_ENCODER_STATUS_FRAME_RATE_MS, Constants.kTimeoutMs);
         talon.setStatusFramePeriod(StatusFrameEnhanced.Status_4_AinTempVbat, config.ANALOG_TEMP_VBAT_STATUS_FRAME_RATE_MS, Constants.kTimeoutMs);
         talon.setStatusFramePeriod(StatusFrameEnhanced.Status_8_PulseWidth, config.PULSE_WIDTH_STATUS_FRAME_RATE_MS, Constants.kTimeoutMs);
-        //RDB was: */
         
         return talon;
     }

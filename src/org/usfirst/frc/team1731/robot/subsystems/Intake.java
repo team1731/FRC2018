@@ -18,7 +18,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.VictorSP;
 
 /**
- * 1731 the intake picks up balls off the ground
+ * 1731 the intake picks up cubes and ejects them
  * 
  * @see Subsystem.java
  */

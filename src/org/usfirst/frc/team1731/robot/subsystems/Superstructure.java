@@ -51,7 +51,11 @@ public class Superstructure extends Subsystem {
     private final Intake mIntake = Intake.getInstance();
     private final Shooter mShooter = Shooter.getInstance();
     private final LED mLED = LED.getInstance();
-    private final Solenoid mHopperSolenoid = Constants.makeSolenoidForId(Constants.kHopperSolenoidId);
+//    private final Solenoid mHopperSolenoid = Constants.makeSolenoidForId(Constants.kHopperSolenoidId);
+    private final Solenoid mOverTheTop1 = Constants.makeSolenoidForId(Constants.kOverTheTopSolenoid1);
+    private final Solenoid mOverTheTop2 = Constants.makeSolenoidForId(Constants.kOverTheTopSolenoid2);
+    private final Solenoid mGrabber1 = Constants.makeSolenoidForId(Constants.kGrabberSolenoid1);
+    private final Solenoid mGrabber2 = Constants.makeSolenoidForId(Constants.kGrabberSolenoid2);
     private final Compressor mCompressor = new Compressor(0);
     private final RevRoboticsAirPressureSensor mAirPressureSensor = new RevRoboticsAirPressureSensor(3);
 
@@ -621,8 +625,19 @@ public class Superstructure extends Subsystem {
     }
 
     public synchronized void setActuateHopper(boolean extended) {
-        mHopperSolenoid.set(extended);
+  //      mHopperSolenoid.set(extended);
     }
+    
+    public synchronized void setGrabber(boolean grab) {
+            mGrabber1.set(grab);
+            mGrabber2.set(!grab);
+    }
+    
+    public synchronized void setOverTheTop(boolean overTheTop) {
+        mOverTheTop1.set(!overTheTop);
+        mOverTheTop2.set(overTheTop);
+    }
+
 
     @Override
     public void outputToSmartDashboard() {
@@ -644,16 +659,8 @@ public class Superstructure extends Subsystem {
         enabledLooper.register(mLoop);
     }
 
-    public void setWantedElevatorIdle() {
-        mElevator.setWantedState(Elevator.WantedState.IDLE);
-    }
-
-    public void setWantedElevatorMovingUp() {
-        mElevator.setWantedState(Elevator.WantedState.MOVE_UP);
-    }
-
-    public void setWantedElevatorMovingDown() {
-        mElevator.setWantedState(Elevator.WantedState.MOVE_DOWN);
+    public void setWantedElevatorPosition(double position) {
+        mElevator.setWantedPosition(position);
     }
 
     public void setWantIntakeReversed() {

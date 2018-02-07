@@ -39,6 +39,18 @@ public class ControlBoard implements ControlBoardInterface {
 
     // DRIVER CONTROLS
     @Override
+    public boolean getRangeFinderButton() {
+        return mButtonBoard.getRawButton(7);
+    }
+
+	@Override
+	public double getElevatorControl() {
+		// TODO Auto-generated method stub
+		//return mButtonBoard.getRawAxis(5);
+		return 0.4;
+		//return -mTurnStick.getY();
+	}
+    @Override
     public double getThrottle() {
         return -mThrottleStick.getRawAxis(1);
     }
@@ -144,11 +156,6 @@ public class ControlBoard implements ControlBoardInterface {
     }
 
     @Override
-    public boolean getRangeFinderButton() {
-        return mButtonBoard.getRawButton(7);
-    }
-
-    @Override
     public boolean getWantGearDriveLimit() {
         return mButtonBoard.getRawButton(12);
     }
@@ -166,6 +173,17 @@ public class ControlBoard implements ControlBoardInterface {
 
 	@Override
 	public boolean getOuttakeButton() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public boolean getGrabCubeButton() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean getOverTheTopButton() {
 		// TODO Auto-generated method stub
 		return false;
 	}
