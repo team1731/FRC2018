@@ -12,13 +12,14 @@ public interface ControlBoardInterface {
 
     double getTurn();
 
-    boolean getQuickTurn();
-
+    boolean getQuickTurn();   
+ 
     boolean getLowGear();
-
-    boolean getAimButton();
+ 
+    boolean getAimButton();  
 
     boolean getDriveAimButton();
+    
 
     // OPERATOR CONTROLS
     boolean getFeedButton();
@@ -29,7 +30,9 @@ public interface ControlBoardInterface {
 	
     boolean getShooterOpenLoopButton();
 
-    boolean getExhaustButton();
+    boolean getCLIMBAxisLFT();
+    
+    boolean getCLIMBAxisRHT();
 
     boolean getUnjamButton();
 

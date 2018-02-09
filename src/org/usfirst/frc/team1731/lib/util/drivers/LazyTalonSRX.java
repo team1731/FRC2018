@@ -9,7 +9,7 @@ import com.ctre.phoenix.motorcontrol.can.*;
  */
 public class LazyTalonSRX extends TalonSRX {
     protected double mLastSet = Double.NaN;
-    protected ControlMode mLastControlMode = null;
+    protected ControlMode mLastControlMode = null;  
 
    /* public LazyTalonSRX(int deviceNumber, int controlPeriodMs, int enablePeriodMs) {
         super(deviceNumber, controlPeriodMs, enablePeriodMs);

@@ -21,15 +21,18 @@ import org.usfirst.frc.team1731.robot.subsystems.Drive;
 import org.usfirst.frc.team1731.robot.subsystems.Elevator;
 import org.usfirst.frc.team1731.robot.subsystems.Intake;
 import org.usfirst.frc.team1731.robot.subsystems.LED;
+//import edu.wpi.first.wpilibj.VictorSP;
 import org.usfirst.frc.team1731.robot.subsystems.Shooter;
 import org.usfirst.frc.team1731.robot.subsystems.Superstructure;
-import org.usfirst.frc.team1731.robot.vision.VisionServer;
+//import org.usfirst.frc.team1731.robot.vision.VisionServer;
 
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.IterativeRobot;
+//import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+//import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 
 /**
  * The main robot class, which instantiates all robot parts and helper classes and initializes all loops. Some classes
@@ -52,7 +55,8 @@ public class Robot extends IterativeRobot {
     private LED mLED = LED.getInstance();
     private RobotState mRobotState = RobotState.getInstance();
     private AutoModeExecuter mAutoModeExecuter = null;
-
+  //  private Joystick joystick1; //This is for testing purposes
+   
     // Create subsystem manager
 //    private final SubsystemManager mSubsystemManager = new SubsystemManager(
 //            Arrays.asList(Drive.getInstance(), Superstructure.getInstance(), Shooter.getInstance(),
@@ -111,6 +115,9 @@ public class Robot extends IterativeRobot {
 
             // Pre calculate the paths we use for auto.
             PathAdapter.calculatePaths();
+//            joystick1 = new Joystick (0); //For testing use
+      //      double value;
+    //        value = joystick1.getX();
 
         } catch (Throwable t) {
             CrashTracker.logThrowableCrash(t);
@@ -232,9 +239,12 @@ public class Robot extends IterativeRobot {
             mSuperstructure.setGrabber(mControlBoard.getGrabCubeButton());
             mSuperstructure.setOverTheTop(mControlBoard.getOverTheTopButton());
 
+
             // Drive base
             double throttle = mControlBoard.getThrottle();
             double turn = mControlBoard.getTurn();
+      //      boolean buttonValue;//Testing Purposes
+        //    buttonValue = joystick1.getRawButton(1);//Testing purposes
 
             boolean wants_aim_button = mControlBoard.getAimButton();
             // wants_aim_button = !mDelayedAimButton.update(timestamp, !wants_aim_button);
@@ -270,7 +280,7 @@ public class Robot extends IterativeRobot {
 
                 Intake.getInstance().setCurrentThrottle(mControlBoard.getThrottle());
 
-                boolean wantsExhaust = mControlBoard.getExhaustButton();
+                boolean wantsCLIMB = mControlBoard.getCLIMBAxisLFT();
 
                 if (Constants.kIsShooterTuning) {
                     mLED.setWantedState(LED.WantedState.FIND_RANGE);
@@ -285,7 +295,7 @@ public class Robot extends IterativeRobot {
                 }
 
                 // Exhaust has highest priority for intake.
-                if (wantsExhaust) {
+                if (wantsCLIMB) {
                     mSuperstructure.setWantIntakeReversed();
                 } else if (mControlBoard.getIntakeButton()) {
                     mSuperstructure.setWantIntakeOn();
@@ -298,10 +308,11 @@ public class Robot extends IterativeRobot {
                 // Hanging has highest priority for feeder, followed by exhausting, unjamming, and finally
                 // feeding.
                 if (mControlBoard.getHangButton()) {
-                    mSuperstructure.setWantedState(Superstructure.WantedState.HANG);
-                } else if (wantsExhaust) {
-                    mSuperstructure.setWantedState(Superstructure.WantedState.EXHAUST);
-                } else if (mControlBoard.getUnjamButton()) {
+                   mSuperstructure.setWantedState(Superstructure.WantedState.HANG);
+                } else if (wantsCLIMB) {
+                    mSuperstructure.setWantedState(Superstructure.WantedState.CLIMB);
+                }
+                else if (mControlBoard.getUnjamButton()) {
                     mSuperstructure.setWantedState(Superstructure.WantedState.UNJAM);
                 } else if (mControlBoard.getFeedButton()) {
                     mSuperstructure.setWantedState(Superstructure.WantedState.MANUAL_FEED);

@@ -1,6 +1,5 @@
 package org.usfirst.frc.team1731.robot;
 
-//import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 
 /**
@@ -30,7 +29,6 @@ public class ControlBoard implements ControlBoardInterface {
     private final Joystick mTurnStick;
     private final Joystick mButtonBoard;
 
-	
     protected ControlBoard() {
         mThrottleStick = new Joystick(0);
         mTurnStick = new Joystick(1);
@@ -38,18 +36,6 @@ public class ControlBoard implements ControlBoardInterface {
     }
 
     // DRIVER CONTROLS
-    @Override
-    public boolean getRangeFinderButton() {
-        return mButtonBoard.getRawButton(7);
-    }
-
-	@Override
-	public double getElevatorControl() {
-		// TODO Auto-generated method stub
-		//return mButtonBoard.getRawAxis(5);
-		return 0.4;
-		//return -mTurnStick.getY();
-	}
     @Override
     public double getThrottle() {
         return -mThrottleStick.getRawAxis(1);
@@ -83,23 +69,27 @@ public class ControlBoard implements ControlBoardInterface {
     @Override
     public boolean getFeedButton() {
         return mButtonBoard.getRawAxis(1) < -0.1;
-    }
+   }
 
     @Override
     public boolean getIntakeButton() {
-        return mButtonBoard.getRawAxis(2) < -0.1;
+        return false;
     }
 
     @Override
     public boolean getShooterOpenLoopButton() {
         return false;
     }
-
     @Override
-    public boolean getExhaustButton() {
-        return mButtonBoard.getRawAxis(0) < -0.1;
+    public boolean getCLIMBAxisLFT() {  
+        return mButtonBoard.getRawAxis(2) < 0.1;
     }
-
+    @Override
+    public boolean getCLIMBAxisRHT() {
+    	return mButtonBoard.getRawAxis(3) > -0.1;
+    }
+    
+    
     @Override
     public boolean getUnjamButton() {
         return mButtonBoard.getRawButton(4);
@@ -110,24 +100,14 @@ public class ControlBoard implements ControlBoardInterface {
         return mButtonBoard.getRawButton(8);
     }
 
-    /*@Override
-    public boolean getElevatorClosedLoopButton() {
-        return mButtonBoard.getRawButton(8);
-    }*/
-    
     @Override
     public boolean getButtonB() {
         return mButtonBoard.getRawButton(2);
     }
-    
-    @Override
-    public boolean getButtonA() {
-        return mButtonBoard.getRawButton(1);
-    }
 
     @Override
     public boolean getFlywheelSwitch() {
-        return mButtonBoard.getRawAxis(3) < -0.1;
+        return false;
     }
 
     @Override
@@ -156,19 +136,19 @@ public class ControlBoard implements ControlBoardInterface {
     }
 
     @Override
+    public boolean getRangeFinderButton() {
+        return mButtonBoard.getRawButton(7);
+    }
+
+    @Override
     public boolean getWantGearDriveLimit() {
         return mButtonBoard.getRawButton(12);
     }
 
 	@Override
-	public boolean getElevatorUpButton() {
+	public double getElevatorControl() {
 		// TODO Auto-generated method stub
-		return mButtonBoard.getRawButton(5);
-	}
-	@Override
-	public boolean getElevatorDownButton() {
-		// TODO Auto-generated method stub
-		return mButtonBoard.getRawButton(6);
+		return 0;
 	}
 
 	@Override
@@ -177,6 +157,25 @@ public class ControlBoard implements ControlBoardInterface {
 		return false;
 	}
 
+	@Override
+	public boolean getButtonA() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean getElevatorUpButton() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean getElevatorDownButton() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
 	public boolean getGrabCubeButton() {
 		// TODO Auto-generated method stub
 		return false;

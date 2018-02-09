@@ -7,7 +7,7 @@ import org.usfirst.frc.team1731.lib.util.drivers.TalonSRXFactory;
 import org.usfirst.frc.team1731.robot.Constants;
 import org.usfirst.frc.team1731.robot.loops.Loop;
 import org.usfirst.frc.team1731.robot.loops.Looper;
-
+import edu.wpi.first.wpilibj.VictorSP;
 
 
 
@@ -23,13 +23,14 @@ import edu.wpi.first.wpilibj.VictorSP;
  */
 @SuppressWarnings("unused")
 public class Climber extends Subsystem {
-    private static final double kReversing = -1.0;
+    private static final double kReversing = -1.0;   
     private static final double kUnjamInPeriod = .2 * kReversing;
     private static final double kUnjamOutPeriod = .4 * kReversing;
     private static final double kUnjamInPower = 6.0 * kReversing / 12.0;
     private static final double kUnjamOutPower = -6.0 * kReversing / 12.0;
     private static final double kFeedVoltage = 10.0;
-    private static final double kExhaustVoltage = kFeedVoltage * kReversing / 12.0;
+    private static final double kCLIMBVoltage = kFeedVoltage * kReversing / 12.0;
+   
 
     private static Climber sInstance = null;
 
@@ -38,14 +39,15 @@ public class Climber extends Subsystem {
             sInstance = new Climber();
         }
         return sInstance;
+         
     }
 
-    private final VictorSP mVictor; 
+    private final VictorSP ClimbMotor; 
 //    private final CANTalon mMasterTalon, mSlaveTalon;
 
     public Climber() {
-    	mVictor = new VictorSP(Constants.kFeederVictor);
-/*      mMasterTalon = CANTalonFactory.createDefaultTalon(Constants.kFeederMasterId);
+    	ClimbMotor = new VictorSP(Constants.kLeftDriveMasterId);
+        /*mMasterTalon = CANTalonFactory.createDefaultTalon(Constants.kFeederMasterId);
         mMasterTalon.setFeedbackDevice(CANTalon.FeedbackDevice.CtreMagEncoder_Relative);
         mMasterTalon.changeControlMode(CANTalon.TalonControlMode.PercentVbus);
         mMasterTalon.SetVelocityMeasurementWindow(16);
@@ -66,23 +68,26 @@ public class Climber extends Subsystem {
 
         mSlaveTalon = CANTalonFactory.createPermanentSlaveTalon(Constants.kFeederSlaveId, Constants.kFeederMasterId);
         mSlaveTalon.reverseOutput(true);
-        mSlaveTalon.enableBrakeMode(true);
-        */
+        mSlaveTalon.enableBrakeMode(true);*/
+        
     }
 
     public enum SystemState {
-        FEEDING, // feed balls into the shooter
+        //FEEDING, // feed balls into the shooter
         UNJAMMING_IN, // used for unjamming fuel
-        UNJAMMING_OUT, // used for unjamming fuel
+        UNJAMMING_OUT, // used for unjamming fuel*/
         IDLE, // stop all motors
-        EXHAUSTING // run feeder in reverse
+        CLIMBING, // Climbs
+       
     }
 
     public enum WantedState {
         IDLE,
         UNJAM,
-        EXHAUST,
-        FEED,
+       // FEED,
+        CLIMB,
+        STOP
+        
     }
 
     private SystemState mSystemState = SystemState.IDLE;
@@ -99,6 +104,7 @@ public class Climber extends Subsystem {
                 mSystemState = SystemState.IDLE;
                 mStateChanged = true;
                 mCurrentStateStartTime = timestamp;
+                ClimbMotor.set(.25) ;
             }
         }
 
@@ -116,12 +122,13 @@ public class Climber extends Subsystem {
                 case UNJAMMING_IN:
                     newState = handleUnjammingIn(timestamp, mCurrentStateStartTime);
                     break;
-                case FEEDING:
+                /*case FEEDING:
                     newState = handleFeeding();
+                    break;*/
+                case CLIMBING:
+                    newState = handleCLIMB();
                     break;
-                case EXHAUSTING:
-                    newState = handleExhaust();
-                    break;
+             
                 default:
                     newState = SystemState.IDLE;
                 }
@@ -144,19 +151,25 @@ public class Climber extends Subsystem {
 
     private SystemState defaultStateTransfer() {
         switch (mWantedState) {
-        case FEED:
-            return SystemState.FEEDING;
+        /*case FEED:
+            return SystemState.FEEDING;*/
         case UNJAM:
             return SystemState.UNJAMMING_OUT;
-        case EXHAUST:
-            return SystemState.EXHAUSTING;
+        case CLIMB:
+            return SystemState.CLIMBING;
+        case STOP :
+        	return SystemState.IDLE ;
+        
         default:
             return SystemState.IDLE;
         }
     }
 
     private SystemState handleIdle() {
-        setOpenLoop(0.0f);
+    	if (mStateChanged) { 
+    		ClimbMotor.set(.25); 
+        }
+       // setOpenLoop(0.0f);
         return defaultStateTransfer();
     }
 
@@ -167,12 +180,12 @@ public class Climber extends Subsystem {
             newState = SystemState.UNJAMMING_IN;
         }
         switch (mWantedState) {
-        case FEED:
-            return SystemState.FEEDING;
+        /*case FEED:
+            return SystemState.FEEDING;*/
         case UNJAM:
             return newState;
-        case EXHAUST:
-            return SystemState.EXHAUSTING;
+        case CLIMB:
+            return SystemState.CLIMBING;
         default:
             return SystemState.IDLE;
         }
@@ -185,12 +198,12 @@ public class Climber extends Subsystem {
             newState = SystemState.UNJAMMING_OUT;
         }
         switch (mWantedState) {
-        case FEED:
-            return SystemState.FEEDING;
+        /*case FEED:
+            return SystemState.FEEDING;*/
         case UNJAM:
             return newState;
-        case EXHAUST:
-            return SystemState.EXHAUSTING;
+        case CLIMB:
+            return SystemState.CLIMBING;
         default:
             return SystemState.IDLE;
         }
@@ -201,14 +214,20 @@ public class Climber extends Subsystem {
             // mMasterTalon.changeControlMode(TalonControlMode.Speed);
             // mMasterTalon.setSetpoint(Constants.kFeederFeedSpeedRpm * Constants.kFeederSensorGearReduction);
 //            mMasterTalon.set(1.0);
-        	mVictor.set(1.0);
+        	ClimbMotor.set(1.0);
         }
         return defaultStateTransfer();
-    }
+   }
 
-    private SystemState handleExhaust() {
-        setOpenLoop(kExhaustVoltage);
+    private SystemState handleCLIMB() {
+        setOpenLoop(kCLIMBVoltage);
+    	if (mStateChanged) { 
+    		ClimbMotor.set(.25);
+        }
         return defaultStateTransfer();
+        //TurnOnMotor (Wench)//NEED TO DO
+      
+        
     }
 
     public synchronized void setWantedState(WantedState state) {
@@ -219,7 +238,7 @@ public class Climber extends Subsystem {
  //       if (mStateChanged) {
  //           mMasterTalon.changeControlMode(CANTalon.TalonControlMode.PercentVbus);
  //       }
-        mVictor.set(voltage);
+        ClimbMotor.set(voltage);
     }
 
     @Override
@@ -243,10 +262,10 @@ public class Climber extends Subsystem {
 
     public boolean checkSystem() {
         System.out.println("Testing FEEDER.-----------------------------------");
- /*       final double kCurrentThres = 0.5;
+        final double kCurrentThres = 0.5;
         final double kRpmThes = 2000.0;
 
-        mSlaveTalon.changeControlMode(TalonControlMode.Voltage);
+        /*mSlaveTalon.changeControlMode(TalonControlMode.Voltage);
         mMasterTalon.changeControlMode(TalonControlMode.Voltage);
 
         mSlaveTalon.set(0.0);
@@ -267,9 +286,9 @@ public class Climber extends Subsystem {
         mSlaveTalon.set(0.0f);
 
         mSlaveTalon.changeControlMode(TalonControlMode.Follower);
-        mSlaveTalon.set(Constants.kFeederMasterId);
+        mSlaveTalon.set(Constants.kFeederMasterId);*/
 
-        System.out.println("Feeder Master Current: " + currentMaster + " Slave Current: " + currentSlave
+        /*System.out.println("Feeder Master Current: " + currentMaster + " Slave Current: " + currentSlave
                 + " rpmMaster: " + rpmMaster + " rpmSlave: " + rpmSlave);
 
         boolean failure = false;
@@ -302,10 +321,11 @@ public class Climber extends Subsystem {
         if (!Util.allCloseTo(Arrays.asList(rpmMaster, rpmSlave), rpmMaster, 250)) {
             failure = true;
             System.out.println("!!!!!!!!!!!!!! Feeder RPM different !!!!!!!!!!!!!!!!!!!!!!!!!");
-        }
-*/
+        }*/
+
 //        return !failure;
         return true;
+        
     }
 
 }

@@ -85,14 +85,14 @@ public class GamepadControlBoard implements ControlBoardInterface {
     }
 
     @Override
-    public boolean getGrabGearButton() {
+   public boolean getGrabGearButton() {
         // L Trigger
-        return mGamepad.getRawAxis(2) > 0.1;
+        return false;
     }
 
     @Override
     public boolean getScoreGearButton() {
-        return mGamepad.getRawAxis(3) > 0.1;
+        return false;
     }
 
     @Override
@@ -102,10 +102,17 @@ public class GamepadControlBoard implements ControlBoardInterface {
     }
 
     @Override
-    public boolean getExhaustButton() {
-        return false;
+    public boolean getCLIMBAxisLFT() {
+        return mGamepad.getRawAxis(2) >0.25;
     }
 
+    @Override
+    public boolean getCLIMBAxisRHT() {
+    	return mGamepad.getRawAxis(3) >0.25;
+    	
+    }
+    	
+    	
     @Override
     public boolean getUnjamButton() {
         return false;

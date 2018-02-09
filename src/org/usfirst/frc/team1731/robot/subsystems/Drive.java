@@ -24,7 +24,7 @@ import org.usfirst.frc.team1731.robot.loops.Looper;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
-import com.ctre.phoenix.motorcontrol.SensorCollection;
+//import com.ctre.phoenix.motorcontrol.SensorCollection;
 import com.ctre.phoenix.motorcontrol.StatusFrame;
 import com.ctre.phoenix.motorcontrol.VelocityMeasPeriod;
 
@@ -59,7 +59,7 @@ public class Drive extends Subsystem {
         OPEN_LOOP, // open loop voltage control
         VELOCITY_SETPOINT, // velocity PID control
         PATH_FOLLOWING, // used for autonomous driving
-        AIM_TO_GOAL, // turn to face the boiler
+        AIM_TO_GOAL, // turn to face the boiler  
         TURN_TO_HEADING, // turn in place
         DRIVE_TOWARDS_GOAL_COARSE_ALIGN, // turn to face the boiler, then DRIVE_TOWARDS_GOAL_COARSE_ALIGN
         DRIVE_TOWARDS_GOAL_APPROACH // drive forwards until we are at optimal shooting distance
@@ -139,10 +139,10 @@ public class Drive extends Subsystem {
                         mCSVWriter.add(mPathFollower.getDebug());
                     }
                     return;
-                case AIM_TO_GOAL:
- //                   if (!Superstructure.getInstance().isShooting()) {
+             /*   case AIM_TO_GOAL:
+                    if (!Superstructure.getInstance().isShooting()) {
                         updateGoalHeading(timestamp);
- //                   }
+                    }   */
                     // fallthrough intended
                 case TURN_TO_HEADING:
                     updateTurnToHeading(timestamp);
@@ -590,33 +590,41 @@ public class Drive extends Subsystem {
      * Is called periodically when the robot is auto-aiming towards the boiler.
      */
     private void updateTurnToHeading(double timestamp) {
- //       if (Superstructure.getInstance().isShooting()) {
+//	    <<<<<<< HEAD
+     /*   if (Superstructure.getInstance().isShooting()) {
+            // Do not update heading while shooting - just base lock. By not updating the setpoint, we will fight to
+            // keep position.
+            return;  */
+        }
+  //  =======
+	    //       if (Superstructure.getInstance().isShooting()) {
             // Do not update heading while shooting - just base lock. By not updating the setpoint, we will fight to
             // keep position.
  //           return;
  //       }
+//>>>>>>> dev
         final Rotation2d field_to_robot = mRobotState.getLatestFieldToVehicle().getValue().getRotation();
 
         // Figure out the rotation necessary to turn to face the goal.
         final Rotation2d robot_to_target = field_to_robot.inverse().rotateBy(mTargetHeading);
 
         // Check if we are on target
-        final double kGoalPosTolerance = 0.75; // degrees
-        final double kGoalVelTolerance = 5.0; // inches per second
+   //     final double kGoalPosTolerance = 0.75; // degrees
+       /* final double kGoalVelTolerance = 5.0; // inches per second
         if (Math.abs(robot_to_target.getDegrees()) < kGoalPosTolerance
                 && Math.abs(getLeftVelocityInchesPerSec()) < kGoalVelTolerance
-                && Math.abs(getRightVelocityInchesPerSec()) < kGoalVelTolerance) {
+                && Math.abs(getRightVelocityInchesPerSec()) < kGoalVelTolerance)*/  {
             // Use the current setpoint and base lock.
-            mIsOnTarget = true;
-            updatePositionSetpoint(getLeftDistanceInches(), getRightDistanceInches());
-            return;
+   //         mIsOnTarget = true;
+     //       updatePositionSetpoint(getLeftDistanceInches(), getRightDistanceInches());
+       //     return;
         }
 
         Kinematics.DriveVelocity wheel_delta = Kinematics
                 .inverseKinematics(new Twist2d(0, 0, robot_to_target.getRadians()));
-        updatePositionSetpoint(wheel_delta.left + getLeftDistanceInches(),
-                wheel_delta.right + getRightDistanceInches());
-    }
+   /*     updatePositionSetpoint(wheel_delta.left + getLeftDistanceInches(),
+                wheel_delta.right + getRightDistanceInches()); */
+
 
     /**
      * Essentially does the same thing as updateTurnToHeading but sends the robot into the DRIVE_TOWARDS_GOAL_APPROACH
@@ -648,7 +656,7 @@ public class Drive extends Subsystem {
             mIsOnTarget = false;
         }
     }
-
+    
     /**
      * Drives the robot straight forwards until it is at an optimal shooting distance. Then sends the robot into the
      * AIM_TO_GOAL state for one final alignment

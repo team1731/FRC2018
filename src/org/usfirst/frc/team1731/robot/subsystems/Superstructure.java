@@ -4,11 +4,18 @@ import java.util.Optional;
 
 import org.usfirst.frc.team1731.lib.util.CircularBuffer;
 import org.usfirst.frc.team1731.lib.util.InterpolatingDouble;
+
+//import java.util.Optional;
+
+//import org.usfirst.frc.team1731.lib.util.CircularBuffer;
+//import org.usfirst.frc.team1731.lib.util.InterpolatingDouble;
 import org.usfirst.frc.team1731.lib.util.drivers.RevRoboticsAirPressureSensor;
 import org.usfirst.frc.team1731.robot.Constants;
 import org.usfirst.frc.team1731.robot.Robot;
 import org.usfirst.frc.team1731.robot.RobotState;
 import org.usfirst.frc.team1731.robot.ShooterAimingParameters;
+//import org.usfirst.frc.team1731.robot.RobotState;
+//import org.usfirst.frc.team1731.robot.ShooterAimingParameters;
 import org.usfirst.frc.team1731.robot.loops.Loop;
 import org.usfirst.frc.team1731.robot.loops.Looper;
 
@@ -47,7 +54,12 @@ public class Superstructure extends Subsystem {
         return mInstance;
     }
 
+
     private final Elevator mElevator = Elevator.getInstance();
+
+    private final Climber mClimber = Climber.getInstance() ;
+    private final Elevator mFeeder = Elevator.getInstance();  //might be old
+
     private final Intake mIntake = Intake.getInstance();
     private final Shooter mShooter = Shooter.getInstance();
     private final LED mLED = LED.getInstance();
@@ -62,7 +74,7 @@ public class Superstructure extends Subsystem {
     // Superstructure doesn't own the drive, but needs to access it
     private final Drive mDrive = Drive.getInstance();
 
-    // Intenal state of the system
+    // Internal state of the system
     public enum SystemState {
         IDLE,
         WAITING_FOR_ALIGNMENT, // waiting for the drivebase to aim
@@ -73,15 +85,18 @@ public class Superstructure extends Subsystem {
         UNJAMMING, // unjamming the feeder and hopper
         UNJAMMING_WITH_SHOOT, // unjamming while the flywheel spins
         JUST_FEED, // run hopper and feeder but not the shooter
-        EXHAUSTING, // exhaust the feeder, hopper, and intake
+        EXHAUSTING,
         HANGING, // run shooter in reverse, everything else is idle
+
         RANGE_FINDING, // blink the LED strip to let drivers know if they are at an optimal shooting range
         //ELEVATOR_UP,
         //ELEVATOR_DOWN,
+        CLIMBING   // climbs
     };
 
     // Desired function from user
     public enum WantedState {
+
         IDLE,
         SHOOT,
         //ELEVATOR_UP,
@@ -91,7 +106,8 @@ public class Superstructure extends Subsystem {
         MANUAL_FEED,
         EXHAUST,
         HANG,
-        RANGE_FINDING
+        RANGE_FINDING,
+        CLIMB
     }
 
     private SystemState mSystemState = SystemState.IDLE;
@@ -126,16 +142,11 @@ public class Superstructure extends Subsystem {
 
     private Loop mLoop = new Loop() {
 
-        // Every time we transition states, we update the current state start
-        // time and the state changed boolean (for one cycle)
-        private double mWantStateChangeStartTime;
-
         @Override
         public void onStart(double timestamp) {
             synchronized (Superstructure.this) {
                 mWantedState = WantedState.IDLE;
                 mCurrentStateStartTime = timestamp;
-                mWantStateChangeStartTime = timestamp;
                 mLastDisturbanceShooterTime = timestamp;
                 mSystemState = SystemState.IDLE;
                 mStateChanged = true;
@@ -155,7 +166,7 @@ public class Superstructure extends Subsystem {
                     break;
                 case WAITING_FOR_FLYWHEEL:
                     newState = handleWaitingForFlywheel();
-                    break;
+                    break; 
                 case SHOOTING:
                     newState = handleShooting(timestamp);
                     break;
@@ -170,22 +181,22 @@ public class Superstructure extends Subsystem {
                     break;
                 case UNJAMMING:
                     newState = handleUnjamming();
-                    break;
-                case JUST_FEED:
+                    break; 
+                  case JUST_FEED:
                     newState = handleJustFeed();
-                    break;
-                case EXHAUSTING:
-                    newState = handleExhaust();
+                    break;  
+                  case CLIMBING:
+                    newState = handleCLIMBING();
                     break;
                 case HANGING:
                     newState = handleHang();
-                    break;
+                    break;  
                 case RANGE_FINDING:
                     newState = handleRangeFinding();
-                    break;
+                    break;  
                 case SHOOTING_SPIN_DOWN:
                     newState = handleShootingSpinDown(timestamp);
-                    break;
+                    break;          
                 default:
                     newState = SystemState.IDLE;
                 }
@@ -231,6 +242,7 @@ public class Superstructure extends Subsystem {
         }
     };
 
+
     private SystemState handleRangeFinding() {
         autoSpinShooter(false);
         mLED.setWantedState(LED.WantedState.FIND_RANGE);
@@ -260,6 +272,7 @@ public class Superstructure extends Subsystem {
         }
     }
 
+
     private SystemState handleIdle(boolean stateChanged) {
         if (stateChanged) {
             stop();
@@ -281,17 +294,18 @@ public class Superstructure extends Subsystem {
         //case ELEVATOR_DOWN:
 		//	return SystemState.ELEVATOR_DOWN;
         case MANUAL_FEED:
-            return SystemState.JUST_FEED;
-        case EXHAUST:
-            return SystemState.EXHAUSTING;
+            return SystemState.JUST_FEED; 
+        case CLIMB:
+            return SystemState.CLIMBING;
         case HANG:
             return SystemState.HANGING;
         case RANGE_FINDING:
-            return SystemState.RANGE_FINDING;
+            return SystemState.RANGE_FINDING; 
         default:
             return SystemState.IDLE;
         }
     }
+
 
     private SystemState handleWaitingForAlignment() {
         mCompressor.setClosedLoopControl(false);
@@ -301,7 +315,6 @@ public class Superstructure extends Subsystem {
         // Don't care about this return value - check the drive directly.
         autoSpinShooter(false);
         if (isDriveOnTarget()) {
-            RobotState.getInstance().resetVision();
             return SystemState.WAITING_FOR_FLYWHEEL;
         }
         switch (mWantedState) {
@@ -354,6 +367,8 @@ public class Superstructure extends Subsystem {
         mLED.setWantedState(LED.WantedState.FIND_RANGE);
         setWantIntakeOnForShooting();
 
+
+
         // Pump circular buffer with last rpm from talon.
         final double rpm = mShooter.getLastSpeedRpm();
 
@@ -361,7 +376,7 @@ public class Superstructure extends Subsystem {
             mShooterRpmBuffer.clear();
         }
 
-        // Find time of last shooter disturbance.
+     //    Find time of last shooter disturbance.
         if ((timestamp - mCurrentStateStartTime < Constants.kShooterMinShootingTime) ||
                 !mShooterRpmBuffer.isFull() ||
                 (Math.abs(mShooterRpmBuffer.getAverage() - rpm) > Constants.kShooterDisturbanceThreshold)) {
@@ -496,7 +511,6 @@ public class Superstructure extends Subsystem {
     private SystemState handleExhaust() {
         mCompressor.setClosedLoopControl(false);
         //mElevator.setWantedState(Elevator.WantedState.IDLE);
-
         switch (mWantedState) {
         case UNJAM:
             return SystemState.UNJAMMING;
@@ -506,13 +520,21 @@ public class Superstructure extends Subsystem {
             return SystemState.WAITING_FOR_ALIGNMENT;
         case MANUAL_FEED:
             return SystemState.JUST_FEED;
-        case EXHAUST:
-            return SystemState.EXHAUSTING;
+        case CLIMB:
+            return SystemState.CLIMBING;
         default:
             return SystemState.IDLE;
         }
 
     }
+    
+    private SystemState handleCLIMBING() {
+        mCompressor.setClosedLoopControl(false);
+        mClimber.setWantedState(Climber.WantedState.CLIMB);
+        return SystemState.CLIMBING;
+        
+    }
+    
 
     private SystemState handleHang() {
         mCompressor.setClosedLoopControl(false);
@@ -563,7 +585,7 @@ public class Superstructure extends Subsystem {
                 boolean is_optimal_range = false;
                 if (range < Constants.kShooterOptimalRangeFloor) {
                     mLED.setRangeBlicking(true);
-                } else if (range > Constants.kShooterOptimalRangeCeiling) {
+               } else if (range > Constants.kShooterOptimalRangeCeiling) {
                     mLED.setRangeBlicking(true);
                 } else {
                     mLED.setRangeBlicking(false);
@@ -573,16 +595,16 @@ public class Superstructure extends Subsystem {
                 }
 
                 SmartDashboard.putBoolean("optimal range", is_optimal_range);
-            } else {
-                // We are shooter tuning find current RPM we are tuning for.
+           } else {
+            //     We are shooter tuning find current RPM we are tuning for.
                 mShooter.setHoldWhenReady(mCurrentTuningRpm);
                 mLastGoalRange = aimOptional.get().getRange();
             }
 
             return range_valid && isOnTargetToShoot()
                     && (timestamp - aim.getLastSeenTimestamp()) < Constants.kMaxGoalTrackAge;
-        } else if (Superstructure.getInstance().isShooting()) {
-            mLED.setRangeBlicking(true);
+        } else if (Superstructure.getInstance().isShooting()) 
+        {   mLED.setRangeBlicking(true);
             // Keep the previous setpoint.
             return false;
         } else {
@@ -592,7 +614,7 @@ public class Superstructure extends Subsystem {
                 // re-appears.
                 mShooter.setSpinUp(getShootingSetpointRpm(Constants.kDefaultShootingDistanceInches));
             }
-            return false;
+            return false; 
         }
     }
 
