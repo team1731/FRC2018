@@ -36,12 +36,13 @@ public class Intake extends Subsystem {
     // hardware
 //    private CANTalon mMasterTalon, mSlaveTalon;
 //    private Solenoid mDeploySolenoid;
-    private final VictorSP mVictor;
-
+    private final VictorSP mVictorLeft;
+    private final VictorSP mVictorRight;
     //private MovingAverage mThrottleAverage = new MovingAverage(50);
 
     private Intake() {
-    	mVictor = new VictorSP(0);
+    	mVictorLeft = new VictorSP(0);
+    	mVictorRight = new VictorSP(1);
     	//mVictor = new VictorSP(Constants.kIntakeVictor);
 
     	
@@ -81,7 +82,8 @@ public class Intake extends Subsystem {
     private WantedState mWantedState = WantedState.IDLE;
 
     private double mCurrentStateStartTime;
-	DoubleSolenoid BoxPincers = new DoubleSolenoid (1, 0);
+	DoubleSolenoid PincerLeft = new DoubleSolenoid (1, 0);
+	DoubleSolenoid PincerRight = new DoubleSolenoid (2, 3);
     private boolean mStateChanged;
     private boolean mSensorFull = false;
 
@@ -152,16 +154,20 @@ public class Intake extends Subsystem {
     private SystemState handleIdle() {
     	if (mStateChanged) {
         //setOpenLoop(0.0f);
-    		mVictor.set(0);//TURN MOTORS OFF
-    		BoxPincers.set(DoubleSolenoid.Value.kReverse);
+    		mVictorLeft.set(0);
+    		mVictorRight.set(0);//TURN MOTORS OFF
+    		PincerRight.set(DoubleSolenoid.Value.kReverse);
+    		PincerLeft.set(DoubleSolenoid.Value.kReverse);
     	}
         return defaultStateTransfer();
     }
     private SystemState handleStop() {
     	if (mStateChanged) {
         //setOpenLoop(0.0f);
-    		mVictor.set(0);//TURN MOTORS OFF
-    		BoxPincers.set(DoubleSolenoid.Value.kOff);
+    		mVictorLeft.set(0);
+    		mVictorRight.set(0);//TURN MOTORS OFF
+       		PincerRight.set(DoubleSolenoid.Value.kOff);
+    		PincerLeft.set(DoubleSolenoid.Value.kOff);
     	}
         return defaultStateTransfer();
     }
@@ -170,8 +176,10 @@ public class Intake extends Subsystem {
         //setOpenLoop(kUnjamOutPower);
     	if (mStateChanged) {
             //setOpenLoop(0.0f);
-        		mVictor.set(0);//TURN MOTORS OFF
-        		BoxPincers.set(DoubleSolenoid.Value.kOff);
+        		mVictorLeft.set(0);
+        		mVictorRight.set(0);//TURN MOTORS OFF
+        		PincerLeft.set(DoubleSolenoid.Value.kForward);
+           		PincerRight.set(DoubleSolenoid.Value.kForward);
         	}
         SystemState newState = SystemState.FULL;
         //if (now - startStartedAt > kUnjamOutPeriod) {
@@ -194,13 +202,16 @@ public class Intake extends Subsystem {
 
     private SystemState handleLoading() {
     	if (mSensorFull) { 
-    		BoxPincers.set(DoubleSolenoid.Value.kForward);
+    		
+       		PincerLeft.set(DoubleSolenoid.Value.kReverse);
+       	    PincerRight.set(DoubleSolenoid.Value.kReverse);
     		mSystemState = SystemState.FULL;
     	} else if (mStateChanged) {
             // mMasterTalon.changeControlMode(TalonControlMode.Speed);
             // mMasterTalon.setSetpoint(Constants.kFeederFeedSpeedRpm * Constants.kFeederSensorGearReduction);
 //            mMasterTalon.set(1.0);
-        	mVictor.set(0.5);
+        	mVictorLeft.set(-0.5);
+        	mVictorRight.set(0.5);
         } 
     	//CLAMP 
     	//TURN ON MOTORS
@@ -212,11 +223,13 @@ public class Intake extends Subsystem {
        // setOpenLoop(kExhaustVoltage);
     	if (mSensorFull) { 
     		if (mStateChanged) {
-    			BoxPincers.set(DoubleSolenoid.Value.kReverse);
+    	   		PincerLeft.set(DoubleSolenoid.Value.kReverse);
+    	   	    PincerLeft.set(DoubleSolenoid.Value.kReverse);
                 // mMasterTalon.changeControlMode(TalonControlMode.Speed);
                 // mMasterTalon.setSetpoint(Constants.kFeederFeedSpeedRpm * Constants.kFeederSensorGearReduction);
 //                mMasterTalon.set(1.0);
-            	mVictor.set(0.5);
+            	mVictorLeft.set(0.5);
+            	mVictorRight.set(-0.5);
             } 
     	} else mSystemState = SystemState.IDLE;
         return defaultStateTransfer();
@@ -230,7 +243,8 @@ public class Intake extends Subsystem {
  //       if (mStateChanged) {
  //           mMasterTalon.changeControlMode(CANTalon.TalonControlMode.PercentVbus);
  //       }
-        mVictor.set(voltage);
+        mVictorLeft.set(voltage);
+        mVictorRight.set(voltage);
     }
 
     @Override
