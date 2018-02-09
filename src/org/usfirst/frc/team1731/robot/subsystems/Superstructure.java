@@ -490,7 +490,7 @@ public class Superstructure extends Subsystem {
         mCompressor.setClosedLoopControl(false);
         //mElevator.setWantedState(Elevator.WantedState.IDLE);
 
-        mIntake.setOnWhileShooting();
+        //mIntake.setOnWhileShooting();
 
         switch (mWantedState) {
         case UNJAM:
@@ -686,7 +686,7 @@ public class Superstructure extends Subsystem {
     }
 
     public void setWantIntakeReversed() {
-        mIntake.setReverse();
+        mIntake.setOut();
     }
 
     public void setWantIntakeStopped() {
@@ -702,7 +702,7 @@ public class Superstructure extends Subsystem {
 	}
 
     public void setWantIntakeOnForShooting() {
-        mIntake.setOnWhileShooting();
+        mIntake.setIn();
     }
 
     public void setOverrideCompressor(boolean force_off) {
