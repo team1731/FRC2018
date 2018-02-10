@@ -8,8 +8,9 @@ import org.usfirst.frc.team1731.robot.Constants;
 import org.usfirst.frc.team1731.robot.loops.Loop;
 import org.usfirst.frc.team1731.robot.loops.Looper;
 
-
-
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.VictorSP;
@@ -40,49 +41,32 @@ public class Climber extends Subsystem {
         return sInstance;
     }
 
-    private final VictorSP mVictor; 
-//    private final CANTalon mMasterTalon, mSlaveTalon;
+//    private final TalonSRX mElevatorMotor; 
+    private final TalonSRX mMasterTalon;
+    private final TalonSRX mSlaveTalon;
 
     public Climber() {
-    	mVictor = new VictorSP(Constants.kFeederVictor);
-/*      mMasterTalon = CANTalonFactory.createDefaultTalon(Constants.kFeederMasterId);
-        mMasterTalon.setFeedbackDevice(CANTalon.FeedbackDevice.CtreMagEncoder_Relative);
-        mMasterTalon.changeControlMode(CANTalon.TalonControlMode.PercentVbus);
-        mMasterTalon.SetVelocityMeasurementWindow(16);
-        mMasterTalon.SetVelocityMeasurementPeriod(CANTalon.VelocityMeasurementPeriod.Period_5Ms);
+    
+        mMasterTalon = TalonSRXFactory.createDefaultTalon(Constants.kClimberMasterId);
+        mMasterTalon.setInverted(false);
+        mMasterTalon.setNeutralMode(NeutralMode.Brake);
 
-        mMasterTalon.setVoltageRampRate(Constants.kFeederRampRate);
-        mMasterTalon.reverseOutput(false);
-        mMasterTalon.enableBrakeMode(true);
-
-        mMasterTalon.setP(Constants.kFeederKP);
-        mMasterTalon.setI(Constants.kFeederKI);
-        mMasterTalon.setD(Constants.kFeederKD);
-        mMasterTalon.setF(Constants.kFeederKF);
-        mMasterTalon.setVoltageCompensationRampRate(Constants.kFeederVoltageCompensationRampRate);
-        mMasterTalon.setNominalClosedLoopVoltage(12.0);
-
-        mMasterTalon.setStatusFrameRateMs(CANTalon.StatusFrameRate.Feedback, 1000);
-
-        mSlaveTalon = CANTalonFactory.createPermanentSlaveTalon(Constants.kFeederSlaveId, Constants.kFeederMasterId);
-        mSlaveTalon.reverseOutput(true);
-        mSlaveTalon.enableBrakeMode(true);
-        */
+        mSlaveTalon = TalonSRXFactory.createPermanentSlaveTalon(Constants.kClimberSlaveId, Constants.kClimberMasterId);
+        mSlaveTalon.setInverted(true);
+        mSlaveTalon.setNeutralMode(NeutralMode.Brake);
+       
     }
 
     public enum SystemState {
-        FEEDING, // feed balls into the shooter
-        UNJAMMING_IN, // used for unjamming fuel
-        UNJAMMING_OUT, // used for unjamming fuel
-        IDLE, // stop all motors
-        EXHAUSTING // run feeder in reverse
+	        GOING_UP, // used for unjamming fuel
+	        GOING_DOWN, // stop all motors
+	        IDLE // run feeder in reverse
     }
 
     public enum WantedState {
         IDLE,
-        UNJAM,
-        EXHAUST,
-        FEED,
+        MECHANISM_UP,
+        MECHANISM_DOWN
     }
 
     private SystemState mSystemState = SystemState.IDLE;
@@ -110,17 +94,11 @@ public class Climber extends Subsystem {
                 case IDLE:
                     newState = handleIdle();
                     break;
-                case UNJAMMING_OUT:
-                    newState = handleUnjammingOut(timestamp, mCurrentStateStartTime);
+                case GOING_UP:
+                    newState = handleGoingUp();
                     break;
-                case UNJAMMING_IN:
-                    newState = handleUnjammingIn(timestamp, mCurrentStateStartTime);
-                    break;
-                case FEEDING:
-                    newState = handleFeeding();
-                    break;
-                case EXHAUSTING:
-                    newState = handleExhaust();
+                case GOING_DOWN:
+                    newState = handleGoingDown();
                     break;
                 default:
                     newState = SystemState.IDLE;
@@ -136,7 +114,21 @@ public class Climber extends Subsystem {
             }
         }
 
-        @Override
+        private SystemState handleGoingDown() {
+            mMasterTalon.set(ControlMode.PercentOutput, 1);
+
+            return defaultStateTransfer();
+        }
+
+		private SystemState handleGoingUp() {
+            mMasterTalon.set(ControlMode.PercentOutput, -1);
+            
+            return defaultStateTransfer();
+
+
+        }
+
+		@Override
         public void onStop(double timestamp) {
             stop();
         }
@@ -144,82 +136,25 @@ public class Climber extends Subsystem {
 
     private SystemState defaultStateTransfer() {
         switch (mWantedState) {
-        case FEED:
-            return SystemState.FEEDING;
-        case UNJAM:
-            return SystemState.UNJAMMING_OUT;
-        case EXHAUST:
-            return SystemState.EXHAUSTING;
+        case MECHANISM_DOWN:
+            return SystemState.GOING_DOWN;
+        case MECHANISM_UP:
+            return SystemState.GOING_UP;
         default:
             return SystemState.IDLE;
         }
+        
     }
 
     private SystemState handleIdle() {
-        setOpenLoop(0.0f);
+        mMasterTalon.set(ControlMode.PercentOutput, -1);
         return defaultStateTransfer();
     }
 
-    private SystemState handleUnjammingOut(double now, double startStartedAt) {
-        setOpenLoop(kUnjamOutPower);
-        SystemState newState = SystemState.UNJAMMING_OUT;
-        if (now - startStartedAt > kUnjamOutPeriod) {
-            newState = SystemState.UNJAMMING_IN;
-        }
-        switch (mWantedState) {
-        case FEED:
-            return SystemState.FEEDING;
-        case UNJAM:
-            return newState;
-        case EXHAUST:
-            return SystemState.EXHAUSTING;
-        default:
-            return SystemState.IDLE;
-        }
-    }
-
-    private SystemState handleUnjammingIn(double now, double startStartedAt) {
-        setOpenLoop(kUnjamInPower);
-        SystemState newState = SystemState.UNJAMMING_IN;
-        if (now - startStartedAt > kUnjamInPeriod) {
-            newState = SystemState.UNJAMMING_OUT;
-        }
-        switch (mWantedState) {
-        case FEED:
-            return SystemState.FEEDING;
-        case UNJAM:
-            return newState;
-        case EXHAUST:
-            return SystemState.EXHAUSTING;
-        default:
-            return SystemState.IDLE;
-        }
-    }
-
-    private SystemState handleFeeding() {
-        if (mStateChanged) {
-            // mMasterTalon.changeControlMode(TalonControlMode.Speed);
-            // mMasterTalon.setSetpoint(Constants.kFeederFeedSpeedRpm * Constants.kFeederSensorGearReduction);
-//            mMasterTalon.set(1.0);
-        	mVictor.set(1.0);
-        }
-        return defaultStateTransfer();
-    }
-
-    private SystemState handleExhaust() {
-        setOpenLoop(kExhaustVoltage);
-        return defaultStateTransfer();
-    }
+   
 
     public synchronized void setWantedState(WantedState state) {
         mWantedState = state;
-    }
-
-    private void setOpenLoop(double voltage) {
- //       if (mStateChanged) {
- //           mMasterTalon.changeControlMode(CANTalon.TalonControlMode.PercentVbus);
- //       }
-        mVictor.set(voltage);
     }
 
     @Override

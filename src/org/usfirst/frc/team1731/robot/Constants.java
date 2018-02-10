@@ -202,12 +202,16 @@ public class Constants extends ConstantsBase {
 
 //	  public static final int kIntakeMasterId = 5;
 //    public static final int kIntakeSlaveId = 10;
-	public static final int kIntakeVictor = 2;
+	public static final int kIntakeVictor1 = 2;
+	public static final int kIntakeVictor2 = 7;
 
     // Hopper / Floor
 //    public static final int kHopperMasterId = 6;
 //    public static final int kHopperSlaveId = 9;
 	public static final int kHopperVictor = 3;
+	
+	public static int kClimberMasterId = 15;
+	public static int kClimberSlaveId = 16;
 
     // Shooter
 //    public static final int kRightShooterMasterId = 2;
@@ -237,6 +241,8 @@ public class Constants extends ConstantsBase {
 //	public static final int kEjectSolenoid = 3; //was 1
 
 	public static final int SlotIdx = 0;
+
+	public static  double kRotateTime = 500;
 
 
 
@@ -320,6 +326,8 @@ public class Constants extends ConstantsBase {
     };
   
 	public static int kPidIdx = 0;
+
+
 
 	
 

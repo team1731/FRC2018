@@ -8,6 +8,9 @@ import org.usfirst.frc.team1731.lib.util.drivers.TalonSRXFactory;
 import org.usfirst.frc.team1731.robot.Constants;
 import org.usfirst.frc.team1731.robot.loops.Looper;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.can.VictorSPX;
+
 //import com.ctre.CANTalon;
 
 import edu.wpi.first.wpilibj.Solenoid;
@@ -30,28 +33,27 @@ public class Intake extends Subsystem {
         return sInstance;
     }
 
-    // hardware
-//    private CANTalon mMasterTalon, mSlaveTalon;
-//    private Solenoid mDeploySolenoid;
-    private final VictorSP mVictor;
 
-    private MovingAverage mThrottleAverage = new MovingAverage(50);
+    private VictorSPX mVictor1;
+    private VictorSPX mVictor2;
+
+
 
     private Intake() {
-    	mVictor = new VictorSP(Constants.kIntakeVictor);
-/*        mMasterTalon = CANTalonFactory.createDefaultTalon(Constants.kIntakeMasterId);
-        mMasterTalon.setStatusFrameRateMs(CANTalon.StatusFrameRate.General, 1000);
-        mMasterTalon.setStatusFrameRateMs(CANTalon.StatusFrameRate.Feedback, 1000);
-        mMasterTalon.changeControlMode(CANTalon.TalonControlMode.Voltage);
-
-        mSlaveTalon = CANTalonFactory.createDefaultTalon(Constants.kIntakeSlaveId);
-        mSlaveTalon.setStatusFrameRateMs(CANTalon.StatusFrameRate.General, 1000);
-        mSlaveTalon.setStatusFrameRateMs(CANTalon.StatusFrameRate.Feedback, 1000);
-        mSlaveTalon.changeControlMode(CANTalon.TalonControlMode.Voltage);
-
-        mDeploySolenoid = new Solenoid(Constants.kIntakeDeploySolenoidId);
-        */
+    	mVictor1 = new VictorSPX(Constants.kIntakeVictor1);
+    	mVictor2 = new VictorSPX(Constants.kIntakeVictor2);
     }
+
+	public void setEjecting() {
+        mVictor1.set(ControlMode.PercentOutput, 1);
+        mVictor2.set(ControlMode.PercentOutput, -1);
+    }
+	
+	public void setIntaking() {
+        mVictor1.set(ControlMode.PercentOutput, -1);
+        mVictor2.set(ControlMode.PercentOutput, 1);
+    }
+		
 
     @Override
     public void outputToSmartDashboard() {
@@ -60,8 +62,8 @@ public class Intake extends Subsystem {
 
     @Override
     public synchronized void stop() {
-        mThrottleAverage.clear();
-        setOff();
+        mVictor1.set(ControlMode.PercentOutput, 0);
+        mVictor2.set(ControlMode.PercentOutput, 0);
     }
 
     @Override
@@ -74,55 +76,6 @@ public class Intake extends Subsystem {
 
     }
 
-    public synchronized void setCurrentThrottle(double currentThrottle) {
-        mThrottleAverage.addNumber(currentThrottle);
-    }
-
-  /*  public synchronized void deploy() {
-        mDeploySolenoid.set(true);
-    }
-
-    public synchronized void reset() { // only use this in autoInit to reset the intake
-        mDeploySolenoid.set(false);
-    }
-*/
-    public synchronized void setOn() {
- //       deploy();
-        setOpenLoop(getScaledIntakeVoltage());
-    }
-
-    public synchronized void setOnWhileShooting() {
-  //      deploy();
-        setOpenLoop(Constants.kIntakeShootingVoltage);
-    }
-
-    public synchronized void setOff() {
-        setOpenLoop(0.0);
-    }
-
-    public synchronized void setReverse() {
-        setOpenLoop(-Constants.kIntakeVoltageMax);
-    }
-
-    private double getScaledIntakeVoltage() {
-        // Perform a linear interpolation from the Abs of throttle. Keep in mind we want to run at
-        // full throttle when in reverse.
-
-        double scale;
-        if (mThrottleAverage.getSize() > 0) {
-            scale = Math.min(0.0, Math.max(0.0, mThrottleAverage.getAverage()));
-        } else {
-            scale = 0.0;
-        }
-
-        return Constants.kIntakeVoltageMax - scale * Constants.kIntakeVoltageDifference;
-    }
-
-    private void setOpenLoop(double voltage) {
-        // voltage = -voltage; // Flip so +V = intake
-        mVictor.set(-voltage);
-        mVictor.set(voltage);
-    }
 
     public boolean checkSystem() {
  /*       final double kCurrentThres = 0.5;
@@ -165,5 +118,14 @@ public class Intake extends Subsystem {
         */
     	return true;
     }
+
+
+
+	public void setIdle() {
+		// TODO Auto-generated method stub
+		
+	}
+
+
 
 }

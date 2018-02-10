@@ -47,7 +47,7 @@ public class DeployIntakeAction implements Action {
     public void start() {
         startTime = Timer.getFPGATimestamp();
  //       mIntake.deploy();
-        if (runIntake)
-            mIntake.setOn();
+ //       if (runIntake)
+     //       mIntake.setOn();
     }
 }

@@ -1,6 +1,5 @@
 package org.usfirst.frc.team1731.robot.auto.actions;
 
-import org.usfirst.frc.team1731.robot.subsystems.Shooter;
 
 /**
  * Spins up the flywheel to a specified RPM in advance in order to save time later.
@@ -18,6 +17,6 @@ public class SetFlywheelRPMAction extends RunOnceAction {
 
     @Override
     public synchronized void runOnce() {
-        Shooter.getInstance().setSpinUp(rpm);
+   //     Shooter.getInstance().setSpinUp(rpm);
     }
 }

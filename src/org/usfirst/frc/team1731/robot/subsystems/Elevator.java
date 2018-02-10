@@ -45,13 +45,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class Elevator extends Subsystem {
 	//private Joystick joystick2;
 
-    private static final double kReversing = -1.0;
-    private static final double kUnjamInPeriod = .2 * kReversing;
-    private static final double kUnjamOutPeriod = .4 * kReversing;
-    private static final double kUnjamInPower = 6.0 * kReversing / 12.0;
-    private static final double kUnjamOutPower = -6.0 * kReversing / 12.0;
-    private static final double kFeedVoltage = 10.0;
-    private static final double kExhaustVoltage = kFeedVoltage * kReversing / 12.0;
+    private static final double kTopEncoderValue = 2000;
+    private static final double kBottomEncoderValue= -2000;
+    private static final double kHomeEncoderValue = 0;
+
 	
     private static Elevator sInstance = null;
     
@@ -78,6 +75,7 @@ public class Elevator extends Subsystem {
         mTalon.config_kF(Constants.SlotIdx, Constants.kElevatorTalonKF, Constants.kTimeoutMs );
         mTalon.setStatusFramePeriod(StatusFrameEnhanced.Status_12_Feedback1, 1000, 1000);
         mTalon.setSelectedSensorPosition(0, 0, 10);
+        mTalon.overrideLimitSwitchesEnable(false);
         
         /* choose to ensure sensor is positive when output is positive */
         mTalon.setSensorPhase(Constants.kSensorPhase);
@@ -102,13 +100,16 @@ public class Elevator extends Subsystem {
     	
     public enum SystemState {	
         IDLE,   // stop all motors
-        MOVING, // moving
+        CALIBRATINGUP,
+        CALIBRATINGDOWN,
+        ELEVATORTRACKING, // moving
     }
 
     public enum WantedState {
-    		IDLE,   
-        MOVING, // moving
-        STOP,
+    	IDLE,   
+        ELEVATORTRACKING, // moving
+        CALIBRATINGUP,
+        CALIBRATINGDOWN,
     }
 
     private SystemState mSystemState = SystemState.IDLE;
@@ -141,8 +142,14 @@ public class Elevator extends Subsystem {
                     case IDLE:
                         newState = handleIdle();
                         break;
-                    case MOVING:
-                        newState = handleMoving();
+                    case ELEVATORTRACKING:
+                        newState = handleElevatorTracking();
+                        break;
+                    case CALIBRATINGUP:
+                        newState = handleCalibratingUp();
+                        break;
+                    case CALIBRATINGDOWN:
+                        newState = handleCalibratingDown();
                         break;
                     default:
                         newState = SystemState.IDLE;                    
@@ -152,7 +159,7 @@ public class Elevator extends Subsystem {
                     //System.out.println("Elevator state " + mSystemState + " to " + newState);
                     mSystemState = newState;
                     mCurrentStateStartTime = timestamp;
-                    DriverStation.reportError("Elevator SystemState: " + mSystemState, false);
+                    DriverStation.reportWarning("Elevator SystemState: " + mSystemState, false);
                     mStateChanged = true;
                 } else {
                     mStateChanged = false;
@@ -160,7 +167,21 @@ public class Elevator extends Subsystem {
             }
         }
         
-        @Override
+        private SystemState handleCalibratingDown() {
+            if (mStateChanged) {
+                mTalon.set(ControlMode.PercentOutput, -0.3);
+            }
+    		return defaultStateTransfer();
+		}
+
+		private SystemState handleCalibratingUp() {
+            if (mStateChanged) {
+                mTalon.set(ControlMode.PercentOutput, 0.5);
+            }
+    		return defaultStateTransfer();
+		}
+
+		@Override
         public void onStop(double timestamp) {
             stop();
         }
@@ -168,10 +189,13 @@ public class Elevator extends Subsystem {
 
     private SystemState defaultStateTransfer() {
         switch (mWantedState) {
-            case MOVING:
-                return SystemState.MOVING;
-            /*case STOP:
-                return SystemState.IDLE; */
+            case ELEVATORTRACKING:
+                return SystemState.ELEVATORTRACKING;
+            case CALIBRATINGUP:
+                return SystemState.CALIBRATINGUP;
+            case CALIBRATINGDOWN:
+                return SystemState.CALIBRATINGDOWN;
+
             default:
                 return SystemState.IDLE;
         }
@@ -181,27 +205,31 @@ public class Elevator extends Subsystem {
         //setOpenLoop(0.0f);
         //if motor is not off, turn motor off
         if (mStateChanged) {
-            mTalon.set(ControlMode.Position, 0);
+            mTalon.set(ControlMode.PercentOutput, 0);
         }
 		return defaultStateTransfer();
     }
 
-    private SystemState handleMoving() {
+    private SystemState handleElevatorTracking() {
         /* 10 Rotations * 4096 u/rev in either direction */
         //targetPositionRotations = mWantedPosition * 4096;
        // DriverStation.reportError("Elevator SetPosition: " + Double.toString(mWantedPosition), false);
-        mTalon.set(ControlMode.Position, mWantedPosition); // * 4096);
-
-        return defaultStateTransfer();
+       // mTalon.set(ControlMode.Position, mWantedPosition); // * 4096);
+    	if (mWantedPosition > 0) {
+    		mTalon.set(ControlMode.Position, mWantedPosition*kTopEncoderValue); 
+    	}
+    	else {
+    		mTalon.set(ControlMode.Position, mWantedPosition*kBottomEncoderValue);
+    		
+    	} 
+    	return defaultStateTransfer();
     }
 
     public synchronized void setWantedPosition(double position) {
-        if (position != mWantedPosition) {
-            mWantedPosition = position;
-            mWantedState = WantedState.MOVING;
-        } else if (position == 0) {
-        	mWantedState = WantedState.IDLE;
-        }
+    	
+    	mWantedPosition = position;
+    	
+
     }
 
 

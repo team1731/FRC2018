@@ -18,6 +18,6 @@ public class ActuateHopperAction extends RunOnceAction {
 
     @Override
     public synchronized void runOnce() {
-        Superstructure.getInstance().setActuateHopper(extend);
+    //    Superstructure.getInstance().setActuateHopper(extend);
     }
 }

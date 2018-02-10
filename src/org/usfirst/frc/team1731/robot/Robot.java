@@ -21,7 +21,6 @@ import org.usfirst.frc.team1731.robot.subsystems.Drive;
 import org.usfirst.frc.team1731.robot.subsystems.Elevator;
 import org.usfirst.frc.team1731.robot.subsystems.Intake;
 import org.usfirst.frc.team1731.robot.subsystems.LED;
-import org.usfirst.frc.team1731.robot.subsystems.Shooter;
 import org.usfirst.frc.team1731.robot.subsystems.Superstructure;
 import org.usfirst.frc.team1731.robot.vision.VisionServer;
 
@@ -53,20 +52,15 @@ public class Robot extends IterativeRobot {
     private RobotState mRobotState = RobotState.getInstance();
     private AutoModeExecuter mAutoModeExecuter = null;
 
-    // Create subsystem manager
-//    private final SubsystemManager mSubsystemManager = new SubsystemManager(
-//            Arrays.asList(Drive.getInstance(), Superstructure.getInstance(), Shooter.getInstance(),
-//                    Feeder.getInstance(), Hopper.getInstance(), Intake.getInstance(),
-//                    ConnectionMonitor.getInstance(), LED.getInstance(),
-//                    MotorGearGrabber.getInstance()));
+
     private final SubsystemManager mSubsystemManager = new SubsystemManager(
-                            Arrays.asList(Drive.getInstance(), Superstructure.getInstance(), Shooter.getInstance(),
+                            Arrays.asList(Drive.getInstance(), Superstructure.getInstance(),
                                     Elevator.getInstance(), Intake.getInstance(),
                                     ConnectionMonitor.getInstance(), LED.getInstance()));
 
     // Initialize other helper objects
     private CheesyDriveHelper mCheesyDriveHelper = new CheesyDriveHelper();
-    private ControlBoardInterface mControlBoard = ControlBoard.getInstance();
+    private ControlBoardInterface mControlBoard = GamepadControlBoard.getInstance();
 
     private Looper mEnabledLooper = new Looper();
 
@@ -76,7 +70,6 @@ public class Robot extends IterativeRobot {
 
     private DelayedBoolean mDelayedAimButton;
 
-    private LatchedBoolean mCommitTuning = new LatchedBoolean();
     private InterpolatingTreeMap<InterpolatingDouble, InterpolatingDouble> mTuningFlywheelMap = new InterpolatingTreeMap<>();
 
     public Robot() {
@@ -98,7 +91,7 @@ public class Robot extends IterativeRobot {
             CrashTracker.logRobotInit();
 
             mSubsystemManager.registerEnabledLoops(mEnabledLooper);
-            mEnabledLooper.register(VisionProcessor.getInstance());
+          //  mEnabledLooper.register(VisionProcessor.getInstance());
             mEnabledLooper.register(RobotStateEstimator.getInstance());
 
             //mVisionServer.addVisionUpdateReceiver(VisionProcessor.getInstance());
@@ -138,7 +131,6 @@ public class Robot extends IterativeRobot {
 
             zeroAllSensors();
             mSuperstructure.setWantedState(Superstructure.WantedState.IDLE);
-            mSuperstructure.setActuateHopper(false);
             mSuperstructure.setOverrideCompressor(true);
 
             mAutoModeExecuter = null;
@@ -205,132 +197,49 @@ public class Robot extends IterativeRobot {
     public void teleopPeriodic() {
         try {
             double timestamp = Timer.getFPGATimestamp();
-            /*
-            boolean elevatorUp = mControlBoard.getElevatorUpButton();
-            DriverStation.reportError("ElevatorUpButton: " + elevatorUp, false);
-            if (elevatorUp) {
-            		mSuperstructure.setWantedState(Superstructure.WantedState.ELEVATOR_UP);
-            }
-            boolean elevatorDown = mControlBoard.getElevatorDownButton();
-            DriverStation.reportError("ElevatorDownButton: " + elevatorDown, false);
-            if (elevatorDown) {
-            		mSuperstructure.setWantedState(Superstructure.WantedState.ELEVATOR_DOWN);
-            }
-            */
-            double elevator_axis = -1 * mControlBoard.getElevatorControl();
-            //double elevator_axis = 0.6;
-            //boolean buttonA = mControlBoard.getButtonA();
-            //DriverStation.reportError("Elevator Position Joystick: " + Double.toString(elevator_axis), false);
-            if (elevator_axis > 0.1) {
-                mSuperstructure.setWantedElevatorPosition(elevator_axis * 8000);
-            } else {
-                mSuperstructure.setWantedElevatorPosition(0);
-            }
-
-            // Grabber
             
-            mSuperstructure.setGrabber(mControlBoard.getGrabCubeButton());
-            mSuperstructure.setOverTheTop(mControlBoard.getOverTheTopButton());
+                       
+            boolean climbUp = mControlBoard.getClimbUp();
+            boolean climbDown = mControlBoard.getClimbDown();
+            boolean overTheTop = mControlBoard.getOverTheTopButton();
+            boolean grabCube = mControlBoard.getGrabCubeButton();
+            boolean calibrateDown = mControlBoard.getCalibrateDown();
+            boolean calibrateUp = mControlBoard.getCalibrateUp();
+            boolean spitting = mControlBoard.getSpit();
+            
+            mSuperstructure.setWantedElevatorPosition(-1 * mControlBoard.getElevatorControl());
+            
+            if (climbUp) {
+            	mSuperstructure.setWantedState(Superstructure.WantedState.CLIMBINGUP);
+            } else if (climbDown) {
+            	mSuperstructure.setWantedState(Superstructure.WantedState.CLIMBINGDOWN);
+            } else if (grabCube) {
+            	mSuperstructure.setWantedState(Superstructure.WantedState.INTAKING);
+            } else if (spitting) {
+            	mSuperstructure.setWantedState(Superstructure.WantedState.SPITTING);
+            } else if (calibrateDown) {
+            	mSuperstructure.setWantedState(Superstructure.WantedState.CALIBRATINGDOWN);
+            } else if (calibrateUp) {
+            	mSuperstructure.setWantedState(Superstructure.WantedState.CALIBRATINGUP);
+            } else if (overTheTop) {
+            	mSuperstructure.setWantedState(Superstructure.WantedState.OVERTHETOP);
+            } else {
+            	mSuperstructure.setWantedState(Superstructure.WantedState.ELEVATOR_TRACKING);
+            }
+            	
+
 
             // Drive base
             double throttle = mControlBoard.getThrottle();
             double turn = mControlBoard.getTurn();
+            
+            mDrive.setOpenLoop(mCheesyDriveHelper.cheesyDrive(throttle, turn, mControlBoard.getQuickTurn(),
+                    !mControlBoard.getLowGear()));
+            boolean wantLowGear = mControlBoard.getLowGear();
+            mDrive.setHighGear(!wantLowGear);
+            
+            
 
-            boolean wants_aim_button = mControlBoard.getAimButton();
-            // wants_aim_button = !mDelayedAimButton.update(timestamp, !wants_aim_button);
-
-            if (wants_aim_button || mControlBoard.getDriveAimButton()) {
-
-                if (Constants.kIsShooterTuning) {
-                    mDrive.setWantAimToGoal();
-                } else if (mControlBoard.getDriveAimButton()) {
-                    mDrive.setWantDriveTowardsGoal();
-                } else {
-                    mDrive.setWantAimToGoal();
-                }
-
-                if ((mControlBoard.getDriveAimButton() && !mDrive.isApproaching())
-                        || !mControlBoard.getDriveAimButton()) {
-                    if (mControlBoard.getUnjamButton()) {
-                        mSuperstructure.setWantedState(Superstructure.WantedState.UNJAM_SHOOT);
-                    } else {
-                        mSuperstructure.setWantedState(Superstructure.WantedState.SHOOT);
-                    }
-                } else {
-                    mSuperstructure.setWantedState(Superstructure.WantedState.RANGE_FINDING);
-                }
-            } else {
-                // Make sure not to interrupt shooting spindown.
-                if (!mSuperstructure.isShooting()) {
-                    mDrive.setOpenLoop(mCheesyDriveHelper.cheesyDrive(throttle, turn, mControlBoard.getQuickTurn(),
-                            !mControlBoard.getLowGear()));
-                    boolean wantLowGear = mControlBoard.getLowGear();
-                    mDrive.setHighGear(!wantLowGear);
-                }
-
-                Intake.getInstance().setCurrentThrottle(mControlBoard.getThrottle());
-
-                boolean wantsExhaust = mControlBoard.getExhaustButton();
-
-                if (Constants.kIsShooterTuning) {
-                    mLED.setWantedState(LED.WantedState.FIND_RANGE);
-                    if (mCommitTuning.update(mControlBoard.getLowGear())) {
-                        // Commit to TuningMap.
-                        double rpm = mSuperstructure.getCurrentTuningRpm();
-                        double range = mSuperstructure.getCurrentRange();
-                        System.out.println("Tuning range: " + range + " = " + rpm);
-                        mTuningFlywheelMap.put(new InterpolatingDouble(range), new InterpolatingDouble(rpm));
-                        mSuperstructure.incrementTuningRpm();
-                    }
-                }
-
-                // Exhaust has highest priority for intake.
-                if (wantsExhaust) {
-                    mSuperstructure.setWantIntakeReversed();
-                } else if (mControlBoard.getIntakeButton()) {
-                    mSuperstructure.setWantIntakeOn();
-                } else if (!mSuperstructure.isShooting()) {
-                    mSuperstructure.setWantIntakeStopped();
-                }
-
-                // Hanging has highest priority for feeder, followed by exhausting, unjamming, and finally
-                // feeding.
-                if (mControlBoard.getHangButton()) {
-                    mSuperstructure.setWantedState(Superstructure.WantedState.HANG);
-                } else if (wantsExhaust) {
-                    mSuperstructure.setWantedState(Superstructure.WantedState.EXHAUST);
-                } else if (mControlBoard.getUnjamButton()) {
-                    mSuperstructure.setWantedState(Superstructure.WantedState.UNJAM);
-                } else if (mControlBoard.getFeedButton()) {
-                    mSuperstructure.setWantedState(Superstructure.WantedState.MANUAL_FEED);
-                } else if (mControlBoard.getRangeFinderButton()) {
-                    mSuperstructure.setWantedState(Superstructure.WantedState.RANGE_FINDING);
-                } else {
-                    mSuperstructure.setWantedState(Superstructure.WantedState.IDLE);
-                }
-
-                if (mControlBoard.getFlywheelSwitch()) {
-                    mSuperstructure.setClosedLoopRpm(Constants.kDefaultShootingRPM);
-                } else if (mControlBoard.getShooterOpenLoopButton()) {
-                    mSuperstructure.setShooterOpenLoop(0);
-                } else if (mControlBoard.getShooterClosedLoopButton()) {
-                    mSuperstructure.setClosedLoopRpm(Constants.kDefaultShootingRPM);
-                } else if (!mControlBoard.getHangButton() && !mControlBoard.getRangeFinderButton() &&
-                        !mSuperstructure.isShooting()) {
-                    mSuperstructure.setShooterOpenLoop(0);
-                }
-
-                if (mControlBoard.getBlinkLEDButton()) {
-                    mLED.setWantedState(LED.WantedState.BLINK);
-                }
-            }
-
-            boolean score_gear = mControlBoard.getScoreGearButton();
-            boolean grab_gear = mControlBoard.getGrabGearButton();
-
-
-
-            mSuperstructure.setActuateHopper(mControlBoard.getActuateHopperButton());
             allPeriodic();
         } catch (Throwable t) {
             CrashTracker.logThrowableCrash(t);
@@ -390,7 +299,6 @@ public class Robot extends IterativeRobot {
         boolean results = Elevator.getInstance().checkSystem();
         results &= Drive.getInstance().checkSystem();
         results &= Intake.getInstance().checkSystem();
-        results &= Shooter.getInstance().checkSystem();
 
 
         if (!results) {
