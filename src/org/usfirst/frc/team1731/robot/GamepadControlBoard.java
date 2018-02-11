@@ -23,8 +23,8 @@ public class GamepadControlBoard implements ControlBoardInterface {
     }
 
     protected GamepadControlBoard() {
-    	mOperator = new Joystick(0);
-        mDriver = new Joystick(1);
+    	mOperator = new Joystick(1);
+        mDriver = new Joystick(0);
     }
     
     @Override
@@ -81,13 +81,27 @@ public class GamepadControlBoard implements ControlBoardInterface {
     @Override
     public boolean getClimbUp() {
         // A
-        return (mOperator.getPOV(1) == 1) &  mOperator.getRawButton(1);
+		//    	Get the angle in degrees of a POV on the HID. 
+		//
+		//    	The POV angles start at 0 in the up direction, and increase clockwise
+    	//		(eg right is 90, upper-left is 315).
+		//    	Parameters:pov The index of the POV to read (starting at 0)
+    	//		Returns:the angle of the POV in degrees, or -1 if the POV is not pressed.
+		//    	
+        return (mOperator.getPOV(0) > 315 && mOperator.getPOV(0) < 45) &  mOperator.getRawButton(1);
     }
     
     @Override
     public boolean getClimbDown() {
         // A
-        return (mOperator.getPOV(1) == 5) &  mOperator.getRawButton(1);
+		//    	Get the angle in degrees of a POV on the HID. 
+		//
+		//    	The POV angles start at 0 in the up direction, and increase clockwise
+    	//		(eg right is 90, upper-left is 315).
+		//    	Parameters:pov The index of the POV to read (starting at 0)
+    	//		Returns:the angle of the POV in degrees, or -1 if the POV is not pressed.
+		//    	
+        return (mOperator.getPOV(0) > 135 && mOperator.getPOV(0) < 225) &  mOperator.getRawButton(1);
     }
 
   

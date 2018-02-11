@@ -202,15 +202,15 @@ public class Constants extends ConstantsBase {
 
 //	  public static final int kIntakeMasterId = 5;
 //    public static final int kIntakeSlaveId = 10;
-	public static final int kIntakeVictor1 = 2;
-	public static final int kIntakeVictor2 = 7;
+	public static final int kIntakeVictor1 = 8;
+	public static final int kIntakeVictor2 = 9;
 
     // Hopper / Floor
 //    public static final int kHopperMasterId = 6;
 //    public static final int kHopperSlaveId = 9;
 	public static final int kHopperVictor = 3;
 	
-	public static int kClimberMasterId = 15;
+	public static int kClimberMasterId = 6;
 	public static int kClimberSlaveId = 16;
 
     // Shooter

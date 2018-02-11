@@ -45,8 +45,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class Elevator extends Subsystem {
 	//private Joystick joystick2;
 
-    private static final double kTopEncoderValue = 2000;
-    private static final double kBottomEncoderValue= -2000;
+    private static final double kTopEncoderValue = 6000;
+    private static final double kBottomEncoderValue= 5300;
     private static final double kHomeEncoderValue = 0;
 
 	
@@ -74,6 +74,7 @@ public class Elevator extends Subsystem {
         mTalon.config_kD(Constants.SlotIdx, Constants.kElevatorTalonKD, Constants.kTimeoutMs);
         mTalon.config_kF(Constants.SlotIdx, Constants.kElevatorTalonKF, Constants.kTimeoutMs );
         mTalon.setStatusFramePeriod(StatusFrameEnhanced.Status_12_Feedback1, 1000, 1000);
+        mTalon.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 10);
         mTalon.setSelectedSensorPosition(0, 0, 10);
         mTalon.overrideLimitSwitchesEnable(false);
         
@@ -171,6 +172,7 @@ public class Elevator extends Subsystem {
             if (mStateChanged) {
                 mTalon.set(ControlMode.PercentOutput, -0.3);
             }
+    		mTalon.setSelectedSensorPosition(0, 0, 0);
     		return defaultStateTransfer();
 		}
 
@@ -178,6 +180,7 @@ public class Elevator extends Subsystem {
             if (mStateChanged) {
                 mTalon.set(ControlMode.PercentOutput, 0.5);
             }
+    		mTalon.setSelectedSensorPosition(0, 0, 0);
     		return defaultStateTransfer();
 		}
 
@@ -211,17 +214,14 @@ public class Elevator extends Subsystem {
     }
 
     private SystemState handleElevatorTracking() {
-        /* 10 Rotations * 4096 u/rev in either direction */
-        //targetPositionRotations = mWantedPosition * 4096;
-       // DriverStation.reportError("Elevator SetPosition: " + Double.toString(mWantedPosition), false);
-       // mTalon.set(ControlMode.Position, mWantedPosition); // * 4096);
+
     	if (mWantedPosition > 0) {
-    		mTalon.set(ControlMode.Position, mWantedPosition*kTopEncoderValue); 
+    		mTalon.set(ControlMode.Position, (int)(mWantedPosition*kTopEncoderValue)); 
     	}
     	else {
-    		mTalon.set(ControlMode.Position, mWantedPosition*kBottomEncoderValue);
-    		
+    		mTalon.set(ControlMode.Position, (int)(mWantedPosition*kBottomEncoderValue));
     	} 
+
     	return defaultStateTransfer();
     }
 

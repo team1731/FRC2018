@@ -176,9 +176,9 @@ public class Drive extends Subsystem {
         //mLeftMaster.setFeedbackDevice(TalonSRX.FeedbackDevice.CtreMagEncoder_Relative);
         mLeftMaster.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, Constants.kTimeoutMs);
         //mLeftMaster.reverseSensor(true);
-        mLeftMaster.setInverted(false);
+        mLeftMaster.setInverted(true);
         //mLeftMaster.reverseOutput(false);
-        mLeftMaster.setSensorPhase(false);
+        mLeftMaster.setSensorPhase(true);
 
         int leftSensorPresent = mLeftMaster.getSensorCollection().getPulseWidthRiseToRiseUs();
 
@@ -215,7 +215,7 @@ public class Drive extends Subsystem {
         mRightSlave = TalonSRXFactory.createPermanentSlaveTalon(Constants.kRightDriverSlaveId,
                 Constants.kRightDriveMasterId);
         //mRightSlave.reverseOutput(false);
-        mRightSlave.setInverted(true);
+        mRightSlave.setInverted(false);
         //mRightMaster.setStatusFrameRateMs(StatusFrameRate.Feedback, 5);
         mRightMaster.setStatusFramePeriod(StatusFrame.Status_2_Feedback0, 5, Constants.kTimeoutMs); 
         mRightMaster.setStatusFramePeriod(StatusFrame.Status_12_Feedback1, 5, Constants.kTimeoutMs);

@@ -98,9 +98,9 @@ public class Robot extends IterativeRobot {
 
             AutoModeSelector.initAutoModeSelector();
 
-            mDelayedAimButton = new DelayedBoolean(Timer.getFPGATimestamp(), 0.1);
+          //  mDelayedAimButton = new DelayedBoolean(Timer.getFPGATimestamp(), 0.1);
             // Force an true update now to prevent robot from running at start.
-            mDelayedAimButton.update(Timer.getFPGATimestamp(), true);
+          //  mDelayedAimButton.update(Timer.getFPGATimestamp(), true);
 
             // Pre calculate the paths we use for auto.
             PathAdapter.calculatePaths();

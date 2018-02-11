@@ -43,7 +43,7 @@ public class Climber extends Subsystem {
 
 //    private final TalonSRX mElevatorMotor; 
     private final TalonSRX mMasterTalon;
-    private final TalonSRX mSlaveTalon;
+  //  private final TalonSRX mSlaveTalon;
 
     public Climber() {
     
@@ -51,9 +51,9 @@ public class Climber extends Subsystem {
         mMasterTalon.setInverted(false);
         mMasterTalon.setNeutralMode(NeutralMode.Brake);
 
-        mSlaveTalon = TalonSRXFactory.createPermanentSlaveTalon(Constants.kClimberSlaveId, Constants.kClimberMasterId);
-        mSlaveTalon.setInverted(true);
-        mSlaveTalon.setNeutralMode(NeutralMode.Brake);
+  //      mSlaveTalon = TalonSRXFactory.createPermanentSlaveTalon(Constants.kClimberSlaveId, Constants.kClimberMasterId);
+  //      mSlaveTalon.setInverted(true);
+  //      mSlaveTalon.setNeutralMode(NeutralMode.Brake);
        
     }
 

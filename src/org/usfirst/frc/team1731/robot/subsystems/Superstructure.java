@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.DriverStation;
 
+
 /**
  * The superstructure subsystem is the overarching superclass containing all components of the superstructure: the
  * intake, hopper, feeder, shooter and LEDs. The superstructure subsystem also contains some miscellaneous hardware that
@@ -177,6 +178,8 @@ public class Superstructure extends Subsystem {
         private SystemState handleElevatorTracking() {
         	mElevator.setWantedPosition(mElevatorJoystickPosition);
         	mElevator.setWantedState(Elevator.WantedState.ELEVATORTRACKING);
+            mIntake.setWantedState(Intake.WantedState.IDLE);
+            mClimber.setWantedState(Climber.WantedState.IDLE);
         	
             switch (mWantedState) {
             case CLIMBINGUP:
@@ -203,7 +206,7 @@ public class Superstructure extends Subsystem {
 		private SystemState handleSpittingOutTop() {
         	mElevator.setWantedPosition(1);
         	mElevator.setWantedState(Elevator.WantedState.ELEVATORTRACKING);
-        	mIntake.setEjecting();
+        	mIntake.setWantedState(Intake.WantedState.SPITTING);
         	
             switch (mWantedState) {
             case CLIMBINGUP:
@@ -262,7 +265,7 @@ public class Superstructure extends Subsystem {
 		private SystemState handleSpitting() {
         	mElevator.setWantedPosition(mElevatorJoystickPosition);
         	mElevator.setWantedState(Elevator.WantedState.ELEVATORTRACKING);
-        	mIntake.setEjecting();
+        	mIntake.setWantedState(Intake.WantedState.SPITTING);
         	
             switch (mWantedState) {
             case CLIMBINGUP:
@@ -362,24 +365,65 @@ public class Superstructure extends Subsystem {
 
 		private SystemState handleClimbingUp() {
 			// TODO Auto-generated method stub
-			return null;
+			return SystemState.IDLE;
 		}
 
 		private SystemState waitingForPowerCubeIntake() {
-			// TODO Auto-generated method stub
-			return null;
-		}
+       	mIntake.setWantedState(Intake.WantedState.INTAKING);
+        	
+            switch (mWantedState) {
+            case CLIMBINGUP:
+                return SystemState.CLIMBINGUP;
+            case CLIMBINGDOWN:
+                return SystemState.CLIMBINGDOWN;
+            case INTAKING:
+                return SystemState.WAITING_FOR_LOW_POSITION;
+            case SPITTING:
+                return SystemState.SPITTING;
+            case CALIBRATINGDOWN:
+                return SystemState.CALIBRATINGDOWN;
+            case CALIBRATINGUP:
+                return SystemState.CALIBRATINGUP;
+            case OVERTHETOP:
+                return SystemState.SPITTING_OUT_TOP;
+            case ELEVATOR_TRACKING:
+                return SystemState.ELEVATOR_TRACKING;
+            default:
+                return SystemState.IDLE;
+            }
+        }
 
 		private SystemState handleWaitingForHightPosition() {
 			// TODO Auto-generated method stub
-			return null;
+			return SystemState.IDLE;
 		}
 
 		private SystemState handleWaitingForLowPosition() {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
+        	mElevator.setWantedPosition(-1);
+        	mElevator.setWantedState(Elevator.WantedState.ELEVATORTRACKING);
+        	mIntake.setWantedState(Intake.WantedState.INTAKING);
+        	
+            switch (mWantedState) {
+            case CLIMBINGUP:
+                return SystemState.CLIMBINGUP;
+            case CLIMBINGDOWN:
+                return SystemState.CLIMBINGDOWN;
+            case INTAKING:
+                return SystemState.WAITING_FOR_LOW_POSITION;
+            case SPITTING:
+                return SystemState.SPITTING;
+            case CALIBRATINGDOWN:
+                return SystemState.CALIBRATINGDOWN;
+            case CALIBRATINGUP:
+                return SystemState.CALIBRATINGUP;
+            case OVERTHETOP:
+                return SystemState.SPITTING_OUT_TOP;
+            case ELEVATOR_TRACKING:
+                return SystemState.ELEVATOR_TRACKING;
+            default:
+                return SystemState.IDLE;
+            }
+        }
 
 		@Override
         public void onStop(double timestamp) {
@@ -393,6 +437,8 @@ public class Superstructure extends Subsystem {
             stop();
             mLED.setWantedState(LED.WantedState.OFF);
             mElevator.setWantedState(Elevator.WantedState.IDLE);
+            mIntake.setWantedState(Intake.WantedState.IDLE);
+         //   mClimber.setWantedState(Climber.WantedState.IDLE);
         }
         
     	
@@ -459,23 +505,7 @@ public class Superstructure extends Subsystem {
     public void setWantedElevatorPosition(double position) {
     	mElevatorJoystickPosition = position;
     }
-/*
-    public void setWantIntakeReversed() {
-        mIntake.setReverse();
-    }
 
-    public void setWantIntakeStopped() {
-        mIntake.setOff();
-    }
-
-    public void setWantIntakeOn() {
-        mIntake.setOn();
-    }
-
-    public void setWantIntakeOnForShooting() {
-        mIntake.setOnWhileShooting();
-    }
-*/
     public void setOverrideCompressor(boolean force_off) {
         mCompressorOverride = force_off;
     }
