@@ -4,7 +4,7 @@
 		<location x="126" y="680"/>
 	</static-widget>
 	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.ConnectionIndicator">
-		<location x="0" y="0"/>
+		<location x="1" y="1"/>
 	</static-widget>
 	<widget field="Air Pressure psi" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
 		<location x="1172" y="43"/>
