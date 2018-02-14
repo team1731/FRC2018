@@ -4,16 +4,7 @@ import java.util.function.Supplier;
 
 import org.json.simple.JSONArray;
 import org.usfirst.frc.team1731.robot.auto.AutoModeBase;
-import org.usfirst.frc.team1731.robot.auto.modes.AutoDetectAllianceGearThenShootMode;
-import org.usfirst.frc.team1731.robot.auto.modes.BoilerGearThenShootModeBlue;
-import org.usfirst.frc.team1731.robot.auto.modes.TestAuto;
-import org.usfirst.frc.team1731.robot.auto.modes.CenterGearThenShootModeBlue;
-import org.usfirst.frc.team1731.robot.auto.modes.CenterGearThenShootModeRed;
-import org.usfirst.frc.team1731.robot.auto.modes.GearThenHopperShootModeBlue;
-import org.usfirst.frc.team1731.robot.auto.modes.GearThenHopperShootModeRed;
-import org.usfirst.frc.team1731.robot.auto.modes.RamHopperShootModeBlue;
-import org.usfirst.frc.team1731.robot.auto.modes.RamHopperShootModeRed;
-import org.usfirst.frc.team1731.robot.auto.modes.StandStillMode;
+import org.usfirst.frc.team1731.robot.auto.modes.*;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
