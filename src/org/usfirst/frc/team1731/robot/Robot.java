@@ -58,6 +58,14 @@ public class Robot extends IterativeRobot {
     private AutoModeExecuter mAutoModeExecuter = null;
     private Command autonomousCommand;
     private SendableChooser autoChooser;
+    private SendableChooser startingPosition;
+    private SendableChooser areTeammatesCool;
+    private enum startingPositions {
+    	LEFT,
+    	MIDDLELEFT,
+    	MIDDLERIGHT,
+    	RIGHT
+    };
 
     private final SubsystemManager mSubsystemManager = new SubsystemManager(
                             Arrays.asList(Drive.getInstance(), Superstructure.getInstance(),
@@ -101,7 +109,17 @@ public class Robot extends IterativeRobot {
             mEnabledLooper.register(RobotStateEstimator.getInstance());
 
             //mVisionServer.addVisionUpdateReceiver(VisionProcessor.getInstance());
-
+            startingPosition = new SendableChooser();
+            startingPosition.addDefault("Left Position", startingPositions.LEFT);
+            startingPosition.addObject("Middle-Left Position", startingPositions.MIDDLELEFT);
+            startingPosition.addObject("Middle-Right Position", startingPositions.MIDDLERIGHT);
+            startingPosition.addObject("Right Position", startingPositions.RIGHT);
+            SmartDashboard.putData("Starting Position", startingPosition);
+            areTeammatesCool = new SendableChooser();
+            areTeammatesCool.addDefault("Be cautious", false);
+            areTeammatesCool.addObject("It's fine", true);
+            SmartDashboard.putData("How should I react?", areTeammatesCool);
+            
             AutoModeSelector.initAutoModeSelector();
             
             //WPILIB WAY TO SET AUTONOMOUS MODES AND SEND TO DASHBOARD...
@@ -157,6 +175,9 @@ public class Robot extends IterativeRobot {
 
             mEnabledLooper.start();
             mSuperstructure.reloadConstants();
+            
+            
+            
             mAutoModeExecuter = new AutoModeExecuter();
             mAutoModeExecuter.setAutoMode(AutoModeSelector.getSelectedAutoMode());
             mAutoModeExecuter.start();
