@@ -19,13 +19,25 @@ import edu.wpi.first.wpilibj.Timer;
  * 
  * @see AutoModeBase
  */
-public class LeftPutCubeOnRightSwitch extends AutoModeBase {
+public class LeftPutCubeOnLeftSwitchAndRightScale extends AutoModeBase {
 
     @Override
     protected void routine() throws AutoModeEndedException {
-    	PathContainer straightPath = new LeftToRightSwitch();
+    	PathContainer straightPath = new LeftToLeftSwitch();
     	runAction(new ResetPoseFromPathAction(straightPath));
     	runAction(new DrivePathAction(straightPath));
+    	runAction(new WaitAction(1));
+    	//Run a parallel action to prepare the cube to drop while driving
+    	
+    	PathContainer sortaStraightPath = new LeftSwitchFromLeftToACube();
+    	runAction(new ResetPoseFromPathAction(sortaStraightPath));
+    	runAction(new DrivePathAction(sortaStraightPath));
+    	runAction(new WaitAction(1));
+    	//TODO: Must run a parallel action to suck in the cube
+    	
+    	PathContainer straightPath2 = new LeftSwitchFromLeftToRightScale();
+    	runAction(new ResetPoseFromPathAction(straightPath2));
+    	runAction(new DrivePathAction(straightPath2));
     	runAction(new WaitAction(1));
     	//Run a parallel action to prepare the cube to drop while driving
     }

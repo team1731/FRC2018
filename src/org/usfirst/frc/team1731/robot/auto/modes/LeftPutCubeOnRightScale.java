@@ -3,9 +3,11 @@ package org.usfirst.frc.team1731.robot.auto.modes;
 import java.util.Arrays;
 
 import org.usfirst.frc.team1731.lib.util.math.RigidTransform2d;
-import org.usfirst.frc.team1731.robot.auto.*;
+import org.usfirst.frc.team1731.robot.auto.AutoModeBase;
+import org.usfirst.frc.team1731.robot.auto.AutoModeEndedException;
 import org.usfirst.frc.team1731.robot.auto.actions.*;
 import org.usfirst.frc.team1731.robot.paths.*;
+import org.usfirst.frc.team1731.robot.paths.profiles.PathAdapter;
 
 import edu.wpi.first.wpilibj.Timer;
 
@@ -17,16 +19,14 @@ import edu.wpi.first.wpilibj.Timer;
  * 
  * @see AutoModeBase
  */
-public class PlaceOnLeftSwitch extends AutoModeBase {
+public class LeftPutCubeOnRightScale extends AutoModeBase {
 
     @Override
     protected void routine() throws AutoModeEndedException {
-    	PathContainer straightPath = new MiddleLeftToLeftSwitch();
+    	PathContainer straightPath = new LeftToRightScale();
     	runAction(new ResetPoseFromPathAction(straightPath));
     	runAction(new DrivePathAction(straightPath));
     	runAction(new WaitAction(1));
-    	PathContainer pathToSomeplace = new GoingSomeplace();
-    	runAction(new ResetPoseFromPathAction(pathToSomeplace));
-    	runAction(new DrivePathAction(pathToSomeplace));
+    	//Run a parallel action to prepare the cube to drop while driving
     }
 }

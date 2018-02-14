@@ -31,8 +31,6 @@ public class AutoModeSelector {
             "AutoDetect Alliance Gear than Hopper Shoot",
             () -> new AutoDetectAllianceSwitchThenPlaceMode());
     private static final AutoModeCreator[] mAllModes = {
-    		new AutoModeCreator("Auto test (from right side): Place cube on right switch", () -> new PlaceOnRightSwitch()),
-    		new AutoModeCreator("Auto test (from left side): Place cube on left switch", () -> new PlaceOnLeftSwitch()),
             new AutoModeCreator("Left: Put cube on left switch", () -> new LeftPutCubeOnLeftSwitch()),
             new AutoModeCreator("Left: Put cube on left switch and left scale", () -> new LeftPutCubeOnLeftSwitchAndLeftScale()),
             new AutoModeCreator("Left: Put cube on right switch", () -> new LeftPutCubeOnRightSwitch()),

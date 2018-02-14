@@ -19,11 +19,11 @@ import edu.wpi.first.wpilibj.Timer;
  * 
  * @see AutoModeBase
  */
-public class LeftPutCubeOnRightSwitch extends AutoModeBase {
+public class LeftPutCubeOnLeftScale extends AutoModeBase {
 
     @Override
     protected void routine() throws AutoModeEndedException {
-    	PathContainer straightPath = new LeftToRightSwitch();
+    	PathContainer straightPath = new LeftToLeftScale();
     	runAction(new ResetPoseFromPathAction(straightPath));
     	runAction(new DrivePathAction(straightPath));
     	runAction(new WaitAction(1));

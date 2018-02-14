@@ -1,4 +1,4 @@
-package org.usfirst.frc.team1731.robot.paths;
+﻿package org.usfirst.frc.team1731.robot.paths;
 
 import java.util.ArrayList;
 
@@ -13,9 +13,9 @@ public class LeftToLeftSwitch implements PathContainer {
     @Override
     public Path buildPath() {
         ArrayList<Waypoint> sWaypoints = new ArrayList<Waypoint>();
-        sWaypoints.add(new Waypoint(16,280,0,0));
-        sWaypoints.add(new Waypoint(165,290,0,60));
-        sWaypoints.add(new Waypoint(165,265,0,60));
+        sWaypoints.add(new Waypoint(16,280,0,0)); //Left
+        sWaypoints.add(new Waypoint(170,300,0,60));
+        sWaypoints.add(new Waypoint(170,260,0,60));
 
         return PathBuilder.buildPathFromWaypoints(sWaypoints);
     }
@@ -29,7 +29,7 @@ public class LeftToLeftSwitch implements PathContainer {
     public boolean isReversed() {
         return false; 
     }
-	// WAYPOINT_DATA: [{"position":{"x":16,"y":280},"speed":0,"radius":0,"comment":""},{"position":{"x":165,"y":290},"speed":60,"radius":0,"comment":""},{"position":{"x":165,"y":265},"speed":60,"radius":0,"comment":""}]
+	// WAYPOINT_DATA: [{"position":{"x":16,"y":280},"speed":0,"radius":0,"comment":"Left"},{"position":{"x":170,"y":300},"speed":60,"radius":0,"comment":""},{"position":{"x":170,"y":260},"speed":60,"radius":0,"comment":""}]
 	// IS_REVERSED: false
 	// FILE_NAME: LeftToLeftSwitch
 }

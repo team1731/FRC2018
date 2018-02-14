@@ -5,21 +5,8 @@ import java.util.Arrays;
 import org.usfirst.frc.team1731.lib.util.math.RigidTransform2d;
 import org.usfirst.frc.team1731.robot.auto.AutoModeBase;
 import org.usfirst.frc.team1731.robot.auto.AutoModeEndedException;
-import org.usfirst.frc.team1731.robot.auto.actions.Action;
-import org.usfirst.frc.team1731.robot.auto.actions.ActuateHopperAction;
-import org.usfirst.frc.team1731.robot.auto.actions.BeginShootingAction;
-import org.usfirst.frc.team1731.robot.auto.actions.CorrectPoseAction;
-import org.usfirst.frc.team1731.robot.auto.actions.DeployIntakeAction;
-import org.usfirst.frc.team1731.robot.auto.actions.DrivePathAction;
-import org.usfirst.frc.team1731.robot.auto.actions.ParallelAction;
-import org.usfirst.frc.team1731.robot.auto.actions.ResetPoseFromPathAction;
-import org.usfirst.frc.team1731.robot.auto.actions.SeriesAction;
-import org.usfirst.frc.team1731.robot.auto.actions.SetFlywheelRPMAction;
-import org.usfirst.frc.team1731.robot.auto.actions.WaitAction;
-import org.usfirst.frc.team1731.robot.paths.GoingSomeplace;
-import org.usfirst.frc.team1731.robot.paths.PathContainer;
-import org.usfirst.frc.team1731.robot.paths.MiddleLeftToLeftSwitch;
-import org.usfirst.frc.team1731.robot.paths.profiles.PathAdapter;
+import org.usfirst.frc.team1731.robot.auto.actions.*;
+import org.usfirst.frc.team1731.robot.paths.*;
 
 import edu.wpi.first.wpilibj.Timer;
 
@@ -35,10 +22,12 @@ public class RightPutCubeOnRightSwitchAndRightScale extends AutoModeBase {
 
     @Override
     protected void routine() throws AutoModeEndedException {
+    	System.out.println("Path is not set yet");
+    	/*
     	PathContainer straightPath = new MiddleLeftToLeftSwitch();
     	runAction(new ResetPoseFromPathAction(straightPath));
     	runAction(new DrivePathAction(straightPath));
     	runAction(new WaitAction(1));
-    	
+    	*/
     }
 }

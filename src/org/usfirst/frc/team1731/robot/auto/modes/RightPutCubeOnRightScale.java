@@ -7,7 +7,6 @@ import org.usfirst.frc.team1731.robot.auto.AutoModeBase;
 import org.usfirst.frc.team1731.robot.auto.AutoModeEndedException;
 import org.usfirst.frc.team1731.robot.auto.actions.*;
 import org.usfirst.frc.team1731.robot.paths.*;
-import org.usfirst.frc.team1731.robot.paths.profiles.PathAdapter;
 
 import edu.wpi.first.wpilibj.Timer;
 
@@ -19,14 +18,16 @@ import edu.wpi.first.wpilibj.Timer;
  * 
  * @see AutoModeBase
  */
-public class LeftPutCubeOnRightSwitch extends AutoModeBase {
+public class RightPutCubeOnRightScale extends AutoModeBase {
 
     @Override
     protected void routine() throws AutoModeEndedException {
-    	PathContainer straightPath = new LeftToRightSwitch();
+    	System.out.println("Path is not set yet");
+    	/*
+    	PathContainer straightPath = new MiddleLeftToLeftSwitch();
     	runAction(new ResetPoseFromPathAction(straightPath));
     	runAction(new DrivePathAction(straightPath));
     	runAction(new WaitAction(1));
-    	//Run a parallel action to prepare the cube to drop while driving
+    	*/
     }
 }

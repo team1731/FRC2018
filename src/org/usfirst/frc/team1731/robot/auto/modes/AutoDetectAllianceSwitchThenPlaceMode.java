@@ -13,51 +13,65 @@ import edu.wpi.first.wpilibj.DriverStation;
  * @see PlaceOnRightSwitch
  */
 public class AutoDetectAllianceSwitchThenPlaceMode extends AutoModeBase {
+	boolean isAllianceTrustworthy = true;
+	enum startingPositions {
+		LEFT,
+		MIDDLELEFT,
+		MIDDLERIGHT,
+		RIGHT
+	}
+	startingPositions startingPos = startingPositions.LEFT;
+	
     @Override
     protected void routine() throws AutoModeEndedException {
     	String gameData = DriverStation.getInstance().getGameSpecificMessage();
-    	int startingPosition = 0; //0 is leftmost, 1 is middle-left, 2 is middle-right, and 3 is rightmost
-        AutoModeBase selectedAutoMode = new PlaceOnLeftSwitch();
+    	AutoModeBase defaultFallbackMode = new StandStillMode();
+        AutoModeBase selectedAutoMode = defaultFallbackMode;
         //boolean isRed = true;
         //DriverStation.Alliance alliance = DriverStation.getInstance().getAlliance();
         
-        selectedAutoMode.run();
-        
-        //The below code will be what we actually run, but we haven't created the paths and/or modes yet
-        /*
-        switch(startingPosition) {
-        	case 0:
+        switch(startingPos){
+        	case LEFT:
         		if(gameData.charAt(0) == 'L' && gameData.charAt(1) == 'L') {
         			selectedAutoMode = new LeftPutCubeOnLeftSwitchAndLeftScale();
         		} else if(gameData.charAt(0) == 'L' && gameData.charAt(1) == 'R') {
-        			selectedAutoMode = new LeftPutCubeOnLeftSwitch();
-        		} else if(gameData.charAt(0) == 'R') {
-        			selectedAutoMode = new LeftPutCubeOnRightSwitch();
-        		}
-        	case 1:
-        		if(gameData.charAt(0) == 'L') {
-        			selectedAutoMode = new MiddleLeftPutCubeOnLeftSwitch();
-        		} else {
-        			selectedAutoMode = new MiddleLeftPutCubeOnRightSwitch();
-        		}
-        	case 2:
-        		if(gameData.charAt(0) == 'L') {
-        			selectedAutoMode = new MiddleRightPutCubeOnLeftSwitch();
-        		} else {
-        			selectedAutoMode = new MiddleRightPutCubeOnRightSwitch();
+        			selectedAutoMode = isAllianceTrustworthy ? new LeftPutCubeOnLeftSwitch() : new LeftPutCubeOnLeftSwitchAndRightScale();
+        		} else if(gameData.charAt(0) == 'R' && gameData.charAt(1) == 'R') {
+        			selectedAutoMode = isAllianceTrustworthy ? new LeftPutCubeOnRightScale() : new LeftPutCubeOnRightSwitch();
+        		} else if(gameData.charAt(0) == 'R' && gameData.charAt(1) == 'L') {
+        			selectedAutoMode = isAllianceTrustworthy ? new LeftPutCubeOnLeftScale() : new LeftPutCubeOnRightSwitchAndLeftScale();
         		}
         	break;
-        	case 3:
+        	case MIDDLELEFT:
+        		if(isAllianceTrustworthy) {
+        			selectedAutoMode = new MiddleLeftPutInExchange();
+        		} else {
+        			selectedAutoMode = gameData.charAt(0) == 'L' ? new MiddleLeftPutCubeOnLeftSwitch() : new MiddleLeftPutCubeOnRightSwitch();
+        		}
+        	break;
+        	case MIDDLERIGHT:
+        		if(isAllianceTrustworthy) {
+        			selectedAutoMode = new MiddleRightPutInExchange();
+        		} else {
+        			selectedAutoMode = gameData.charAt(0) == 'L' ? new MiddleRightPutCubeOnLeftSwitch() : new MiddleRightPutCubeOnRightSwitch();
+        		}
+        	break;
+        	case RIGHT:
         		if(gameData.charAt(0) == 'R' && gameData.charAt(1) == 'R') {
         			selectedAutoMode = new RightPutCubeOnRightSwitchAndRightScale();
         		} else if(gameData.charAt(0) == 'R' && gameData.charAt(1) == 'L') {
-        			selectedAutoMode = new RightPutCubeOnRightSwitch();
-        		} else if(gameData.charAt(0) == 'L') {
-        			selectedAutoMode = new RightPutCubeOnLeftSwitch();
+        			selectedAutoMode = isAllianceTrustworthy ? new RightPutCubeOnRightSwitch() : new RightPutCubeOnRightSwitchAndLeftScale();
+        		} else if(gameData.charAt(0) == 'L' && gameData.charAt(1) == 'L') {
+        			selectedAutoMode = isAllianceTrustworthy ? new RightPutCubeOnLeftScale() : new RightPutCubeOnLeftSwitch();
+        		} else if(gameData.charAt(0) == 'L' && gameData.charAt(1) == 'R') {
+        			selectedAutoMode = isAllianceTrustworthy ? new RightPutCubeOnRightScale() : new RightPutCubeOnLeftSwitchAndRightScale();
         		}
         	break;
         }
-        */
+        if(selectedAutoMode == defaultFallbackMode) {
+        	DriverStation.reportWarning("Unable to logically choose correct autonomous path from gameData. Defaulting to "+defaultFallbackMode.toString()+" here's some fun facts: selectedAutoMode: "+selectedAutoMode.toString()+" isAllianceTrustworthy: "+isAllianceTrustworthy, false);
+        }
+        selectedAutoMode.run();
         
         /*
         	This is my thinking space
@@ -69,6 +83,5 @@ public class AutoDetectAllianceSwitchThenPlaceMode extends AutoModeBase {
         		If time allows, keep grabbing boxes and putting them in the scale
         		Maybe we can go into teleop holding a box?
         */
-         */
     }
 }
