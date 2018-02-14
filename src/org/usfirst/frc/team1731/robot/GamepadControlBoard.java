@@ -34,7 +34,7 @@ public class GamepadControlBoard implements ControlBoardInterface {
     
     @Override
     public boolean getOverTheTopButton() {
-        return mOperator.getRawButton(4);
+        return mOperator.getRawButton(5);
     }
     
     @Override
@@ -88,7 +88,8 @@ public class GamepadControlBoard implements ControlBoardInterface {
 		//    	Parameters:pov The index of the POV to read (starting at 0)
     	//		Returns:the angle of the POV in degrees, or -1 if the POV is not pressed.
 		//    	
-        return (mOperator.getPOV(0) > 315 && mOperator.getPOV(0) < 45) &  mOperator.getRawButton(1);
+        return (mOperator.getPOV(0) > 315 || mOperator.getPOV(0) < 45) &  mOperator.getRawButton(1);
+        //return mOperator.getRawButton(1);
     }
     
     @Override
@@ -102,6 +103,7 @@ public class GamepadControlBoard implements ControlBoardInterface {
     	//		Returns:the angle of the POV in degrees, or -1 if the POV is not pressed.
 		//    	
         return (mOperator.getPOV(0) > 135 && mOperator.getPOV(0) < 225) &  mOperator.getRawButton(1);
+        //return mOperator.getRawButton(1);
     }
 
   
@@ -109,6 +111,11 @@ public class GamepadControlBoard implements ControlBoardInterface {
     public boolean getBlinkLEDButton() {
         return false;
     }
+
+    @Override
+	public boolean getElevatorButton() {
+		return mOperator.getRawButton(2); // getButtonB
+	}
 
 	@Override
 	public double getElevatorControl() {

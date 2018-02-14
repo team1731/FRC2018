@@ -29,7 +29,7 @@ import edu.wpi.first.wpilibj.Talon;
 //import com.ctre.phoenix.motorcontrol.VelocityMeasWindow;
 
 import edu.wpi.first.wpilibj.Timer;
-//import edu.wpi.first.wpilibj.VictorSP;
+import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
@@ -43,13 +43,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 @SuppressWarnings("unused")
 public class Elevator extends Subsystem {
-	//private Joystick joystick2;
 
-    private static final double kTopEncoderValue = 6000;
-    private static final double kBottomEncoderValue= 5300;
-    private static final double kHomeEncoderValue = 0;
-
-	
     private static Elevator sInstance = null;
     
     public static Elevator getInstance() {
@@ -59,8 +53,9 @@ public class Elevator extends Subsystem {
         return sInstance;
     }
 
-    private final TalonSRX mTalon; 
-    //private final VictorSP mVictor;
+    private final TalonSRX mTalon;
+    //private final Solenoid mOverTop1;
+    //private final Solenoid mOverTop2;
     
     public Elevator() {
         mTalon = new TalonSRX(Constants.kElevatorTalon);
@@ -97,6 +92,8 @@ public class Elevator extends Subsystem {
          */
         mTalon.configAllowableClosedloopError(0, Constants.kPIDLoopIdx, Constants.kTimeoutMs);
 
+        //mOverTop1 = Constants.makeSolenoidForId(Constants.kOverTheTopSolenoid1);
+        //mOverTop2 = Constants.makeSolenoidForId(Constants.kOverTheTopSolenoid2);
     }
     	
     public enum SystemState {	
@@ -119,6 +116,10 @@ public class Elevator extends Subsystem {
     private double mCurrentStateStartTime;
     private double mWantedPosition = 0;
     private boolean mStateChanged = false;
+    private boolean mRevSwitchSet = false;
+    private boolean mIsOverTop = false;
+
+
 
     private Loop mLoop = new Loop() {
         @Override
@@ -205,31 +206,33 @@ public class Elevator extends Subsystem {
     }
     
     private SystemState handleIdle() {
-        //setOpenLoop(0.0f);
-        //if motor is not off, turn motor off
         if (mStateChanged) {
             mTalon.set(ControlMode.PercentOutput, 0);
         }
-		return defaultStateTransfer();
+        return defaultStateTransfer();
     }
 
     private SystemState handleElevatorTracking() {
+    		int nextPos; 
+    	
+	    	if (mWantedPosition > 0) {
+	    		nextPos = (int)(mWantedPosition*Constants.kElevatorTopEncoderValue); 
+	    	} else {
+	    		//int curPos = mTalon.getSelectedSensorPosition(0);
+	    		nextPos = (int)(mWantedPosition*Constants.kElevatorBottomEncoderValue);	    		
+	    	} 
 
-    	if (mWantedPosition > 0) {
-    		mTalon.set(ControlMode.Position, (int)(mWantedPosition*kTopEncoderValue)); 
-    	}
-    	else {
-    		mTalon.set(ControlMode.Position, (int)(mWantedPosition*kBottomEncoderValue));
-    	} 
+    		if (checkRevSwitch()) {
+    			nextPos = -1 * (int)Constants.kElevatorBottomEncoderValue;
+    		}
 
-    	return defaultStateTransfer();
+    		mTalon.set(ControlMode.Position, nextPos); 	
+
+	    	return defaultStateTransfer();
     }
 
     public synchronized void setWantedPosition(double position) {
-    	
-    	mWantedPosition = position;
-    	
-
+        mWantedPosition = position;
     }
 
 
@@ -240,18 +243,45 @@ public class Elevator extends Subsystem {
         }
     }
 
+    public boolean isOverTop() {
+        return mIsOverTop;
+    }
+
+    public synchronized void setOverTop(boolean wantsOverTop) {
+        if (wantsOverTop != mIsOverTop) {
+            mIsOverTop = wantsOverTop;
+            //mOverTop1.set(wantsOverTop);
+            //mOverTop2.set(!wantsOverTop);
+        }
+    }
+
     @Override
     public void outputToSmartDashboard() {
         SmartDashboard.putNumber("ElevWantPos", mWantedPosition);
         SmartDashboard.putNumber("ElevCurPos", mTalon.getSelectedSensorPosition(0));
         SmartDashboard.putNumber("ElevQuadPos", mTalon.getSensorCollection().getQuadraturePosition());
         SmartDashboard.putBoolean("ElevRevSw", mTalon.getSensorCollection().isRevLimitSwitchClosed());
+        SmartDashboard.putBoolean("ElevLastRevSw", mRevSwitchSet);
     }
 
     @Override
     public void stop() {
         // mVictor.set(0);
         setWantedState(WantedState.IDLE);
+    }
+
+    private boolean checkRevSwitch() {
+        boolean revSwitch = mTalon.getSensorCollection().isRevLimitSwitchClosed();
+        if (revSwitch) {
+            if (!mRevSwitchSet) {
+                mTalon.setSelectedSensorPosition(-1 * (int)Constants.kElevatorBottomEncoderValue, 0, 10);
+                mRevSwitchSet = true;
+            }
+        } else {
+            mRevSwitchSet = false;
+        }
+        
+        return revSwitch;
     }
 
     @Override
@@ -264,7 +294,7 @@ public class Elevator extends Subsystem {
     }
 
     public boolean checkSystem() {
-        System.out.println("Testing FEEDER.-----------------------------------");
+        System.out.println("Testing ELEVATOR.-----------------------------------");
         return false;
     }
 }

@@ -352,8 +352,8 @@ public class Superstructure extends Subsystem {
             }
         }
 		private SystemState handleClimbingDown() {
-        	mClimber.setWantedState(Climber.WantedState.MECHANISM_DOWN);
-        	
+            mClimber.setWantedState(Climber.WantedState.MECHANISM_DOWN);
+
             switch (mWantedState) {
             case CLIMBINGUP:
                 return SystemState.CLIMBINGUP;
@@ -379,8 +379,30 @@ public class Superstructure extends Subsystem {
         }
 
 		private SystemState handleClimbingUp() {
-			// TODO Auto-generated method stub
-			return SystemState.IDLE;
+            mClimber.setWantedState(Climber.WantedState.MECHANISM_UP);
+
+            switch (mWantedState) {
+            case CLIMBINGUP:
+                return SystemState.CLIMBINGUP;
+            case CLIMBINGDOWN:
+                return SystemState.CLIMBINGDOWN;
+            case AUTOINTAKING:
+                return SystemState.WAITING_FOR_LOW_POSITION;
+            case INTAKING:
+                return SystemState.WAITING_FOR_POWERCUBE_INTAKE;
+            case SPITTING:
+                return SystemState.SPITTING;
+            case CALIBRATINGDOWN:
+                return SystemState.CALIBRATINGDOWN;
+            case CALIBRATINGUP:
+                return SystemState.CALIBRATINGUP;
+            case OVERTHETOP:
+                return SystemState.SPITTING_OUT_TOP;
+            case ELEVATOR_TRACKING:
+                return SystemState.ELEVATOR_TRACKING;
+            default:
+                return SystemState.IDLE;
+            }
 		}
 
 		private SystemState waitingForPowerCubeIntake() {
@@ -487,10 +509,28 @@ public class Superstructure extends Subsystem {
     }
 
 
+    public synchronized void setOverTop(boolean overTop) {
+        mElevator.setOverTop(overTop);
+        /*
+        overTopNow = mElevator.isOverTop();
+        if (overTop) {
+            // want it over the top
+            if (! overTopNow) {
+                // but it is NOT, so put over the top
+                mElevator.setOverTop(true);
+            }
+        } else {
+            // don't want it over the top
+            if (overTopNow) {
+                // but it is, so pull it back
+                mElevator.setOverTop(false);
+            }
+        }
+        */
+    }
 
     public synchronized void setWantedState(WantedState wantedState) {
         mWantedState = wantedState;
-        
     }
 
     public synchronized void setGrabber(boolean grab) {
@@ -525,7 +565,7 @@ public class Superstructure extends Subsystem {
     }
 
     public void setWantedElevatorPosition(double position) {
-    	mElevatorJoystickPosition = position;
+        mElevatorJoystickPosition = position;
     }
 
     public void setOverrideCompressor(boolean force_off) {

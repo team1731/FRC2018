@@ -20,6 +20,7 @@ import org.usfirst.frc.team1731.robot.paths.profiles.PathAdapter;
 import org.usfirst.frc.team1731.robot.subsystems.ConnectionMonitor;
 import org.usfirst.frc.team1731.robot.subsystems.Drive;
 import org.usfirst.frc.team1731.robot.subsystems.Elevator;
+import org.usfirst.frc.team1731.robot.subsystems.Climber;
 import org.usfirst.frc.team1731.robot.subsystems.Intake;
 import org.usfirst.frc.team1731.robot.subsystems.LED;
 import org.usfirst.frc.team1731.robot.subsystems.Superstructure;
@@ -60,8 +61,8 @@ public class Robot extends IterativeRobot {
 
     private final SubsystemManager mSubsystemManager = new SubsystemManager(
                             Arrays.asList(Drive.getInstance(), Superstructure.getInstance(),
-                                    Elevator.getInstance(), Intake.getInstance(),
-                                    ConnectionMonitor.getInstance(), LED.getInstance()));
+                                    Elevator.getInstance(), Intake.getInstance(), Climber.getInstance(),
+                                    ConnectionMonitor.getInstance(), LED.getInstance() ));
 
     // Initialize other helper objects
     private CheesyDriveHelper mCheesyDriveHelper = new CheesyDriveHelper();
@@ -73,7 +74,7 @@ public class Robot extends IterativeRobot {
 
     private AnalogInput mCheckLightButton = new AnalogInput(Constants.kLEDOnId);
 
-    private DelayedBoolean mDelayedAimButton;
+    //private DelayedBoolean mDelayedAimButton;
 
     private InterpolatingTreeMap<InterpolatingDouble, InterpolatingDouble> mTuningFlywheelMap = new InterpolatingTreeMap<>();
 
@@ -222,8 +223,7 @@ public class Robot extends IterativeRobot {
     public void teleopPeriodic() {
         try {
             double timestamp = Timer.getFPGATimestamp();
-            
-                       
+                
             boolean climbUp = mControlBoard.getClimbUp();
             boolean climbDown = mControlBoard.getClimbDown();
             boolean overTheTop = mControlBoard.getOverTheTopButton();
@@ -232,8 +232,12 @@ public class Robot extends IterativeRobot {
             boolean calibrateUp = mControlBoard.getCalibrateUp();
             boolean spitting = mControlBoard.getSpit();
             
-            mSuperstructure.setWantedElevatorPosition(-1 * mControlBoard.getElevatorControl());
-            
+            if (mControlBoard.getElevatorButton()) {
+                mSuperstructure.setWantedElevatorPosition(-1 * mControlBoard.getElevatorControl());
+            } else {
+                mSuperstructure.setWantedElevatorPosition(0);
+            }
+
             if (climbUp) {
             	mSuperstructure.setWantedState(Superstructure.WantedState.CLIMBINGUP);
             } else if (climbDown) {

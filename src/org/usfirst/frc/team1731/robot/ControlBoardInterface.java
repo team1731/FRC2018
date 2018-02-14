@@ -5,30 +5,33 @@ package org.usfirst.frc.team1731.robot;
  */
 public interface ControlBoardInterface {
 
-	// DRIVER CONTROLS
-    double getElevatorControl();
+		// DRIVER CONTROLS
 
-    double getThrottle();
+		boolean getElevatorButton();
 
-    double getTurn();
+		double getElevatorControl();
 
-    boolean getQuickTurn();
+		double getThrottle();
 
-    boolean getLowGear();
+		double getTurn();
 
-    boolean getBlinkLEDButton();
+		boolean getQuickTurn();
 
-	boolean getGrabCubeButton();
+		boolean getLowGear();
 
-	boolean getOverTheTopButton();
+		boolean getBlinkLEDButton();
 
-	boolean getCalibrateUp();
+		boolean getGrabCubeButton();
 
-	boolean getCalibrateDown();
+		boolean getOverTheTopButton();
 
-	boolean getSpit();
+		boolean getCalibrateUp();
 
-	boolean getClimbUp();
+		boolean getCalibrateDown();
 
-	boolean getClimbDown();
+		boolean getSpit();
+
+		boolean getClimbUp();
+
+		boolean getClimbDown();
 }

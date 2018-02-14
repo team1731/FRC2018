@@ -8,17 +8,16 @@ import org.usfirst.frc.team1731.robot.Constants;
 import org.usfirst.frc.team1731.robot.loops.Loop;
 import org.usfirst.frc.team1731.robot.loops.Looper;
 
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.VictorSP;
+import edu.wpi.first.wpilibj.DriverStation;
 
 /**
-
  * 
- * 1731 the feeder is the spinner thing that brings balls to the shooter.
+ * 1731 the climber enable the endgame climb.
  * 
  * @see Subsystem.java
  */
@@ -41,20 +40,13 @@ public class Climber extends Subsystem {
         return sInstance;
     }
 
-//    private final TalonSRX mElevatorMotor; 
-    private final TalonSRX mMasterTalon;
-  //  private final TalonSRX mSlaveTalon;
+    private final TalonSRX mTalon;
 
     public Climber() {
     
-        mMasterTalon = TalonSRXFactory.createDefaultTalon(Constants.kClimberMasterId);
-        mMasterTalon.setInverted(false);
-        mMasterTalon.setNeutralMode(NeutralMode.Brake);
-
-  //      mSlaveTalon = TalonSRXFactory.createPermanentSlaveTalon(Constants.kClimberSlaveId, Constants.kClimberMasterId);
-  //      mSlaveTalon.setInverted(true);
-  //      mSlaveTalon.setNeutralMode(NeutralMode.Brake);
-       
+        mTalon = TalonSRXFactory.createDefaultTalon(Constants.kClimberMasterId);
+        mTalon.setInverted(false);
+        mTalon.setNeutralMode(NeutralMode.Brake);
     }
 
     public enum SystemState {
@@ -73,7 +65,7 @@ public class Climber extends Subsystem {
     private WantedState mWantedState = WantedState.IDLE;
 
     private double mCurrentStateStartTime;
-    private boolean mStateChanged;
+    private boolean mStateChanged = false;
 
     private Loop mLoop = new Loop() {
         @Override
@@ -83,6 +75,7 @@ public class Climber extends Subsystem {
                 mSystemState = SystemState.IDLE;
                 mStateChanged = true;
                 mCurrentStateStartTime = timestamp;
+                mTalon.setSelectedSensorPosition(0, 0, 10);
             }
         }
 
@@ -104,9 +97,9 @@ public class Climber extends Subsystem {
                     newState = SystemState.IDLE;
                 }
                 if (newState != mSystemState) {
-                    System.out.println("Feeder state " + mSystemState + " to " + newState);
                     mSystemState = newState;
                     mCurrentStateStartTime = timestamp;
+                    DriverStation.reportWarning("Climber SystemState: " + mSystemState, false);
                     mStateChanged = true;
                 } else {
                     mStateChanged = false;
@@ -115,20 +108,18 @@ public class Climber extends Subsystem {
         }
 
         private SystemState handleGoingDown() {
-            mMasterTalon.set(ControlMode.PercentOutput, 1);
+            mTalon.set(ControlMode.PercentOutput, 0.2);
 
             return defaultStateTransfer();
         }
 
-		private SystemState handleGoingUp() {
-            mMasterTalon.set(ControlMode.PercentOutput, -1);
+        private SystemState handleGoingUp() {
+            mTalon.set(ControlMode.PercentOutput, -0.2);
             
             return defaultStateTransfer();
-
-
         }
 
-		@Override
+        @Override
         public void onStop(double timestamp) {
             stop();
         }
@@ -147,19 +138,21 @@ public class Climber extends Subsystem {
     }
 
     private SystemState handleIdle() {
-        mMasterTalon.set(ControlMode.PercentOutput, -1);
+        mTalon.set(ControlMode.PercentOutput, 0);
         return defaultStateTransfer();
     }
 
-   
-
     public synchronized void setWantedState(WantedState state) {
-        mWantedState = state;
+        if (state != mWantedState) {
+            mWantedState = state;
+            DriverStation.reportError("Climber WantedState: " + mWantedState, false);
+        }
     }
 
     @Override
     public void outputToSmartDashboard() {
-        // SmartDashboard.putNumber("feeder_speed", mMasterTalon.get() / Constants.kFeederSensorGearReduction);
+        //SmartDashboard.putNumber("Climber mSystemState", mSystemState);
+        //SmartDashboard.putNumber("Climber mWantedState", mWantedState);
     }
 
     @Override
@@ -177,28 +170,28 @@ public class Climber extends Subsystem {
     }
 
     public boolean checkSystem() {
-        System.out.println("Testing FEEDER.-----------------------------------");
+        System.out.println("Testing CLIMBER.-----------------------------------");
  /*       final double kCurrentThres = 0.5;
         final double kRpmThes = 2000.0;
 
         mSlaveTalon.changeControlMode(TalonControlMode.Voltage);
-        mMasterTalon.changeControlMode(TalonControlMode.Voltage);
+        mTalon.changeControlMode(TalonControlMode.Voltage);
 
         mSlaveTalon.set(0.0);
-        mMasterTalon.set(0.0);
+        mTalon.set(0.0);
 
-        mMasterTalon.set(6.0f);
+        mTalon.set(6.0f);
         Timer.delay(4.0);
-        final double currentMaster = mMasterTalon.getOutputCurrent();
-        final double rpmMaster = mMasterTalon.getSpeed();
-        mMasterTalon.set(0.0f);
+        final double currentMaster = mTalon.getOutputCurrent();
+        final double rpmMaster = mTalon.getSpeed();
+        mTalon.set(0.0f);
 
         Timer.delay(2.0);
 
         mSlaveTalon.set(-6.0f);
         Timer.delay(4.0);
         final double currentSlave = mSlaveTalon.getOutputCurrent();
-        final double rpmSlave = mMasterTalon.getSpeed();
+        final double rpmSlave = mTalon.getSpeed();
         mSlaveTalon.set(0.0f);
 
         mSlaveTalon.changeControlMode(TalonControlMode.Follower);
