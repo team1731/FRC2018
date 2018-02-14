@@ -59,13 +59,13 @@ public class Constants extends ConstantsBase {
 
     // PID gains for drive velocity loop (HIGH GEAR)
     // Units: setpoint, error, and output are in inches per second.
-    public static double kDriveHighGearVelocityKp = 1.2;
+    public static double kDriveHighGearVelocityKp = 3.0;   //cheezy guys had 1.2
     public static double kDriveHighGearVelocityKi = 0.0;
-    public static double kDriveHighGearVelocityKd = 6.0;
-    public static double kDriveHighGearVelocityKf = .15;
+    public static double kDriveHighGearVelocityKd = 30.0;    //cheezy guys had 6.0
+    public static double kDriveHighGearVelocityKf = .7;    //cheezy guys had .15
     public static int kDriveHighGearVelocityIZone = 0;
     public static double kDriveHighGearVelocityRampRate = 0.05;// 240.0;
-    public static double kDriveHighGearNominalOutput = 0.5;
+    public static double kDriveHighGearNominalOutput = 0.0;   // cheezy gusy had .5
     public static double kDriveHighGearMaxSetpoint = 17.0 * 12.0; // 17 fps
 
     // PID gains for drive velocity loop (LOW GEAR)
@@ -272,12 +272,12 @@ public class Constants extends ConstantsBase {
     public static double kSegmentCompletionTolerance = 0.1; // inches
     public static double kPathFollowingMaxAccel = 120.0; // inches per second^2
     public static double kPathFollowingMaxVel = 120.0; // inches per second
-    public static double kPathFollowingProfileKp = 5.00;
+    public static double kPathFollowingProfileKp = 5.0;   // cheezy people had 5.0
     public static double kPathFollowingProfileKi = 0.03;
     public static double kPathFollowingProfileKv = 0.02;
     public static double kPathFollowingProfileKffv = 1.0;
     public static double kPathFollowingProfileKffa = 0.05;
-    public static double kPathFollowingGoalPosTolerance = 0.75;
+    public static double kPathFollowingGoalPosTolerance = 0.75; //cheezyguys hae this as .75
     public static double kPathFollowingGoalVelTolerance = 12.0;
     public static double kPathStopSteeringDistance = 9.0;
 

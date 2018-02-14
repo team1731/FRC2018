@@ -12,6 +12,7 @@ import org.usfirst.frc.team1731.lib.util.InterpolatingTreeMap;
 import org.usfirst.frc.team1731.lib.util.LatchedBoolean;
 import org.usfirst.frc.team1731.lib.util.math.RigidTransform2d;
 import org.usfirst.frc.team1731.robot.auto.AutoModeExecuter;
+import org.usfirst.frc.team1731.robot.auto.modes.TestAuto;
 import org.usfirst.frc.team1731.robot.loops.Looper;
 import org.usfirst.frc.team1731.robot.loops.RobotStateEstimator;
 import org.usfirst.frc.team1731.robot.loops.VisionProcessor;
@@ -28,6 +29,9 @@ import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.command.Scheduler;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
@@ -51,7 +55,8 @@ public class Robot extends IterativeRobot {
     private LED mLED = LED.getInstance();
     private RobotState mRobotState = RobotState.getInstance();
     private AutoModeExecuter mAutoModeExecuter = null;
-
+    private Command autonomousCommand;
+    private SendableChooser autoChooser;
 
     private final SubsystemManager mSubsystemManager = new SubsystemManager(
                             Arrays.asList(Drive.getInstance(), Superstructure.getInstance(),
@@ -97,7 +102,15 @@ public class Robot extends IterativeRobot {
             //mVisionServer.addVisionUpdateReceiver(VisionProcessor.getInstance());
 
             AutoModeSelector.initAutoModeSelector();
-
+            
+            //WPILIB WAY TO SET AUTONOMOUS MODES AND SEND TO DASHBOARD...
+            //
+            //
+            //autoChooser = new SendableChooser();
+            //autoChooser.addDefault("Default Program", new TestAuto());
+            //autoChooser.addDefault("_1_NearSwitch_Side", new TestAuto());
+            //SmartDashboard.putData("Autonomous Mode Chooser", autoChooser);
+            
           //  mDelayedAimButton = new DelayedBoolean(Timer.getFPGATimestamp(), 0.1);
             // Force an true update now to prevent robot from running at start.
           //  mDelayedAimButton.update(Timer.getFPGATimestamp(), true);
@@ -146,6 +159,13 @@ public class Robot extends IterativeRobot {
             mAutoModeExecuter = new AutoModeExecuter();
             mAutoModeExecuter.setAutoMode(AutoModeSelector.getSelectedAutoMode());
             mAutoModeExecuter.start();
+            
+            //WPILIB WAY TO GET AUTONOMOUS MODE...
+            //
+            //
+            //autonomousCommand = (Command) autoChooser.getSelected();
+            //autonomousCommand.start();
+            
 
         } catch (Throwable t) {
             CrashTracker.logThrowableCrash(t);
@@ -159,6 +179,11 @@ public class Robot extends IterativeRobot {
     @Override
     public void autonomousPeriodic() {
         allPeriodic();
+        
+        //WPILIB WAY TO RUN AUTONOMOUS...
+        //
+        //
+        //Scheduler.getInstance().run();
     }
 
     /**

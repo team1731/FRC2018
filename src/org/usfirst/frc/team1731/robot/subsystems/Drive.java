@@ -191,7 +191,6 @@ public class Drive extends Subsystem {
         //mLeftSlave.reverseOutput(false);
         mLeftSlave.setInverted(false);
         //mLeftMaster.setStatusFrameRateMs(StatusFrameRate.Feedback, 5);
-
         mLeftMaster.setStatusFramePeriod(StatusFrame.Status_2_Feedback0, 5, Constants.kTimeoutMs); 
         mLeftMaster.setStatusFramePeriod(StatusFrame.Status_12_Feedback1, 5, Constants.kTimeoutMs); 
         mRightMaster = TalonSRXFactory.createDefaultTalon(Constants.kRightDriveMasterId);
@@ -223,11 +222,11 @@ public class Drive extends Subsystem {
        // mLeftMaster.SetVelocityMeasurementPeriod(VelocityMeasurementPeriod.Period_10Ms);
         mLeftMaster.configVelocityMeasurementPeriod(VelocityMeasPeriod.Period_10Ms, Constants.kTimeoutMs);
        // mLeftMaster.SetVelocityMeasurementWindow(32);
-        mLeftMaster.configVelocityMeasurementWindow(32, Constants.kTimeoutMs);
+        mLeftMaster.configVelocityMeasurementWindow(32, Constants.kTimeoutMs);   // chesyguys had 32
         //mRightMaster.SetVelocityMeasurementPeriod(VelocityMeasurementPeriod.Period_10Ms);
         mRightMaster.configVelocityMeasurementPeriod(VelocityMeasPeriod.Period_10Ms, Constants.kTimeoutMs);
        // mRightMaster.SetVelocityMeasurementWindow(32);
-        mRightMaster.configVelocityMeasurementWindow(32, Constants.kTimeoutMs);
+        mRightMaster.configVelocityMeasurementWindow(32, Constants.kTimeoutMs);  // cheesygutys had 32
 
         mShifter1 = Constants.makeSolenoidForId(Constants.kShifterSolenoidId1);
         mShifter2 = Constants.makeSolenoidForId(Constants.kShifterSolenoidId2);

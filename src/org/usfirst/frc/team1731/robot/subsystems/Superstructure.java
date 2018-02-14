@@ -83,7 +83,8 @@ public class Superstructure extends Subsystem {
         IDLE,
         CLIMBINGUP, 
         CLIMBINGDOWN, 
-        INTAKING, 
+        INTAKING,
+        AUTOINTAKING,
         SPITTING,
         CALIBRATINGDOWN, 
         CALIBRATINGUP,
@@ -186,8 +187,10 @@ public class Superstructure extends Subsystem {
                 return SystemState.CLIMBINGUP;
             case CLIMBINGDOWN:
                 return SystemState.CLIMBINGDOWN;
-            case INTAKING:
+            case AUTOINTAKING:
                 return SystemState.WAITING_FOR_LOW_POSITION;
+            case INTAKING:
+                return SystemState.WAITING_FOR_POWERCUBE_INTAKE;
             case SPITTING:
                 return SystemState.SPITTING;
             case CALIBRATINGDOWN:
@@ -213,8 +216,10 @@ public class Superstructure extends Subsystem {
                 return SystemState.CLIMBINGUP;
             case CLIMBINGDOWN:
                 return SystemState.CLIMBINGDOWN;
-            case INTAKING:
+            case AUTOINTAKING:
                 return SystemState.WAITING_FOR_LOW_POSITION;
+            case INTAKING:
+                return SystemState.WAITING_FOR_POWERCUBE_INTAKE;
             case SPITTING:
                 return SystemState.SPITTING;
             case CALIBRATINGDOWN:
@@ -243,8 +248,10 @@ public class Superstructure extends Subsystem {
                 return SystemState.CLIMBINGUP;
             case CLIMBINGDOWN:
                 return SystemState.CLIMBINGDOWN;
-            case INTAKING:
+            case AUTOINTAKING:
                 return SystemState.WAITING_FOR_LOW_POSITION;
+            case INTAKING:
+                return SystemState.WAITING_FOR_POWERCUBE_INTAKE;
             case SPITTING:
                 return SystemState.SPITTING;
             case CALIBRATINGDOWN:
@@ -272,8 +279,10 @@ public class Superstructure extends Subsystem {
                 return SystemState.CLIMBINGUP;
             case CLIMBINGDOWN:
                 return SystemState.CLIMBINGDOWN;
-            case INTAKING:
+            case AUTOINTAKING:
                 return SystemState.WAITING_FOR_LOW_POSITION;
+            case INTAKING:
+                return SystemState.WAITING_FOR_POWERCUBE_INTAKE;
             case SPITTING:
                 return SystemState.SPITTING;
             case CALIBRATINGDOWN:
@@ -297,8 +306,10 @@ public class Superstructure extends Subsystem {
                 return SystemState.CLIMBINGUP;
             case CLIMBINGDOWN:
                 return SystemState.CLIMBINGDOWN;
-            case INTAKING:
+            case AUTOINTAKING:
                 return SystemState.WAITING_FOR_LOW_POSITION;
+            case INTAKING:
+                return SystemState.WAITING_FOR_POWERCUBE_INTAKE;
             case SPITTING:
                 return SystemState.SPITTING;
             case CALIBRATINGDOWN:
@@ -322,8 +333,10 @@ public class Superstructure extends Subsystem {
                 return SystemState.CLIMBINGUP;
             case CLIMBINGDOWN:
                 return SystemState.CLIMBINGDOWN;
-            case INTAKING:
+            case AUTOINTAKING:
                 return SystemState.WAITING_FOR_LOW_POSITION;
+            case INTAKING:
+                return SystemState.WAITING_FOR_POWERCUBE_INTAKE;
             case SPITTING:
                 return SystemState.SPITTING;
             case CALIBRATINGDOWN:
@@ -346,8 +359,10 @@ public class Superstructure extends Subsystem {
                 return SystemState.CLIMBINGUP;
             case CLIMBINGDOWN:
                 return SystemState.CLIMBINGDOWN;
-            case INTAKING:
+            case AUTOINTAKING:
                 return SystemState.WAITING_FOR_LOW_POSITION;
+            case INTAKING:
+                return SystemState.WAITING_FOR_POWERCUBE_INTAKE;
             case SPITTING:
                 return SystemState.SPITTING;
             case CALIBRATINGDOWN:
@@ -369,6 +384,7 @@ public class Superstructure extends Subsystem {
 		}
 
 		private SystemState waitingForPowerCubeIntake() {
+
        	mIntake.setWantedState(Intake.WantedState.INTAKING);
         	
             switch (mWantedState) {
@@ -376,8 +392,10 @@ public class Superstructure extends Subsystem {
                 return SystemState.CLIMBINGUP;
             case CLIMBINGDOWN:
                 return SystemState.CLIMBINGDOWN;
-            case INTAKING:
+            case AUTOINTAKING:
                 return SystemState.WAITING_FOR_LOW_POSITION;
+            case INTAKING:
+                return SystemState.WAITING_FOR_POWERCUBE_INTAKE;
             case SPITTING:
                 return SystemState.SPITTING;
             case CALIBRATINGDOWN:
@@ -408,8 +426,10 @@ public class Superstructure extends Subsystem {
                 return SystemState.CLIMBINGUP;
             case CLIMBINGDOWN:
                 return SystemState.CLIMBINGDOWN;
-            case INTAKING:
+            case AUTOINTAKING:
                 return SystemState.WAITING_FOR_LOW_POSITION;
+            case INTAKING:
+                return SystemState.WAITING_FOR_POWERCUBE_INTAKE;
             case SPITTING:
                 return SystemState.SPITTING;
             case CALIBRATINGDOWN:
@@ -447,8 +467,10 @@ public class Superstructure extends Subsystem {
             return SystemState.CLIMBINGUP;
         case CLIMBINGDOWN:
             return SystemState.CLIMBINGDOWN;
-        case INTAKING:
+        case AUTOINTAKING:
             return SystemState.WAITING_FOR_LOW_POSITION;
+        case INTAKING:
+            return SystemState.WAITING_FOR_POWERCUBE_INTAKE;      
         case SPITTING:
             return SystemState.SPITTING;
         case CALIBRATINGDOWN:

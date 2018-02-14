@@ -138,7 +138,7 @@ public class Intake extends Subsystem {
 		}
 
 		private SystemState handleIntaking() {
-            if (mIRSensor.getAverageVoltage()< 400) {
+            if (mIRSensor.getAverageValue()< 400) {
                 mVictor1.set(ControlMode.PercentOutput, -1);
                 mVictor2.set(ControlMode.PercentOutput, -1);
             }else {
