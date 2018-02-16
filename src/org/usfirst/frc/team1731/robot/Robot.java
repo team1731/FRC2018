@@ -27,6 +27,7 @@ import org.usfirst.frc.team1731.robot.subsystems.Superstructure;
 import org.usfirst.frc.team1731.robot.vision.VisionServer;
 
 import edu.wpi.first.wpilibj.AnalogInput;
+import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Timer;
@@ -109,6 +110,11 @@ public class Robot extends IterativeRobot {
             mEnabledLooper.register(RobotStateEstimator.getInstance());
 
             //mVisionServer.addVisionUpdateReceiver(VisionProcessor.getInstance());
+            
+            
+            //http://robotrio-NNNN-frc.local:1731/?action=stream
+            CameraServer.getInstance().startAutomaticCapture(0);
+            
             startingPosition = new SendableChooser();
             startingPosition.addDefault("Left Position", startingPositions.LEFT);
             startingPosition.addObject("Middle-Left Position", startingPositions.MIDDLELEFT);
