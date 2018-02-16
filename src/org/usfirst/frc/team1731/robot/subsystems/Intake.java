@@ -23,6 +23,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.VictorSP;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.AnalogInput;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 
 /**
  * 1731 the intake picks up cubes and ejects them
@@ -80,6 +81,8 @@ public class Intake extends Subsystem {
 
     private SystemState mSystemState = SystemState.IDLE;
     private WantedState mWantedState = WantedState.IDLE;
+    
+    DoubleSolenoid Pinchers = new DoubleSolenoid (Constants.kPincherSolenoid1, Constants.kPincherSolenoid2);
 
     private double mCurrentStateStartTime;
   //  private double mWantedPosition = 0;
@@ -138,12 +141,14 @@ public class Intake extends Subsystem {
 		}
 
 		private SystemState handleIntaking() {
-            if (mIRSensor.getAverageValue()< 400) {
+            if (gotCube()) {
+            	Pinchers.set(DoubleSolenoid.Value.kReverse);
                 mVictor1.set(ControlMode.PercentOutput, -1);
                 mVictor2.set(ControlMode.PercentOutput, -1);
             }else {
                 mVictor1.set(ControlMode.PercentOutput, 0);
                 mVictor2.set(ControlMode.PercentOutput, 0);
+            	Pinchers.set(DoubleSolenoid.Value.kForward); 
 //                mHaveCube = true;
             }
     		return defaultStateTransfer();
@@ -174,6 +179,7 @@ public class Intake extends Subsystem {
         if (mStateChanged) {
             mVictor1.set(ControlMode.PercentOutput, 0);
             mVictor2.set(ControlMode.PercentOutput, 0);
+        	Pinchers.set(DoubleSolenoid.Value.kForward);
         }
 		return defaultStateTransfer();
     }
@@ -213,7 +219,10 @@ public class Intake extends Subsystem {
     public void registerEnabledLoops(Looper in) {
         in.register(mLoop);
     }
-
-
+    
+    public boolean gotCube() {
+    	 return (mIRSensor.getAverageValue()< 400); 
+    }
 
 }
+    

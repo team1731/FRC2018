@@ -53,8 +53,8 @@ public class Superstructure extends Subsystem {
     private final LED mLED = LED.getInstance();
     private final Solenoid mOverTheTop1 = Constants.makeSolenoidForId(Constants.kOverTheTopSolenoid1);
     private final Solenoid mOverTheTop2 = Constants.makeSolenoidForId(Constants.kOverTheTopSolenoid2);
-    private final Solenoid mGrabber1 = Constants.makeSolenoidForId(Constants.kGrabberSolenoid1);
-    private final Solenoid mGrabber2 = Constants.makeSolenoidForId(Constants.kGrabberSolenoid2);
+ //   private final Solenoid mGrabber1 = Constants.makeSolenoidForId(Constants.kGrabberSolenoid1);
+ //   private final Solenoid mGrabber2 = Constants.makeSolenoidForId(Constants.kGrabberSolenoid2);
     private final Compressor mCompressor = new Compressor(0);
     private final RevRoboticsAirPressureSensor mAirPressureSensor = new RevRoboticsAirPressureSensor(3);
 
@@ -415,7 +415,10 @@ public class Superstructure extends Subsystem {
             case CLIMBINGDOWN:
                 return SystemState.CLIMBINGDOWN;
             case AUTOINTAKING:
-                return SystemState.WAITING_FOR_LOW_POSITION;
+            	if (mIntake.gotCube()) {
+            		return SystemState.ELEVATOR_TRACKING;
+            	}
+                return SystemState.WAITING_FOR_POWERCUBE_INTAKE;
             case INTAKING:
                 return SystemState.WAITING_FOR_POWERCUBE_INTAKE;
             case SPITTING:
@@ -448,8 +451,13 @@ public class Superstructure extends Subsystem {
                 return SystemState.CLIMBINGUP;
             case CLIMBINGDOWN:
                 return SystemState.CLIMBINGDOWN;
-            case AUTOINTAKING:
+            case AUTOINTAKING:{
+            	if (mElevator.atBottom())
+            		return SystemState.WAITING_FOR_POWERCUBE_INTAKE; 
+            		else  
                 return SystemState.WAITING_FOR_LOW_POSITION;
+            	}
+            	
             case INTAKING:
                 return SystemState.WAITING_FOR_POWERCUBE_INTAKE;
             case SPITTING:
@@ -533,10 +541,10 @@ public class Superstructure extends Subsystem {
         mWantedState = wantedState;
     }
 
-    public synchronized void setGrabber(boolean grab) {
-        mGrabber1.set(grab);
-        mGrabber2.set(!grab);
-    }
+   // public synchronized void setGrabber(boolean grab) {
+   //     mGrabber1.set(grab);
+  //      mGrabber2.set(!grab);
+  //  }
     
     private void setOverTheTop(boolean overTheTop) {
         mOverTheTop1.set(!overTheTop);

@@ -283,6 +283,9 @@ public class Elevator extends Subsystem {
         
         return revSwitch;
     }
+    public boolean atBottom() {
+    	return Math.abs(mTalon.getSelectedSensorPosition(0)-Constants.kElevatorBottomEncoderValue)<20;
+    }
 
     @Override
     public void zeroSensors() {

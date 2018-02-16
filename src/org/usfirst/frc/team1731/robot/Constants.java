@@ -233,11 +233,11 @@ public class Constants extends ConstantsBase {
     public static final int kShifterSolenoidId1 = 1; //was 0 // PCM 0, Solenoid 0
     public static final int kShifterSolenoidId2 = 6;
     
-    public static final int kOverTheTopSolenoid1 = 2; 
-    public static final int kOverTheTopSolenoid2 = 5;
+    public static final int kOverTheTopSolenoid1 = 3; 
+    public static final int kOverTheTopSolenoid2 = 4;
     
-    public static final int kGrabberSolenoid1 = 3; 
-    public static final int kGrabberSolenoid2 = 4;
+    public static final int kPincherSolenoid1 = 2; 
+    public static final int kPincherSolenoid2 = 5;
     
     
 //    public static final int kIntakeDeploySolenoidId = 1; // PCM 0, Solenoid 1
