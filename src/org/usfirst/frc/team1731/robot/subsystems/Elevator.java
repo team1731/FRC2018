@@ -54,8 +54,8 @@ public class Elevator extends Subsystem {
     }
 
     private final TalonSRX mTalon;
-    private final Solenoid mOverTop1;
-    private final Solenoid mOverTop2;
+    //private final Solenoid mOverTop1;
+    //private final Solenoid mOverTop2;
     
     public Elevator() {
         mTalon = new TalonSRX(Constants.kElevatorTalon);
@@ -70,6 +70,7 @@ public class Elevator extends Subsystem {
         mTalon.config_kF(Constants.SlotIdx, Constants.kElevatorTalonKF, Constants.kTimeoutMs );
         mTalon.setStatusFramePeriod(StatusFrameEnhanced.Status_12_Feedback1, 1000, 1000);
         mTalon.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 10);
+        mTalon.configClosedloopRamp(0, Constants.kTimeoutMs);
         mTalon.setSelectedSensorPosition(0, 0, 10);
         mTalon.overrideLimitSwitchesEnable(false);
         
@@ -82,7 +83,7 @@ public class Elevator extends Subsystem {
 
         /* set the peak and nominal outputs, 12V means full */
         mTalon.configNominalOutputForward(.5, Constants.kTimeoutMs);
-        mTalon.configNominalOutputReverse(.8, Constants.kTimeoutMs);
+        mTalon.configNominalOutputReverse(.9, Constants.kTimeoutMs);
         mTalon.configPeakOutputForward(1.0, Constants.kTimeoutMs);
         mTalon.configPeakOutputReverse(-1.0, Constants.kTimeoutMs);
         /*
@@ -92,8 +93,8 @@ public class Elevator extends Subsystem {
          */
         mTalon.configAllowableClosedloopError(0, Constants.kPIDLoopIdx, Constants.kTimeoutMs);
 
-        mOverTop1 = Constants.makeSolenoidForId(Constants.kOverTheTopSolenoid1);
-        mOverTop2 = Constants.makeSolenoidForId(Constants.kOverTheTopSolenoid2);
+        //mOverTop1 = Constants.makeSolenoidForId(Constants.kOverTheTopSolenoid1);
+        //mOverTop2 = Constants.makeSolenoidForId(Constants.kOverTheTopSolenoid2);
     }
     	
     public enum SystemState {	
@@ -117,7 +118,7 @@ public class Elevator extends Subsystem {
     private double mWantedPosition = 0;
     private boolean mStateChanged = false;
     private boolean mRevSwitchSet = false;
-    private boolean mIsOverTop = false;
+    //private boolean mIsOverTop = false;
 
 
 
@@ -244,7 +245,7 @@ public class Elevator extends Subsystem {
             DriverStation.reportError("Elevator WantedState: " + mWantedState, false);
         }
     }
-
+    /*
     public boolean isOverTop() {
         return mIsOverTop;
     }
@@ -256,7 +257,7 @@ public class Elevator extends Subsystem {
             mOverTop2.set(!wantsOverTop);
         }
     }
-
+    */
     @Override
     public void outputToSmartDashboard() {
         SmartDashboard.putNumber("ElevSysState", (double)mSystemState.ordinal());

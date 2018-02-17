@@ -51,8 +51,8 @@ public class Superstructure extends Subsystem {
     private final Climber mClimber = Climber.getInstance();
     private final Intake mIntake = Intake.getInstance();
     private final LED mLED = LED.getInstance();
-    //private final Solenoid mOverTheTop1 = Constants.makeSolenoidForId(Constants.kOverTheTopSolenoid1);
-    //private final Solenoid mOverTheTop2 = Constants.makeSolenoidForId(Constants.kOverTheTopSolenoid2);
+    private final Solenoid mOverTheTop1 = Constants.makeSolenoidForId(Constants.kOverTheTopSolenoid1);
+    private final Solenoid mOverTheTop2 = Constants.makeSolenoidForId(Constants.kOverTheTopSolenoid2);
     //private final Solenoid mGrabber1 = Constants.makeSolenoidForId(Constants.kGrabberSolenoid1);
     //private final Solenoid mGrabber2 = Constants.makeSolenoidForId(Constants.kGrabberSolenoid2);
     private final Compressor mCompressor = new Compressor(0);
@@ -100,7 +100,7 @@ public class Superstructure extends Subsystem {
     private double mCurrentStateStartTime;
     private boolean mStateChanged;
     private double mElevatorJoystickPosition = 0;
-    private boolean overTopNow = false;
+    private boolean mIsOverTheTop = false;
 
 
     private Loop mLoop = new Loop() {
@@ -455,7 +455,7 @@ public class Superstructure extends Subsystem {
             case AUTOINTAKING:{
             	if (mElevator.atBottom())
             		return SystemState.WAITING_FOR_POWERCUBE_INTAKE; 
-            		else  
+            	else  
                 return SystemState.WAITING_FOR_LOW_POSITION;
             	}
             	
@@ -511,32 +511,12 @@ public class Superstructure extends Subsystem {
         case OVERTHETOP:
             return SystemState.WAITING_FOR_HIGH_POSITION;
         case ELEVATOR_TRACKING:
-        	return SystemState.ELEVATOR_TRACKING;
+            return SystemState.ELEVATOR_TRACKING;
         default:
             return SystemState.IDLE;
         }
     }
 
-
-    public synchronized void setOverTop(boolean overTop) {
-        mElevator.setOverTop(overTop);
-        
-        overTopNow = mElevator.isOverTop();
-        if (overTop) {
-            // want it over the top
-            if (! overTopNow) {
-                // but it is NOT, so put over the top
-                mElevator.setOverTop(true);
-            }
-        } else {
-            // don't want it over the top
-            if (overTopNow) {
-                // but it is, so pull it back
-                mElevator.setOverTop(false);
-            }
-        }
-        
-    }
 
     public synchronized void setWantedState(WantedState wantedState) {
         mWantedState = wantedState;
@@ -546,12 +526,15 @@ public class Superstructure extends Subsystem {
    //     mGrabber1.set(grab);
   //      mGrabber2.set(!grab);
   //  }
-    
-    private void setOverTheTop(boolean overTheTop) {
-        //mOverTheTop1.set(!overTheTop);
-        //mOverTheTop2.set(overTheTop);
-    }
 
+    public synchronized void setOverTheTop(boolean wantsOverTheTop) {
+        if (wantsOverTheTop != mIsOverTheTop) {
+            mIsOverTheTop = wantsOverTheTop;
+            mOverTheTop1.set(!wantsOverTheTop);
+            mOverTheTop2.set(wantsOverTheTop);
+        }
+    }
+    
 
     @Override
     public void outputToSmartDashboard() {

@@ -260,12 +260,12 @@ public class Robot extends IterativeRobot {
             boolean spitting = mControlBoard.getSpit();
             
             if (mControlBoard.getElevatorButton()) {
-            		if (overTheTop) {
-            			mSuperstructure.setOverTop(true);
-            		}
-            		else {
-            			mSuperstructure.setOverTop(false);
-            		}
+                if (overTheTop) {
+                    mSuperstructure.setOverTheTop(true);
+                }
+                else {
+                    mSuperstructure.setOverTheTop(false);
+                }
                 mSuperstructure.setWantedElevatorPosition(-1 * mControlBoard.getElevatorControl());
             } else {
                 mSuperstructure.setWantedElevatorPosition(0);
@@ -284,7 +284,7 @@ public class Robot extends IterativeRobot {
             } else if (calibrateUp) {
             	mSuperstructure.setWantedState(Superstructure.WantedState.CALIBRATINGUP);
             } else if (overTheTop) {
-            	mSuperstructure.setWantedState(Superstructure.WantedState.OVERTHETOP);
+            	//mSuperstructure.setWantedState(Superstructure.WantedState.OVERTHETOP);
             } else {
             	mSuperstructure.setWantedState(Superstructure.WantedState.ELEVATOR_TRACKING);
             }
