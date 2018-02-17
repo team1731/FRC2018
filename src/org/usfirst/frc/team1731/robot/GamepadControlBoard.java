@@ -87,8 +87,9 @@ public class GamepadControlBoard implements ControlBoardInterface {
     	//		(eg right is 90, upper-left is 315).
 		//    	Parameters:pov The index of the POV to read (starting at 0)
     	//		Returns:the angle of the POV in degrees, or -1 if the POV is not pressed.
-		//    	
-        return (mOperator.getPOV(0) > 315 || mOperator.getPOV(0) < 45) &  mOperator.getRawButton(1);
+		//
+        int pov = mOperator.getPOV(0);    	
+        return ((pov != -1) && (pov > 315 || pov < 45)) &&  mOperator.getRawButton(1);
         //return mOperator.getRawButton(1);
     }
     
@@ -102,7 +103,7 @@ public class GamepadControlBoard implements ControlBoardInterface {
 		//    	Parameters:pov The index of the POV to read (starting at 0)
     	//		Returns:the angle of the POV in degrees, or -1 if the POV is not pressed.
 		//    	
-        return (mOperator.getPOV(0) > 135 && mOperator.getPOV(0) < 225) &  mOperator.getRawButton(1);
+        return (mOperator.getPOV(0) > 135 && mOperator.getPOV(0) < 225) &&  mOperator.getRawButton(1);
         //return mOperator.getRawButton(1);
     }
 

@@ -140,7 +140,7 @@ public class Constants extends ConstantsBase {
     public static double kFeederSensorGearReduction = 3.0;
     
    //Elevator
-    public static double kElevatorTalonKP = 1;
+    public static double kElevatorTalonKP = 2;
     public static double kElevatorTalonKI = 0.0;
     public static double kElevatorTalonKD = 0.0;
     public static double kElevatorTalonKF = 0.0;

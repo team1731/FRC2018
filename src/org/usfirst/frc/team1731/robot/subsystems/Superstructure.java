@@ -51,10 +51,10 @@ public class Superstructure extends Subsystem {
     private final Climber mClimber = Climber.getInstance();
     private final Intake mIntake = Intake.getInstance();
     private final LED mLED = LED.getInstance();
-    private final Solenoid mOverTheTop1 = Constants.makeSolenoidForId(Constants.kOverTheTopSolenoid1);
-    private final Solenoid mOverTheTop2 = Constants.makeSolenoidForId(Constants.kOverTheTopSolenoid2);
- //   private final Solenoid mGrabber1 = Constants.makeSolenoidForId(Constants.kGrabberSolenoid1);
- //   private final Solenoid mGrabber2 = Constants.makeSolenoidForId(Constants.kGrabberSolenoid2);
+    //private final Solenoid mOverTheTop1 = Constants.makeSolenoidForId(Constants.kOverTheTopSolenoid1);
+    //private final Solenoid mOverTheTop2 = Constants.makeSolenoidForId(Constants.kOverTheTopSolenoid2);
+    //private final Solenoid mGrabber1 = Constants.makeSolenoidForId(Constants.kGrabberSolenoid1);
+    //private final Solenoid mGrabber2 = Constants.makeSolenoidForId(Constants.kGrabberSolenoid2);
     private final Compressor mCompressor = new Compressor(0);
     private final RevRoboticsAirPressureSensor mAirPressureSensor = new RevRoboticsAirPressureSensor(3);
 
@@ -100,6 +100,7 @@ public class Superstructure extends Subsystem {
     private double mCurrentStateStartTime;
     private boolean mStateChanged;
     private double mElevatorJoystickPosition = 0;
+    private boolean overTopNow = false;
 
 
     private Loop mLoop = new Loop() {
@@ -519,7 +520,7 @@ public class Superstructure extends Subsystem {
 
     public synchronized void setOverTop(boolean overTop) {
         mElevator.setOverTop(overTop);
-        /*
+        
         overTopNow = mElevator.isOverTop();
         if (overTop) {
             // want it over the top
@@ -534,7 +535,7 @@ public class Superstructure extends Subsystem {
                 mElevator.setOverTop(false);
             }
         }
-        */
+        
     }
 
     public synchronized void setWantedState(WantedState wantedState) {
@@ -547,8 +548,8 @@ public class Superstructure extends Subsystem {
   //  }
     
     private void setOverTheTop(boolean overTheTop) {
-        mOverTheTop1.set(!overTheTop);
-        mOverTheTop2.set(overTheTop);
+        //mOverTheTop1.set(!overTheTop);
+        //mOverTheTop2.set(overTheTop);
     }
 
 

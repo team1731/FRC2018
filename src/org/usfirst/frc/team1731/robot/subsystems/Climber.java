@@ -23,6 +23,7 @@ import edu.wpi.first.wpilibj.DriverStation;
  */
 @SuppressWarnings("unused")
 public class Climber extends Subsystem {
+    /*
     private static final double kReversing = -1.0;
     private static final double kUnjamInPeriod = .2 * kReversing;
     private static final double kUnjamOutPeriod = .4 * kReversing;
@@ -30,7 +31,8 @@ public class Climber extends Subsystem {
     private static final double kUnjamOutPower = -6.0 * kReversing / 12.0;
     private static final double kFeedVoltage = 10.0;
     private static final double kExhaustVoltage = kFeedVoltage * kReversing / 12.0;
-
+    */
+    
     private static Climber sInstance = null;
 
     public static Climber getInstance() {

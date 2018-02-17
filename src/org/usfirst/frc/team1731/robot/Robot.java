@@ -260,6 +260,12 @@ public class Robot extends IterativeRobot {
             boolean spitting = mControlBoard.getSpit();
             
             if (mControlBoard.getElevatorButton()) {
+            		if (overTheTop) {
+            			mSuperstructure.setOverTop(true);
+            		}
+            		else {
+            			mSuperstructure.setOverTop(false);
+            		}
                 mSuperstructure.setWantedElevatorPosition(-1 * mControlBoard.getElevatorControl());
             } else {
                 mSuperstructure.setWantedElevatorPosition(0);

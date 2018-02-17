@@ -54,8 +54,8 @@ public class Elevator extends Subsystem {
     }
 
     private final TalonSRX mTalon;
-    //private final Solenoid mOverTop1;
-    //private final Solenoid mOverTop2;
+    private final Solenoid mOverTop1;
+    private final Solenoid mOverTop2;
     
     public Elevator() {
         mTalon = new TalonSRX(Constants.kElevatorTalon);
@@ -81,10 +81,10 @@ public class Elevator extends Subsystem {
         mTalon.setInverted(true); //Constants.kMotorInvert);
 
         /* set the peak and nominal outputs, 12V means full */
-        mTalon.configNominalOutputForward(.2, Constants.kTimeoutMs);
-        mTalon.configNominalOutputReverse(.2, Constants.kTimeoutMs);
-        mTalon.configPeakOutputForward(1, Constants.kTimeoutMs);
-        mTalon.configPeakOutputReverse(-0.5, Constants.kTimeoutMs);
+        mTalon.configNominalOutputForward(.5, Constants.kTimeoutMs);
+        mTalon.configNominalOutputReverse(.8, Constants.kTimeoutMs);
+        mTalon.configPeakOutputForward(1.0, Constants.kTimeoutMs);
+        mTalon.configPeakOutputReverse(-1.0, Constants.kTimeoutMs);
         /*
          * set the allowable closed-loop error, Closed-Loop output will be
          * neutral within this range. See Table in Section 17.2.1 for native
@@ -92,19 +92,19 @@ public class Elevator extends Subsystem {
          */
         mTalon.configAllowableClosedloopError(0, Constants.kPIDLoopIdx, Constants.kTimeoutMs);
 
-        //mOverTop1 = Constants.makeSolenoidForId(Constants.kOverTheTopSolenoid1);
-        //mOverTop2 = Constants.makeSolenoidForId(Constants.kOverTheTopSolenoid2);
+        mOverTop1 = Constants.makeSolenoidForId(Constants.kOverTheTopSolenoid1);
+        mOverTop2 = Constants.makeSolenoidForId(Constants.kOverTheTopSolenoid2);
     }
     	
     public enum SystemState {	
         IDLE,   // stop all motors
+        ELEVATORTRACKING, // moving
         CALIBRATINGUP,
         CALIBRATINGDOWN,
-        ELEVATORTRACKING, // moving
     }
 
     public enum WantedState {
-    	IDLE,   
+    		IDLE,   
         ELEVATORTRACKING, // moving
         CALIBRATINGUP,
         CALIBRATINGDOWN,
@@ -223,7 +223,9 @@ public class Elevator extends Subsystem {
 	    	} 
 
     		if (checkRevSwitch()) {
-    			nextPos = -1 * (int)Constants.kElevatorBottomEncoderValue;
+                if (nextPos < -1 * (int)Constants.kElevatorBottomEncoderValue) {
+    		        nextPos = -1 * (int)Constants.kElevatorBottomEncoderValue;
+                }
     		}
 
     		mTalon.set(ControlMode.Position, nextPos); 	
@@ -250,13 +252,15 @@ public class Elevator extends Subsystem {
     public synchronized void setOverTop(boolean wantsOverTop) {
         if (wantsOverTop != mIsOverTop) {
             mIsOverTop = wantsOverTop;
-            //mOverTop1.set(wantsOverTop);
-            //mOverTop2.set(!wantsOverTop);
+            mOverTop1.set(wantsOverTop);
+            mOverTop2.set(!wantsOverTop);
         }
     }
 
     @Override
     public void outputToSmartDashboard() {
+        SmartDashboard.putNumber("ElevSysState", (double)mSystemState.ordinal());
+        SmartDashboard.putNumber("ElevWantState", (double)mWantedState.ordinal());
         SmartDashboard.putNumber("ElevWantPos", mWantedPosition);
         SmartDashboard.putNumber("ElevCurPos", mTalon.getSelectedSensorPosition(0));
         SmartDashboard.putNumber("ElevQuadPos", mTalon.getSensorCollection().getQuadraturePosition());
