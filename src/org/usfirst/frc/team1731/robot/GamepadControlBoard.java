@@ -123,4 +123,8 @@ public class GamepadControlBoard implements ControlBoardInterface {
 		return mOperator.getRawAxis(1);
 		//return 0.3;
 	}
+	   public boolean getAutoPickUp() {
+	        // R1
+	        return mOperator.getRawButton(6);
+	    }
 }

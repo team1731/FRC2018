@@ -258,6 +258,7 @@ public class Robot extends IterativeRobot {
             boolean calibrateDown = mControlBoard.getCalibrateDown();
             boolean calibrateUp = mControlBoard.getCalibrateUp();
             boolean spitting = mControlBoard.getSpit();
+            boolean pickUp = mControlBoard.getAutoPickUp();
             
             if (mControlBoard.getElevatorButton()) {
                 if (overTheTop) {
@@ -283,6 +284,8 @@ public class Robot extends IterativeRobot {
             	mSuperstructure.setWantedState(Superstructure.WantedState.CALIBRATINGDOWN);
             } else if (calibrateUp) {
             	mSuperstructure.setWantedState(Superstructure.WantedState.CALIBRATINGUP);
+            } else if (pickUp) {
+            	mSuperstructure.setWantedState(Superstructure.WantedState.AUTOINTAKING);
             } else if (overTheTop) {
             	//mSuperstructure.setWantedState(Superstructure.WantedState.OVERTHETOP);
             } else {

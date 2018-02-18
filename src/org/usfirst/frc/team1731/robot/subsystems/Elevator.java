@@ -305,4 +305,8 @@ public class Elevator extends Subsystem {
         System.out.println("Testing ELEVATOR.-----------------------------------");
         return false;
     }
+
+	public boolean atTop() {
+		return Math.abs(mTalon.getSelectedSensorPosition(0)-Constants.kElevatorTopEncoderValue)<20;
+	}
 }

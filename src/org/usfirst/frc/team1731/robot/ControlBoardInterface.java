@@ -34,4 +34,6 @@ public interface ControlBoardInterface {
 		boolean getClimbUp();
 
 		boolean getClimbDown();
+
+		boolean getAutoPickUp();
 }
