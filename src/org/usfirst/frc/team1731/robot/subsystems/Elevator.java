@@ -238,7 +238,14 @@ public class Elevator extends Subsystem {
         mWantedPosition = position;
     }
 
-
+    public synchronized double getCurrentPosition(boolean up) {
+    	if (up) {
+    		return mTalon.getSelectedSensorPosition(0) / Constants.kElevatorTopEncoderValue;
+    	} else {
+    		return mTalon.getSelectedSensorPosition(0) / Constants.kElevatorBottomEncoderValue;
+    	}
+    }
+    
     public synchronized void setWantedState(WantedState state) {
         if (state != mWantedState) {
             mWantedState = state;
@@ -288,6 +295,7 @@ public class Elevator extends Subsystem {
         
         return revSwitch;
     }
+    
     public boolean atBottom() {
     	return Math.abs(mTalon.getSelectedSensorPosition(0)-Constants.kElevatorBottomEncoderValue)<20;
     }

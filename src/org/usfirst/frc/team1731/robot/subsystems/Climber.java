@@ -110,13 +110,13 @@ public class Climber extends Subsystem {
         }
 
         private SystemState handleGoingDown() {
-            mTalon.set(ControlMode.PercentOutput, 0.2);
+            mTalon.set(ControlMode.PercentOutput, 1.0);
 
             return defaultStateTransfer();
         }
 
         private SystemState handleGoingUp() {
-            mTalon.set(ControlMode.PercentOutput, -0.2);
+            mTalon.set(ControlMode.PercentOutput, -1.0);
             
             return defaultStateTransfer();
         }

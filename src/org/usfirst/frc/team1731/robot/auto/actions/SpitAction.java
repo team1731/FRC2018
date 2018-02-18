@@ -46,6 +46,7 @@ public class SpitAction implements Action {
 
     @Override
     public void start() {
+    	runIntake = true;
         startTime = Timer.getFPGATimestamp();
         mIntake.setWantedState(WantedState.SPITTING);
     }
