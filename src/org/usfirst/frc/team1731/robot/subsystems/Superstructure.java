@@ -75,6 +75,7 @@ public class Superstructure extends Subsystem {
         WAITING_FOR_ROTATE,
         SPITTING_OUT_TOP, 
         RETURNINGFROMINTAKE,
+        RETURNING_HOME,
         ELEVATOR_TRACKING
     };
 
@@ -161,7 +162,11 @@ public class Superstructure extends Subsystem {
                 case ELEVATOR_TRACKING:
                     newState = handleElevatorTracking();
                     break;
+                case RETURNING_HOME:
+                    newState = handleReturningHome();
+                    break;
                 default:
+                	
                     newState = SystemState.IDLE;
                 }
 
@@ -190,6 +195,36 @@ public class Superstructure extends Subsystem {
                 return SystemState.CLIMBINGDOWN;
             case AUTOINTAKING:
                 return SystemState.WAITING_FOR_LOW_POSITION;
+            case INTAKING:
+                return SystemState.WAITING_FOR_POWERCUBE_INTAKE;
+            case SPITTING:
+                return SystemState.SPITTING;
+            case CALIBRATINGDOWN:
+                return SystemState.CALIBRATINGDOWN;
+            case CALIBRATINGUP:
+                return SystemState.CALIBRATINGUP;
+            case OVERTHETOP:
+                return SystemState.WAITING_FOR_HIGH_POSITION;
+            case ELEVATOR_TRACKING:
+                return SystemState.ELEVATOR_TRACKING;
+            default:
+                return SystemState.IDLE;
+            }
+        }
+        
+        private SystemState handleReturningHome() {
+        	mElevator.setWantedPosition(0);
+        	mElevator.setWantedState(Elevator.WantedState.ELEVATORTRACKING);
+            mIntake.setWantedState(Intake.WantedState.IDLE);
+           // mClimber.setWantedState(Climber.WantedState.IDLE);
+        	
+            switch (mWantedState) {
+            case CLIMBINGUP:
+                return SystemState.CLIMBINGUP;
+            case CLIMBINGDOWN:
+                return SystemState.CLIMBINGDOWN;
+            case AUTOINTAKING:
+                return SystemState.RETURNING_HOME;
             case INTAKING:
                 return SystemState.WAITING_FOR_POWERCUBE_INTAKE;
             case SPITTING:
@@ -417,7 +452,7 @@ public class Superstructure extends Subsystem {
                 return SystemState.CLIMBINGDOWN;
             case AUTOINTAKING:
             	if (mIntake.gotCube()) {
-            		return SystemState.ELEVATOR_TRACKING;
+            		return SystemState.RETURNING_HOME;
             	}
                 return SystemState.WAITING_FOR_POWERCUBE_INTAKE;
             case INTAKING:
@@ -528,11 +563,11 @@ public class Superstructure extends Subsystem {
   //  }
 
     public synchronized void setOverTheTop(boolean wantsOverTheTop) {
-        if (wantsOverTheTop != mIsOverTheTop) {
+      //  if (wantsOverTheTop != mIsOverTheTop) {
             mIsOverTheTop = wantsOverTheTop;
             mOverTheTop1.set(!wantsOverTheTop);
             mOverTheTop2.set(wantsOverTheTop);
-        }
+      //  }
     }
     
 

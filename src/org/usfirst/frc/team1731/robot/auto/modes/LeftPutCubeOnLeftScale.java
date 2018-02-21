@@ -23,10 +23,14 @@ public class LeftPutCubeOnLeftScale extends AutoModeBase {
 
     @Override
     protected void routine() throws AutoModeEndedException {
+    	System.out.println("Executing LeftPutCubeOnLeftScale ");
+    	/*
     	PathContainer straightPath = new LeftToLeftScale();
     	runAction(new ResetPoseFromPathAction(straightPath));
     	runAction(new DrivePathAction(straightPath));
     	runAction(new WaitAction(1));
     	//Run a parallel action to prepare the cube to drop while driving
+    	 * 
+    	 */
     }
 }

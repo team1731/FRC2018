@@ -71,7 +71,7 @@ public class Elevator extends Subsystem {
         mTalon.setStatusFramePeriod(StatusFrameEnhanced.Status_12_Feedback1, 1000, 1000);
         mTalon.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 10);
         mTalon.configClosedloopRamp(0, Constants.kTimeoutMs);
-        mTalon.setSelectedSensorPosition(0, 0, 10);
+        mTalon.setSelectedSensorPosition(-1793, 0, 10);
         mTalon.overrideLimitSwitchesEnable(false);
         
         /* choose to ensure sensor is positive when output is positive */
@@ -91,7 +91,7 @@ public class Elevator extends Subsystem {
          * neutral within this range. See Table in Section 17.2.1 for native
          * units per rotation.
          */
-        mTalon.configAllowableClosedloopError(0, Constants.kPIDLoopIdx, Constants.kTimeoutMs);
+        mTalon.configAllowableClosedloopError(Constants.kPIDLoopIdx, 50, Constants.kTimeoutMs);
 
         //mOverTop1 = Constants.makeSolenoidForId(Constants.kOverTheTopSolenoid1);
         //mOverTop2 = Constants.makeSolenoidForId(Constants.kOverTheTopSolenoid2);
@@ -116,6 +116,7 @@ public class Elevator extends Subsystem {
 
     private double mCurrentStateStartTime;
     private double mWantedPosition = 0;
+    private double mNextEncPos = 0;
     private boolean mStateChanged = false;
     private boolean mRevSwitchSet = false;
     //private boolean mIsOverTop = false;
@@ -131,7 +132,7 @@ public class Elevator extends Subsystem {
                 mStateChanged = true;
                 mWantedPosition = 0;
                 mCurrentStateStartTime = timestamp;
-                mTalon.setSelectedSensorPosition(0, 0, 10);                
+               // mTalon.setSelectedSensorPosition(0, 0, 10);                
               //  DriverStation.reportError("Elevator SystemState: " + mSystemState, false);
             }
         }
@@ -235,6 +236,12 @@ public class Elevator extends Subsystem {
     }
 
     public synchronized void setWantedPosition(double position) {
+    	if (mWantedPosition > 0) {
+    		mNextEncPos = (int)(position*Constants.kElevatorTopEncoderValue); 
+    	} else {
+    		//int curPos = mTalon.getSelectedSensorPosition(0);
+    		mNextEncPos = (int)(position*Constants.kElevatorBottomEncoderValue);	    		
+    	} 
         mWantedPosition = position;
     }
 
@@ -297,9 +304,13 @@ public class Elevator extends Subsystem {
     }
     
     public boolean atBottom() {
-    	return Math.abs(mTalon.getSelectedSensorPosition(0)-Constants.kElevatorBottomEncoderValue)<20;
+    	return Math.abs(mTalon.getSelectedSensorPosition(0)+Constants.kElevatorBottomEncoderValue)<100;
     }
 
+    public boolean atDesired() {
+    	return Math.abs(mTalon.getSelectedSensorPosition(0) - mNextEncPos)<100;
+    }
+    
     @Override
     public void zeroSensors() {
     }
@@ -315,6 +326,6 @@ public class Elevator extends Subsystem {
     }
 
 	public boolean atTop() {
-		return Math.abs(mTalon.getSelectedSensorPosition(0)-Constants.kElevatorTopEncoderValue)<20;
+		return Math.abs(mTalon.getSelectedSensorPosition(0)-Constants.kElevatorTopEncoderValue)<100;
 	}
 }

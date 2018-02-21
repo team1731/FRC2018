@@ -11,7 +11,10 @@ import org.usfirst.frc.team1731.lib.util.InterpolatingDouble;
 import org.usfirst.frc.team1731.lib.util.InterpolatingTreeMap;
 import org.usfirst.frc.team1731.lib.util.LatchedBoolean;
 import org.usfirst.frc.team1731.lib.util.math.RigidTransform2d;
+import org.usfirst.frc.team1731.robot.auto.AutoModeBase;
 import org.usfirst.frc.team1731.robot.auto.AutoModeExecuter;
+import org.usfirst.frc.team1731.robot.auto.modes.AutoDetectAllianceSwitchThenPlaceMode;
+import org.usfirst.frc.team1731.robot.auto.modes.StandStillMode;
 import org.usfirst.frc.team1731.robot.auto.modes.TestAuto;
 import org.usfirst.frc.team1731.robot.loops.Looper;
 import org.usfirst.frc.team1731.robot.loops.RobotStateEstimator;
@@ -57,13 +60,15 @@ public class Robot extends IterativeRobot {
     private LED mLED = LED.getInstance();
     private RobotState mRobotState = RobotState.getInstance();
     private AutoModeExecuter mAutoModeExecuter = null;
-    private Command autonomousCommand;
+//    private Command autonomousCommand;
+    private AutoModeBase autoModeToExecute;
     private SendableChooser autoChooser;
+//    private SendableChooser autoMode;
     private SendableChooser startingPosition;
     private SendableChooser areTeammatesCool;
     private enum startingPositions {
     	LEFT,
-    	MIDDLELEFT,
+ //   	MIDDLELEFT,
     	MIDDLERIGHT,
     	RIGHT
     };
@@ -115,18 +120,25 @@ public class Robot extends IterativeRobot {
             //http://robotrio-NNNN-frc.local:1731/?action=stream
             CameraServer.getInstance().startAutomaticCapture(0);
             
+            autoChooser = new SendableChooser();
+            autoChooser.addDefault("Score Cubes", "ScoreCubes");
+            autoChooser.addObject("Do Nothing", new StandStillMode());
+            autoChooser.addObject("Test", new TestAuto());
+            SmartDashboard.putData("Autonomous Mode", autoChooser);
+           
             startingPosition = new SendableChooser();
             startingPosition.addDefault("Left Position", startingPositions.LEFT);
-            startingPosition.addObject("Middle-Left Position", startingPositions.MIDDLELEFT);
+//            startingPosition.addObject("Middle-Left Position", startingPositions.MIDDLELEFT);
             startingPosition.addObject("Middle-Right Position", startingPositions.MIDDLERIGHT);
             startingPosition.addObject("Right Position", startingPositions.RIGHT);
             SmartDashboard.putData("Starting Position", startingPosition);
+            
             areTeammatesCool = new SendableChooser();
             areTeammatesCool.addDefault("Be cautious", false);
             areTeammatesCool.addObject("It's fine", true);
             SmartDashboard.putData("How should I react?", areTeammatesCool);
             
-            AutoModeSelector.initAutoModeSelector();
+ //           AutoModeSelector.initAutoModeSelector();
             
             //WPILIB WAY TO SET AUTONOMOUS MODES AND SEND TO DASHBOARD...
             //
@@ -182,10 +194,16 @@ public class Robot extends IterativeRobot {
             mEnabledLooper.start();
             mSuperstructure.reloadConstants();
             
-            
+
+            if (autoChooser.getSelected().equals("ScoreCubes")) {
+            	autoModeToExecute = AutoDetectAllianceSwitchThenPlaceMode.pickAutoMode((AutoDetectAllianceSwitchThenPlaceMode.startingPositions.valueOf(startingPosition.getSelected().toString())) ,(boolean) areTeammatesCool.getSelected());
+            		
+            } else 
+            	autoModeToExecute = (AutoModeBase) autoChooser.getSelected();
             
             mAutoModeExecuter = new AutoModeExecuter();
-            mAutoModeExecuter.setAutoMode(AutoModeSelector.getSelectedAutoMode());
+            mAutoModeExecuter.setAutoMode(autoModeToExecute);
+  //          mAutoModeExecuter.setAutoMode(AutoModeSelector.getSelectedAutoMode());
             mAutoModeExecuter.start();
             
             //WPILIB WAY TO GET AUTONOMOUS MODE...

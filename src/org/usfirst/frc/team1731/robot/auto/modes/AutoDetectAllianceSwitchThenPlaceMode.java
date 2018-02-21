@@ -12,24 +12,37 @@ import edu.wpi.first.wpilibj.DriverStation;
  * @see SwitchThenPlaceModeBlue
  * @see PlaceOnRightSwitch
  */
-public class AutoDetectAllianceSwitchThenPlaceMode extends AutoModeBase {
-	boolean isAllianceTrustworthy = true;
-	enum startingPositions {
+public class AutoDetectAllianceSwitchThenPlaceMode  {
+//	boolean isAllianceTrustworthy = true;
+	public enum startingPositions {
 		LEFT,
-		MIDDLELEFT,
+//		MIDDLELEFT,
 		MIDDLERIGHT,
 		RIGHT
 	}
-	startingPositions startingPos = startingPositions.LEFT;
+//	startingPositions startingPos = startingPositions.LEFT;
 	
-    @Override
-    protected void routine() throws AutoModeEndedException {
-    	String gameData = DriverStation.getInstance().getGameSpecificMessage();
+    public static AutoModeBase pickAutoMode(startingPositions startingPos, boolean isAllianceTrustworthy)  {
+    	String gameData = null;
+        gameData = DriverStation.getInstance().getGameSpecificMessage();
+        int retries = 100;
+          	
+        while (gameData.length() < 2 && retries > 0) {
+            retries--;
+            try {
+                Thread.sleep(5);
+            } catch (InterruptedException ie) {
+                // Just ignore the interrupted exception
+            }
+            gameData = DriverStation.getInstance().getGameSpecificMessage();
+        }
+
+    	
     	AutoModeBase defaultFallbackMode = new StandStillMode();
         AutoModeBase selectedAutoMode = defaultFallbackMode;
         //boolean isRed = true;
         //DriverStation.Alliance alliance = DriverStation.getInstance().getAlliance();
-        
+        if (gameData.length()>0 ) {
         switch(startingPos){
         	case LEFT:
         		if(gameData.charAt(0) == 'L' && gameData.charAt(1) == 'L') {
@@ -42,36 +55,38 @@ public class AutoDetectAllianceSwitchThenPlaceMode extends AutoModeBase {
         			selectedAutoMode = isAllianceTrustworthy ? new LeftPutCubeOnLeftScale() : new LeftPutCubeOnRightSwitchAndLeftScale();
         		}
         	break;
-        	case MIDDLELEFT:
+ /*       	case MIDDLELEFT:
         		if(isAllianceTrustworthy) {
         			selectedAutoMode = new MiddleLeftPutInExchange();
         		} else {
         			selectedAutoMode = gameData.charAt(0) == 'L' ? new MiddleLeftPutCubeOnLeftSwitch() : new MiddleLeftPutCubeOnRightSwitch();
         		}
         	break;
+*/
         	case MIDDLERIGHT:
-        		if(isAllianceTrustworthy) {
-        			selectedAutoMode = new MiddleRightPutInExchange();
-        		} else {
+        	//	if(isAllianceTrustworthy) {
+        	//		selectedAutoMode = new MiddleRightPutInExchange();
+        	//	} else {
         			selectedAutoMode = gameData.charAt(0) == 'L' ? new MiddleRightPutCubeOnLeftSwitch() : new MiddleRightPutCubeOnRightSwitch();
-        		}
+        	//	}
         	break;
         	case RIGHT:
         		if(gameData.charAt(0) == 'R' && gameData.charAt(1) == 'R') {
-        			selectedAutoMode = new RightPutCubeOnRightSwitchAndRightScale();
+        			selectedAutoMode = new RightPutCubeOnRightScaleAndRightSwitch();
         		} else if(gameData.charAt(0) == 'R' && gameData.charAt(1) == 'L') {
-        			selectedAutoMode = isAllianceTrustworthy ? new RightPutCubeOnRightSwitch() : new RightPutCubeOnRightSwitchAndLeftScale();
+        			selectedAutoMode = new RightPutCubeOnRightSwitchAndLeftScale();
         		} else if(gameData.charAt(0) == 'L' && gameData.charAt(1) == 'L') {
-        			selectedAutoMode = isAllianceTrustworthy ? new RightPutCubeOnLeftScale() : new RightPutCubeOnLeftSwitch();
+        			selectedAutoMode =  new RightPutCubeOnLeftScaleAndLeftSwitch();
         		} else if(gameData.charAt(0) == 'L' && gameData.charAt(1) == 'R') {
-        			selectedAutoMode = isAllianceTrustworthy ? new RightPutCubeOnRightScale() : new RightPutCubeOnLeftSwitchAndRightScale();
+        			selectedAutoMode = isAllianceTrustworthy ? new RightPutCubeOnRightScale() : new RightPutCubeOnRightScaleAndLeftSwitch();
         		}
         	break;
+        }
         }
         if(selectedAutoMode == defaultFallbackMode) {
         	DriverStation.reportWarning("Unable to logically choose correct autonomous path from gameData. Defaulting to "+defaultFallbackMode.toString()+" here's some fun facts: selectedAutoMode: "+selectedAutoMode.toString()+" isAllianceTrustworthy: "+isAllianceTrustworthy, false);
         }
-        selectedAutoMode.run();
+        return selectedAutoMode;
         
         /*
         	This is my thinking space

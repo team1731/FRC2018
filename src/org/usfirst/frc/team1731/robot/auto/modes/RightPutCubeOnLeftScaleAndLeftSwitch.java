@@ -18,34 +18,33 @@ import edu.wpi.first.wpilibj.Timer;
  * 
  * @see AutoModeBase
  */
-public class RightPutCubeOnRightScale extends AutoModeBase {
+public class RightPutCubeOnLeftScaleAndLeftSwitch extends AutoModeBase {
 
     @Override
     protected void routine() throws AutoModeEndedException {
-    	System.out.println("Executing RightPutCubeOnrightScale");
+    	System.out.println("Executing RightPutCubeOnLeftScale");
     	
-    	PathContainer Path = new RightToRightScale();
+    	PathContainer Path = new RightToLeftScale();
     	runAction(new ResetPoseFromPathAction(Path));
-        runAction(new ParallelAction(Arrays.asList(new Action[] {
-        		new ElevatorUp(), 
+        runAction(new ParallelAction(Arrays.asList(new Action[] { 
         		new RotateIntakeActionUp(),
-        		new DrivePathAction(Path)
+        		new DrivePathAction(Path),
         })));
+        runAction(new ElevatorUp());
+        runAction(new SpitAction());
+        
 
-    	runAction(new SpitAction());
-    	Path = new RightScaleToRightSwitch();
+    	Path = new LeftScaleToLeftSwitch();
         runAction(new ParallelAction(Arrays.asList(new Action[] {
         		new PickUpAction(), 
         		new DrivePathAction(Path)
+        		
         })));
   
-    	Path = new RightSwitchToRightScale();
-        runAction(new ParallelAction(Arrays.asList(new Action[] {
-        		new ElevatorUp(), 
-        		new RotateIntakeActionUp(),
-        		new DrivePathAction(Path)
-        })));
+    	Path = new DriveToScoreSwitchLeft();
+		runAction(new DrivePathAction(Path));
         runAction(new SpitAction()); 
+        // approx 10 sec. to here
 
     	runAction(new WaitAction(1));
     	

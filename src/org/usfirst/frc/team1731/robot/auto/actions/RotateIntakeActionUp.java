@@ -10,13 +10,22 @@ import org.usfirst.frc.team1731.robot.subsystems.Superstructure;
  * @see Action
  * @see RunOnceAction
  */
-public class RotateIntakeAction extends RunOnceAction implements Action {
+public class RotateIntakeActionUp extends RunOnceAction implements Action {
 
+	private boolean up = true;
+	
+	public RotateIntakeActionUp() {
+	}
+	
+	public RotateIntakeActionUp(boolean up) {
+		this.up = up;
+	}
+	
     @Override
     public void runOnce() {
 
-        Superstructure.getInstance().setOverTheTop(true);
-  //      Intake.getInstance().setOn(); // maybe intake a few missed balls if we're lucky
+        Superstructure.getInstance().setOverTheTop(up);
+ 
     }
 
 }

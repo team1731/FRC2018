@@ -22,12 +22,36 @@ public class RightPutCubeOnRightSwitchAndLeftScale extends AutoModeBase {
 
     @Override
     protected void routine() throws AutoModeEndedException {
-    	System.out.println("Path is not set yet");
-    	/*
-    	PathContainer straightPath = new MiddleLeftToLeftSwitch();
-    	runAction(new ResetPoseFromPathAction(straightPath));
-    	runAction(new DrivePathAction(straightPath));
-    	runAction(new WaitAction(1));
-    	*/
+    	System.out.println("Executing PutCubeOnrightSwitchAndLeftScale");
+    	PathContainer Path = new RightToRightSwitch_A();
+    	runAction(new ResetPoseFromPathAction(Path));
+        runAction(new ParallelAction(Arrays.asList(new Action[] {
+        		new RotateIntakeActionUp(false), //stay down
+        		new DrivePathAction(Path)
+        })));
+        
+        //drive forward and spit
+    	Path = new RightToRightSwitch_B();
+    	runAction(new DrivePathAction(Path));
+    	runAction(new SpitAction());
+    	    	
+    	//back up
+    	Path = new RightToRightSwitch_C();
+    	runAction(new DrivePathAction(Path));
+
+    	//drive forward and pick up
+    	Path = new RightToRightSwitch_D();
+    	runAction(new ParallelAction(Arrays.asList(new Action[] {
+        		new PickUpAction(), 
+        		new DrivePathAction(Path)
+        })));
+  
+    	Path = new RightSwitchToLeftScale();
+        runAction(new ParallelAction(Arrays.asList(new Action[] {
+        		new ElevatorUp(), 
+        		new RotateIntakeActionUp(),
+        		new DrivePathAction(Path)
+        })));
+        runAction(new SpitAction()); 
     }
 }

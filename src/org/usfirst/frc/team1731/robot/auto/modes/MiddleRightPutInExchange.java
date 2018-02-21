@@ -22,7 +22,7 @@ public class MiddleRightPutInExchange extends AutoModeBase {
 
     @Override
     protected void routine() throws AutoModeEndedException {
-    	System.out.println("Path is not set yet");
+    	System.out.println("Executing MiddleRightPutInExchange");
     	/*
     	PathContainer straightPath = new MiddleLeftToLeftSwitch();
     	runAction(new ResetPoseFromPathAction(straightPath));

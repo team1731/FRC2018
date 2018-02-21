@@ -11,9 +11,9 @@ import edu.wpi.first.wpilibj.Timer;
  * 
  * @see Action
  */
-public class ElevatorUp implements Action {
+public class ElevatorDown implements Action {
 
-    private static final double DESIRED_POSITION = 0.4;
+    private static final double DESIRED_POSITION = -1.0;
 	Elevator mElevator = Elevator.getInstance();
 	Superstructure mSuperstructure = Superstructure.getInstance();
 

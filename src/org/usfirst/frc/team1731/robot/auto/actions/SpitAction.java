@@ -2,6 +2,7 @@ package org.usfirst.frc.team1731.robot.auto.actions;
 
 import org.usfirst.frc.team1731.robot.subsystems.Intake;
 import org.usfirst.frc.team1731.robot.subsystems.Intake.WantedState;
+import org.usfirst.frc.team1731.robot.subsystems.Superstructure;
 
 import edu.wpi.first.wpilibj.Timer;
 
@@ -13,6 +14,7 @@ import edu.wpi.first.wpilibj.Timer;
 public class SpitAction implements Action {
 
     Intake mIntake = Intake.getInstance();
+    Superstructure mSuperstructure = Superstructure.getInstance();
     double startTime;
     boolean runIntake;
 
@@ -27,7 +29,7 @@ public class SpitAction implements Action {
     @Override
     public boolean isFinished() {
         if (runIntake) {
-            return Timer.getFPGATimestamp() - startTime > 0.25;
+            return Timer.getFPGATimestamp() - startTime > 1.0;
         } else {
             return true;
         }
@@ -48,6 +50,8 @@ public class SpitAction implements Action {
     public void start() {
     	runIntake = true;
         startTime = Timer.getFPGATimestamp();
-        mIntake.setWantedState(WantedState.SPITTING);
+        //mIntake.setWantedState(WantedState.SPITTING);
+        //mSuperstructure.setWantedElevatorPosition(0);
+        mSuperstructure.setWantedState(Superstructure.WantedState.SPITTING);
     }
 }

@@ -142,13 +142,13 @@ public class Intake extends Subsystem {
 
 		private SystemState handleIntaking() {
             if (gotCube()) {
-            	Pinchers.set(DoubleSolenoid.Value.kReverse);
-                mVictor1.set(ControlMode.PercentOutput, -1);
-                mVictor2.set(ControlMode.PercentOutput, -1);
-            }else {
+            	Pinchers.set(DoubleSolenoid.Value.kForward);
                 mVictor1.set(ControlMode.PercentOutput, 0);
                 mVictor2.set(ControlMode.PercentOutput, 0);
-            	Pinchers.set(DoubleSolenoid.Value.kForward); 
+            }else {
+                mVictor1.set(ControlMode.PercentOutput, -1);
+                mVictor2.set(ControlMode.PercentOutput, -1);
+            	Pinchers.set(DoubleSolenoid.Value.kReverse); 
 //                mHaveCube = true;
             }
     		return defaultStateTransfer();
@@ -221,7 +221,7 @@ public class Intake extends Subsystem {
     }
     
     public boolean gotCube() {
-    	 return (mIRSensor.getAverageValue() < 400); 
+    	 return (mIRSensor.getAverageValue() > 400); 
     }
 
 }

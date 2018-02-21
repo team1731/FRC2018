@@ -22,12 +22,15 @@ public class MiddleRightPutCubeOnRightSwitch extends AutoModeBase {
 
     @Override
     protected void routine() throws AutoModeEndedException {
-    	System.out.println("Path is not set yet");
-    	/*
-    	PathContainer straightPath = new MiddleLeftToLeftSwitch();
-    	runAction(new ResetPoseFromPathAction(straightPath));
-    	runAction(new DrivePathAction(straightPath));
-    	runAction(new WaitAction(1));
-    	*/
+    	System.out.println("Executing MiddleRightPutCubeOnRightSwitch ");
+    	PathContainer Path = new MiddleToRightSwitch();
+    	runAction(new ResetPoseFromPathAction(Path));
+        runAction(new ParallelAction(Arrays.asList(new Action[] {
+        		new RotateIntakeActionUp(false),
+        		new DrivePathAction(Path),
+        })));
+
+    	runAction(new SpitAction());
+    	
     }
 }

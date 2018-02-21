@@ -14,7 +14,7 @@ import org.usfirst.frc.team1731.robot.auto.actions.EndShootingAction;
 import org.usfirst.frc.team1731.robot.auto.actions.ParallelAction;
 import org.usfirst.frc.team1731.robot.auto.actions.PickUpAction;
 import org.usfirst.frc.team1731.robot.auto.actions.ResetPoseFromPathAction;
-import org.usfirst.frc.team1731.robot.auto.actions.RotateIntakeAction;
+import org.usfirst.frc.team1731.robot.auto.actions.RotateIntakeActionUp;
 import org.usfirst.frc.team1731.robot.auto.actions.SpitAction;
 import org.usfirst.frc.team1731.robot.auto.actions.WaitAction;
 import org.usfirst.frc.team1731.robot.paths.*;
@@ -28,6 +28,7 @@ public class TestAuto extends AutoModeBase {
 
     @Override
     protected void routine() throws AutoModeEndedException {
+        System.out.println("Executing TestAuto");
         runAction(new WaitAction(2));
         PathContainer autoPath = new PatrickPath();
         runAction(new ResetPoseFromPathAction(autoPath));
@@ -36,7 +37,7 @@ public class TestAuto extends AutoModeBase {
         runAction(new PickUpAction());
         runAction(new ParallelAction(Arrays.asList(new Action[] {
         		new ElevatorUp(), 
-        		new RotateIntakeAction()
+        		new RotateIntakeActionUp()
         })));
         runAction(new SpitAction());
         runAction(new ElevatorHome());

@@ -9,29 +9,29 @@ import org.usfirst.frc.team1731.lib.util.math.Translation2d;
 import org.usfirst.frc.team1731.robot.paths.PathBuilder.Waypoint;
 import org.usfirst.frc.team1731.robot.paths.PathContainer;
 
-public class _4_FarSwitch_Back implements PathContainer {
+public class Right3rdCubePickup implements PathContainer {
     
     @Override
     public Path buildPath() {
         ArrayList<Waypoint> sWaypoints = new ArrayList<Waypoint>();
-        sWaypoints.add(new Waypoint(20,50,0,0));
-        sWaypoints.add(new Waypoint(230,50,40,60));
-        sWaypoints.add(new Waypoint(230,220,10,60));
-        sWaypoints.add(new Waypoint(215,220,5,20));
+        sWaypoints.add(new Waypoint(255,90,0,0));  
+        sWaypoints.add(new Waypoint(245,108,0,30));
+        sWaypoints.add(new Waypoint(220,120,0,30));
+
 
         return PathBuilder.buildPathFromWaypoints(sWaypoints);
     }
     
     @Override
     public RigidTransform2d getStartPose() {
-        return new RigidTransform2d(new Translation2d(20, 50), Rotation2d.fromDegrees(180.0)); 
+        return new RigidTransform2d(new Translation2d(280, 70), Rotation2d.fromDegrees(0.0)); 
     }
 
     @Override
     public boolean isReversed() {
         return false; 
     }
-	// WAYPOINT_DATA: [{"position":{"x":20,"y":50},"speed":0,"radius":0,"comment":""},{"position":{"x":230,"y":50},"speed":60,"radius":40,"comment":""},{"position":{"x":230,"y":220},"speed":60,"radius":10,"comment":""},{"position":{"x":215,"y":220},"speed":20,"radius":5,"comment":""}]
+	// WAYPOINT_DATA: [{"position":{"x":280,"y":70},"speed":0,"radius":0,"comment":""},{"position":{"x":220,"y":85},"speed":30,"radius":0,"comment":""}]
 	// IS_REVERSED: false
-	// FILE_NAME: _4_FarSwitch_Back
+	// FILE_NAME: RightScaleToRightSwitch
 }
