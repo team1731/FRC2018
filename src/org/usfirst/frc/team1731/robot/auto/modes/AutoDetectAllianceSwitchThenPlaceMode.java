@@ -46,13 +46,13 @@ public class AutoDetectAllianceSwitchThenPlaceMode  {
         switch(startingPos){
         	case LEFT:
         		if(gameData.charAt(0) == 'L' && gameData.charAt(1) == 'L') {
-        			selectedAutoMode = new LeftPutCubeOnLeftSwitchAndLeftScale();
+        			selectedAutoMode = new LeftPutCubeOnLeftScaleAndLeftSwitch();
         		} else if(gameData.charAt(0) == 'L' && gameData.charAt(1) == 'R') {
-        			selectedAutoMode = isAllianceTrustworthy ? new LeftPutCubeOnLeftSwitch() : new LeftPutCubeOnLeftSwitchAndRightScale();
+        			selectedAutoMode =  new LeftPutCubeOnLeftSwitch(); 
         		} else if(gameData.charAt(0) == 'R' && gameData.charAt(1) == 'R') {
-        			selectedAutoMode = isAllianceTrustworthy ? new LeftPutCubeOnRightScale() : new LeftPutCubeOnRightSwitch();
+        			selectedAutoMode = new LeftPutCubeOnRightScaleAndRightSwitch();
         		} else if(gameData.charAt(0) == 'R' && gameData.charAt(1) == 'L') {
-        			selectedAutoMode = isAllianceTrustworthy ? new LeftPutCubeOnLeftScale() : new LeftPutCubeOnRightSwitchAndLeftScale();
+        			selectedAutoMode = isAllianceTrustworthy ? new LeftPutCubeOnLeftScale() : new LeftPutCubeOnLeftScaleAndRightSwitch();
         		}
         	break;
  /*       	case MIDDLELEFT:
@@ -74,7 +74,7 @@ public class AutoDetectAllianceSwitchThenPlaceMode  {
         		if(gameData.charAt(0) == 'R' && gameData.charAt(1) == 'R') {
         			selectedAutoMode = new RightPutCubeOnRightScaleAndRightSwitch();
         		} else if(gameData.charAt(0) == 'R' && gameData.charAt(1) == 'L') {
-        			selectedAutoMode = new RightPutCubeOnRightSwitchAndLeftScale();
+        			selectedAutoMode = new RightPutCubeOnRightSwitch();
         		} else if(gameData.charAt(0) == 'L' && gameData.charAt(1) == 'L') {
         			selectedAutoMode =  new RightPutCubeOnLeftScaleAndLeftSwitch();
         		} else if(gameData.charAt(0) == 'L' && gameData.charAt(1) == 'R') {

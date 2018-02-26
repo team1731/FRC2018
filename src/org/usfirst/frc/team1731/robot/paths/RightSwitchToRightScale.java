@@ -14,8 +14,8 @@ public class RightSwitchToRightScale implements PathContainer {
     @Override
     public Path buildPath() {
         ArrayList<Waypoint> sWaypoints = new ArrayList<Waypoint>();
-        sWaypoints.add(new Waypoint(229,104,0,0));
-        sWaypoints.add(new Waypoint(285,94,0,20));
+        sWaypoints.add(new Waypoint(229,93,0,0));
+        sWaypoints.add(new Waypoint(284,91,0,20));
         
         return PathBuilder.buildPathFromWaypoints(sWaypoints);
     }

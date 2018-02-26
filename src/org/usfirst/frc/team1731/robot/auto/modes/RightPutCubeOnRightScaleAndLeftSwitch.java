@@ -22,7 +22,7 @@ public class RightPutCubeOnRightScaleAndLeftSwitch extends AutoModeBase {
 
     @Override
     protected void routine() throws AutoModeEndedException {
-    	System.out.println("Executing RightPutCubeOnLeftSwtichAndrightScale");
+    	System.out.println("Executing RightPutCubeOnRightScaleAndLeftSwitch");
     	
     	PathContainer Path = new RightToRightScale();
     	runAction(new ResetPoseFromPathAction(Path));

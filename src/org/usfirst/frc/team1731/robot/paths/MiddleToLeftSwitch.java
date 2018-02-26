@@ -13,10 +13,10 @@ public class MiddleToLeftSwitch implements PathContainer {
 	  @Override
 	    public Path buildPath() {
 	        ArrayList<Waypoint> sWaypoints = new ArrayList<Waypoint>();
-	        sWaypoints.add(new Waypoint(21,150,0,0));
-	        sWaypoints.add(new Waypoint(33,150,10,60));
-	        sWaypoints.add(new Waypoint(70,215,20,60));
-	        sWaypoints.add(new Waypoint(124,215,0,30));
+	        sWaypoints.add(new Waypoint(19,157,0,0));
+	        sWaypoints.add(new Waypoint(31,157,10,60));
+	        sWaypoints.add(new Waypoint(68,222,20,60));
+	        sWaypoints.add(new Waypoint(122,222,0,30));
 
 	        return PathBuilder.buildPathFromWaypoints(sWaypoints);
 	    }

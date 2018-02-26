@@ -14,8 +14,8 @@ public class DriveToScoreSwitchRight implements PathContainer {
     @Override
     public Path buildPath() {
         ArrayList<Waypoint> sWaypoints = new ArrayList<Waypoint>();
-        sWaypoints.add(new Waypoint(229,104,0,0));
-        sWaypoints.add(new Waypoint(217,104,0,60));
+        sWaypoints.add(new Waypoint(229,93,0,0));
+        sWaypoints.add(new Waypoint(216,101,0,60));
 
 
         return PathBuilder.buildPathFromWaypoints(sWaypoints);

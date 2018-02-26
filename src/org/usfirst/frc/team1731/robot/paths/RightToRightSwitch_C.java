@@ -14,8 +14,8 @@ public class RightToRightSwitch_C implements PathContainer {
     @Override
     public Path buildPath() {
         ArrayList<Waypoint> sWaypoints = new ArrayList<Waypoint>();
-        sWaypoints.add(new Waypoint(180,65,0,0));
-        sWaypoints.add(new Waypoint(270,75,0,40));
+        sWaypoints.add(new Waypoint(168,69,0,0));
+        sWaypoints.add(new Waypoint(234,30,0,80));
 
 
         return PathBuilder.buildPathFromWaypoints(sWaypoints);

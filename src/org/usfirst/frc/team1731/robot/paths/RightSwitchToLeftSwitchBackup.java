@@ -14,8 +14,8 @@ public class RightSwitchToLeftSwitchBackup implements PathContainer {
     @Override
     public Path buildPath() {
         ArrayList<Waypoint> sWaypoints = new ArrayList<Waypoint>();
-        sWaypoints.add(new Waypoint(234,96,0,0));
-        sWaypoints.add(new Waypoint(250,80,0,60));
+        sWaypoints.add(new Waypoint(229,93,0,0));
+        sWaypoints.add(new Waypoint(249,77,0,60));
         
         return PathBuilder.buildPathFromWaypoints(sWaypoints);
     }

@@ -9,18 +9,18 @@ import org.usfirst.frc.team1731.lib.util.math.Translation2d;
 import org.usfirst.frc.team1731.robot.paths.PathBuilder.Waypoint;
 import org.usfirst.frc.team1731.robot.paths.PathContainer;
 
-public class RightSwitchToLeftSwitch implements PathContainer {
+public class LeftSwitchToRightSwitch2 implements PathContainer {
     
     @Override
     public Path buildPath() {
         ArrayList<Waypoint> sWaypoints = new ArrayList<Waypoint>();
-        sWaypoints.add(new Waypoint(249,77,0,0));
-        sWaypoints.add(new Waypoint(249,116,0,100));
-        sWaypoints.add(new Waypoint(249,257,10,100));
-        sWaypoints.add(new Waypoint(219,297,10,80));
-        sWaypoints.add(new Waypoint(169,297,10,80));
+        sWaypoints.add(new Waypoint(249,247,0,0));
+        sWaypoints.add(new Waypoint(249,208,0,100));
+        sWaypoints.add(new Waypoint(249,67,10,100));
+        sWaypoints.add(new Waypoint(219,27,10,80));
+        sWaypoints.add(new Waypoint(169,27,10,80));
     //    sWaypoints.add(new Waypoint(165,290,0,50));
-        sWaypoints.add(new Waypoint(164,265,0,60));
+        sWaypoints.add(new Waypoint(164,59,0,60));
         
 
         return PathBuilder.buildPathFromWaypoints(sWaypoints);
@@ -28,7 +28,7 @@ public class RightSwitchToLeftSwitch implements PathContainer {
     
     @Override
     public RigidTransform2d getStartPose() {
-        return new RigidTransform2d(new Translation2d(220, 90), Rotation2d.fromDegrees(0)); 
+        return new RigidTransform2d(new Translation2d(249, 247), Rotation2d.fromDegrees(0)); 
     }
 
     @Override

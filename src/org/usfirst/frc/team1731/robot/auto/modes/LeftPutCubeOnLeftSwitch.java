@@ -7,7 +7,6 @@ import org.usfirst.frc.team1731.robot.auto.AutoModeBase;
 import org.usfirst.frc.team1731.robot.auto.AutoModeEndedException;
 import org.usfirst.frc.team1731.robot.auto.actions.*;
 import org.usfirst.frc.team1731.robot.paths.*;
-import org.usfirst.frc.team1731.robot.paths.profiles.PathAdapter;
 
 import edu.wpi.first.wpilibj.Timer;
 
@@ -23,14 +22,33 @@ public class LeftPutCubeOnLeftSwitch extends AutoModeBase {
 
     @Override
     protected void routine() throws AutoModeEndedException {
-    	System.out.println("Executing LeftPutCubeOnLeftSwitchAndLeftScale ");
-    	/*
-    	PathContainer straightPath = new LeftToLeftSwitch();
-    	runAction(new ResetPoseFromPathAction(straightPath));
-    	runAction(new DrivePathAction(straightPath));
-    	runAction(new WaitAction(1));
-    	//Run a parallel action to prepare the cube to drop while driving, then drop it
-    	 * 
-    	 */
+    	System.out.println("Executing LeftPutCubeOnLeftSwitch");
+    	PathContainer Path = new LeftToLeftSwitch_A2();
+    	runAction(new ResetPoseFromPathAction(Path));
+        runAction(new ParallelAction(Arrays.asList(new Action[] {
+        		new RotateIntakeActionUp(false), //stay down
+        		new DrivePathAction(Path)
+        })));
+        
+        //drive forward and spit
+    	Path = new LeftToLeftSwitch_B2();
+    	runAction(new DrivePathAction(Path));
+    	runAction(new SpitAction());
+    	    	
+    	//back up
+    	Path = new LeftToLeftSwitch_C2();
+    	runAction(new DrivePathAction(Path));
+
+    	//drive forward and pick up
+    	Path = new LeftToLeftSwitch_D2();
+    	runAction(new ParallelAction(Arrays.asList(new Action[] {
+        		new PickUpAction(), 
+        		new DrivePathAction(Path)
+        })));
+  
+    	Path = new LeftToLeftSwitch_E2();; 
+        runAction(new DrivePathAction(Path));
+		runAction(new SetElevatorPostition());
+        runAction(new SpitAction()); 
     }
 }

@@ -18,18 +18,18 @@ import edu.wpi.first.wpilibj.Timer;
  * 
  * @see AutoModeBase
  */
-public class LeftPutCubeOnLeftScale extends AutoModeBase {
+public class LeftPutCubeOnLeftScaleAndLeftSwitch extends AutoModeBase {
 
     @Override
     protected void routine() throws AutoModeEndedException {
-    	System.out.println("Executing LeftPutCubeOnLeftScale");
+    	System.out.println("executing LeftPutCubeOnLeftScaleAndLeftSwitch");
     	
     	PathContainer Path = new LeftToLeftScale2();
     	runAction(new ResetPoseFromPathAction(Path));
         runAction(new ParallelAction(Arrays.asList(new Action[] {
         		new ElevatorUp(), 
         		new RotateIntakeActionUp(),
-        		new DrivePathAction(Path)
+        		new DrivePathAction(Path),
         })));
 
     	runAction(new SpitAction());
@@ -37,17 +37,38 @@ public class LeftPutCubeOnLeftScale extends AutoModeBase {
         runAction(new ParallelAction(Arrays.asList(new Action[] {
         		new PickUpAction(), 
         		new DrivePathAction(Path)
+        		
         })));
   
-    	Path = new LeftSwitchToLeftScale2();
+    	Path = new DriveToScoreSwitchLeft2();
+		runAction(new DrivePathAction(Path));
+		runAction(new SetElevatorPostition());
+        runAction(new SpitAction()); 
+        // approx 10 sec. to here
+
+    	Path = new Left3rdCubeBackup2();
+        runAction(new ParallelAction(Arrays.asList(new Action[] { 
+        		new RotateIntakeActionUp(false),
+        		//new ElevatorDown(),
+        		new DrivePathAction(Path)
+        })));
+        
+    	Path = new Left3rdCubePickup2();
+        runAction(new ParallelAction(Arrays.asList(new Action[] {
+        		new PickUpAction(), 
+        		new DrivePathAction(Path)
+        		
+        })));
+        
+    	Path = new Left3rdCubeScore2();
         runAction(new ParallelAction(Arrays.asList(new Action[] {
         		new ElevatorUp(), 
         		new RotateIntakeActionUp(),
-        		new DrivePathAction(Path)
+        		new DrivePathAction(Path),
+        		new WaitAction(2)
+        		
         })));
-        runAction(new SpitAction()); 
 
-    	runAction(new WaitAction(1));
-    	
+    	runAction(new SpitAction());
     }
 }

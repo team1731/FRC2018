@@ -14,9 +14,9 @@ public class Right3rdCubePickup implements PathContainer {
     @Override
     public Path buildPath() {
         ArrayList<Waypoint> sWaypoints = new ArrayList<Waypoint>();
-        sWaypoints.add(new Waypoint(255,90,0,0));  
-        sWaypoints.add(new Waypoint(245,108,0,30));
-        sWaypoints.add(new Waypoint(220,120,0,30));
+        sWaypoints.add(new Waypoint(254,87,0,0));  
+        sWaypoints.add(new Waypoint(244,105,0,60));
+        sWaypoints.add(new Waypoint(219,117,0,60));
 
 
         return PathBuilder.buildPathFromWaypoints(sWaypoints);

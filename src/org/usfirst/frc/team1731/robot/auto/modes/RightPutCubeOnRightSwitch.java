@@ -18,36 +18,36 @@ import edu.wpi.first.wpilibj.Timer;
  * 
  * @see AutoModeBase
  */
-public class LeftPutCubeOnLeftScale extends AutoModeBase {
+public class RightPutCubeOnRightSwitch extends AutoModeBase {
 
     @Override
     protected void routine() throws AutoModeEndedException {
-    	System.out.println("Executing LeftPutCubeOnLeftScale");
-    	
-    	PathContainer Path = new LeftToLeftScale2();
+    	System.out.println("Executing PutCubeOnrightSwitch");
+    	PathContainer Path = new RightToRightSwitch_A();
     	runAction(new ResetPoseFromPathAction(Path));
         runAction(new ParallelAction(Arrays.asList(new Action[] {
-        		new ElevatorUp(), 
-        		new RotateIntakeActionUp(),
+        		new RotateIntakeActionUp(false), //stay down
         		new DrivePathAction(Path)
         })));
-
+        
+        //drive forward and spit
+    	Path = new RightToRightSwitch_B();
+    	runAction(new DrivePathAction(Path));
     	runAction(new SpitAction());
-    	Path = new LeftScaleToLeftSwitch2();
-        runAction(new ParallelAction(Arrays.asList(new Action[] {
+    	    	
+    	//back up
+    	Path = new RightToRightSwitch_C();
+    	runAction(new DrivePathAction(Path));
+
+    	//drive forward and pick up
+    	Path = new RightToRightSwitch_D();
+    	runAction(new ParallelAction(Arrays.asList(new Action[] {
         		new PickUpAction(), 
         		new DrivePathAction(Path)
         })));
   
-    	Path = new LeftSwitchToLeftScale2();
-        runAction(new ParallelAction(Arrays.asList(new Action[] {
-        		new ElevatorUp(), 
-        		new RotateIntakeActionUp(),
-        		new DrivePathAction(Path)
-        })));
-        runAction(new SpitAction()); 
+    	Path = new RightToRightSwitch_E();
 
-    	runAction(new WaitAction(1));
-    	
+        
     }
 }

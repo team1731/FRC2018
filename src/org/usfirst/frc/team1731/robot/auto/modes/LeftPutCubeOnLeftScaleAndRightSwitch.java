@@ -18,40 +18,45 @@ import edu.wpi.first.wpilibj.Timer;
  * 
  * @see AutoModeBase
  */
-public class RightPutCubeOnRightSwitchAndLeftScale extends AutoModeBase {
+public class LeftPutCubeOnLeftScaleAndRightSwitch extends AutoModeBase {
 
     @Override
     protected void routine() throws AutoModeEndedException {
-    	System.out.println("Executing PutCubeOnrightSwitchAndLeftScale");
-    	PathContainer Path = new RightToRightSwitch_A();
+    	System.out.println("Executing LeftPutCubeOnLeftScaleAndRightSwitch");
+    	
+    	PathContainer Path = new LeftToLeftScale2();
     	runAction(new ResetPoseFromPathAction(Path));
-        runAction(new ParallelAction(Arrays.asList(new Action[] {
-        		new RotateIntakeActionUp(false), //stay down
-        		new DrivePathAction(Path)
-        })));
-        
-        //drive forward and spit
-    	Path = new RightToRightSwitch_B();
-    	runAction(new DrivePathAction(Path));
-    	runAction(new SpitAction());
-    	    	
-    	//back up
-    	Path = new RightToRightSwitch_C();
-    	runAction(new DrivePathAction(Path));
-
-    	//drive forward and pick up
-    	Path = new RightToRightSwitch_D();
-    	runAction(new ParallelAction(Arrays.asList(new Action[] {
-        		new PickUpAction(), 
-        		new DrivePathAction(Path)
-        })));
-  
-    	Path = new RightSwitchToLeftScale();
         runAction(new ParallelAction(Arrays.asList(new Action[] {
         		new ElevatorUp(), 
         		new RotateIntakeActionUp(),
         		new DrivePathAction(Path)
+        		 //       		new SeriesAction (Arrays.asList(new Action[] {
+        		 //               		new WaitForPathMarkerAction("spit"), 
+        		 //               		new SpitAction()
+        		 //       		}))
+        })));
+
+    	runAction(new SpitAction());
+    	Path = new LeftScaleToLeftSwitch2();
+        runAction(new ParallelAction(Arrays.asList(new Action[] {
+        		new PickUpAction(), 
+        		new DrivePathAction(Path)
+        })));
+        
+    	Path = new LeftSwitchToRightSwitchBackup2();
+        runAction(new ParallelAction(Arrays.asList(new Action[] { 
+        		new RotateIntakeActionUp(false),
+        		new DrivePathAction(Path)
+        })));
+        
+    	Path = new LeftSwitchToRightSwitch2();
+        runAction(new ParallelAction(Arrays.asList(new Action[] { 
+        		new RotateIntakeActionUp(false),
+        		new DrivePathAction(Path)
         })));
         runAction(new SpitAction()); 
+
+    	runAction(new WaitAction(1));
+    	
     }
 }

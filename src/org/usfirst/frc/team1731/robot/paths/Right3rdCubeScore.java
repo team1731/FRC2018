@@ -14,9 +14,9 @@ public class Right3rdCubeScore implements PathContainer {
     @Override
     public Path buildPath() {
         ArrayList<Waypoint> sWaypoints = new ArrayList<Waypoint>();
-        sWaypoints.add(new Waypoint(225,115,0,0));
-        sWaypoints.add(new Waypoint(250,97,0,60));
-        sWaypoints.add(new Waypoint(285,97,0,40));
+        sWaypoints.add(new Waypoint(219,117,0,0));
+        sWaypoints.add(new Waypoint(249,94,0,60));
+        sWaypoints.add(new Waypoint(284,94,0,40));
         
         return PathBuilder.buildPathFromWaypoints(sWaypoints);
     }

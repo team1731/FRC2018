@@ -9,28 +9,28 @@ import org.usfirst.frc.team1731.lib.util.math.Translation2d;
 import org.usfirst.frc.team1731.robot.paths.PathBuilder.Waypoint;
 import org.usfirst.frc.team1731.robot.paths.PathContainer;
 
-public class _4_NearSwitch_Side implements PathContainer {
+public class LeftToLeftSwitch_B2 implements PathContainer {
     
     @Override
     public Path buildPath() {
         ArrayList<Waypoint> sWaypoints = new ArrayList<Waypoint>();
-        sWaypoints.add(new Waypoint(20,50,0,0));
-        sWaypoints.add(new Waypoint(165,50,10,60));
-        sWaypoints.add(new Waypoint(165,60,0,30));
+        sWaypoints.add(new Waypoint(180,294,0,0));
+        sWaypoints.add(new Waypoint(168,274,10,80));
+        sWaypoints.add(new Waypoint(168,255,0,40));
 
         return PathBuilder.buildPathFromWaypoints(sWaypoints);
     }
     
     @Override
     public RigidTransform2d getStartPose() {
-        return new RigidTransform2d(new Translation2d(20, 50), Rotation2d.fromDegrees(0.0)); 
+        return new RigidTransform2d(new Translation2d(180, 294), Rotation2d.fromDegrees(0.0)); 
     }
 
     @Override
     public boolean isReversed() {
         return false; 
     }
-	// WAYPOINT_DATA: [{"position":{"x":20,"y":50},"speed":0,"radius":0,"comment":""},{"position":{"x":165,"y":50},"speed":60,"radius":30,"comment":""},{"position":{"x":165,"y":60},"speed":30,"radius":10,"comment":""},{"position":{"x":165,"y":70},"speed":0,"radius":5,"comment":""}]
-	// IS_REVERSED: false
-	// FILE_NAME: _4_NearSwitch_Side
+	// WAYPOINT_DATA: [{"position":{"x":20,"y":50},"speed":0,"radius":0,"comment":""},{"position":{"x":210,"y":50},"speed":110,"radius":30,"comment":""},{"position":{"x":200,"y":60},"speed":30,"radius":0,"comment":""}]
+	// IS_REVERSED: true
+	// FILE_NAME: RightToRightSwitch_A
 }

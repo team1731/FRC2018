@@ -9,14 +9,14 @@ import org.usfirst.frc.team1731.lib.util.math.Translation2d;
 import org.usfirst.frc.team1731.robot.paths.PathBuilder.Waypoint;
 import org.usfirst.frc.team1731.robot.paths.PathContainer;
 
-public class LeftScaleToLeftSwitch implements PathContainer {
+public class RightScaleToRightSwitch2 implements PathContainer {
     
     @Override
     public Path buildPath() {
         ArrayList<Waypoint> sWaypoints = new ArrayList<Waypoint>();
-        sWaypoints.add(new Waypoint(286,252,0,0));
-        sWaypoints.add(new Waypoint(249,252,10,50));
-        sWaypoints.add(new Waypoint(224,227,0,50));
+        sWaypoints.add(new Waypoint(286,72,0,0));
+        sWaypoints.add(new Waypoint(249,72,10,50));
+        sWaypoints.add(new Waypoint(224,97,0,50));
 
 
 
@@ -25,7 +25,7 @@ public class LeftScaleToLeftSwitch implements PathContainer {
     
     @Override
     public RigidTransform2d getStartPose() {
-        return new RigidTransform2d(new Translation2d(280, 70), Rotation2d.fromDegrees(0.0)); 
+        return new RigidTransform2d(new Translation2d(286, 72), Rotation2d.fromDegrees(0.0)); 
     }
 
     @Override
