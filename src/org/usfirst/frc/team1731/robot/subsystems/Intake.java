@@ -44,14 +44,16 @@ public class Intake extends Subsystem {
 
     private VictorSPX mVictor1;
     private VictorSPX mVictor2;
-    private AnalogInput mIRSensor;
+    private AnalogInput mIRSensor1;
+    private AnalogInput mIRSensor2;
 
 
 
     private Intake() {
     	mVictor1 = new VictorSPX(Constants.kIntakeVictor1);
     	mVictor2 = new VictorSPX(Constants.kIntakeVictor2);
-    	mIRSensor = new AnalogInput(1);
+    	mIRSensor1 = new AnalogInput(1);
+    	mIRSensor1 = new AnalogInput(2);
     }
 
 
@@ -196,8 +198,8 @@ public class Intake extends Subsystem {
 
     @Override
     public void outputToSmartDashboard() {
-    	SmartDashboard.putNumber("IRSensor avg voltage", mIRSensor.getAverageVoltage());
-    	SmartDashboard.putNumber("IRSensor", mIRSensor.getAverageValue());
+    	SmartDashboard.putNumber("IRSensor1", mIRSensor1.getAverageValue());
+    	SmartDashboard.putNumber("IRSensor2", mIRSensor2.getAverageValue());
      /*   SmartDashboard.putNumber("ElevWantPos", mWantedState);
         SmartDashboard.putNumber("ElevCurPos", mTalon.getSelectedSensorPosition(0));
         SmartDashboard.putNumber("ElevQuadPos", mTalon.getSensorCollection().getQuadraturePosition());
@@ -221,7 +223,7 @@ public class Intake extends Subsystem {
     }
     
     public boolean gotCube() {
-    	 return (mIRSensor.getAverageValue() > 400); 
+    	 return ((mIRSensor1.getAverageValue() > 400) && (mIRSensor2.getAverageValue() >400)); 
     }
 
 }
