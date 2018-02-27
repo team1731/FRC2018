@@ -21,6 +21,23 @@ public class AutoDetectAllianceSwitchThenPlaceMode  {
 		RIGHT
 	}
 //	startingPositions startingPos = startingPositions.LEFT;
+	public static AutoModeBase intenseTrust(startingPositions startingPos) {
+		AutoModeBase selectedAutoMode = new StandStillMode();
+		
+		switch(startingPos){
+			case LEFT:
+				selectedAutoMode = new DriveForwardFromLeftMode();
+			break;
+			case MIDDLERIGHT:
+				selectedAutoMode = new DriveForwardFromMiddleMode();
+			break;
+			case RIGHT:
+				selectedAutoMode = new DriveForwardFromRightMode();
+			break;
+		}
+		
+		return selectedAutoMode;
+	}
 	
     public static AutoModeBase pickAutoMode(startingPositions startingPos, boolean isAllianceTrustworthy)  {
     	String gameData = null;

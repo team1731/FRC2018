@@ -7,7 +7,7 @@ import org.usfirst.frc.team1731.robot.subsystems.Superstructure;
 import edu.wpi.first.wpilibj.Timer;
 
 /**
- * Deploys the elevator up action
+ * Deploys the elevator down action
  * 
  * @see Action
  */

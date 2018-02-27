@@ -122,6 +122,7 @@ public class Robot extends IterativeRobot {
             
             autoChooser = new SendableChooser();
             autoChooser.addDefault("Score Cubes", "ScoreCubes");
+            autoChooser.addObject("Drive and do nothing", "DriveOnly");
             autoChooser.addObject("Do Nothing", new StandStillMode());
             autoChooser.addObject("Test", new TestAuto());
             SmartDashboard.putData("Autonomous Mode", autoChooser);
@@ -197,7 +198,9 @@ public class Robot extends IterativeRobot {
 
             if (autoChooser.getSelected().equals("ScoreCubes")) {
             	autoModeToExecute = AutoDetectAllianceSwitchThenPlaceMode.pickAutoMode((AutoDetectAllianceSwitchThenPlaceMode.startingPositions.valueOf(startingPosition.getSelected().toString())) ,(boolean) areTeammatesCool.getSelected());
-            		
+            
+            } else if(autoChooser.getSelected().equals("DriveOnly")) {
+            	autoModeToExecute = AutoDetectAllianceSwitchThenPlaceMode.intenseTrust(AutoDetectAllianceSwitchThenPlaceMode.startingPositions.valueOf(startingPosition.getSelected().toString()));
             } else 
             	autoModeToExecute = (AutoModeBase) autoChooser.getSelected();
             

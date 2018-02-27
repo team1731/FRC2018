@@ -22,7 +22,7 @@ public class MiddleRightPutInExchange extends AutoModeBase {
 
     @Override
     protected void routine() throws AutoModeEndedException {
-    	System.out.println("Executing MiddleRightPutInExchange");
+    	System.out.println("This mode is disabled!");
     	/*
     	PathContainer straightPath = new MiddleLeftToLeftSwitch();
     	runAction(new ResetPoseFromPathAction(straightPath));
