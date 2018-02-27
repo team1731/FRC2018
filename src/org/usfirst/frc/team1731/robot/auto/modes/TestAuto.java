@@ -2,6 +2,7 @@ package org.usfirst.frc.team1731.robot.auto.modes;
 
 import java.util.Arrays;
 
+import org.usfirst.frc.team1731.lib.util.math.Rotation2d;
 import org.usfirst.frc.team1731.robot.auto.AutoModeBase;
 import org.usfirst.frc.team1731.robot.auto.AutoModeEndedException;
 import org.usfirst.frc.team1731.robot.auto.actions.Action;
@@ -16,6 +17,7 @@ import org.usfirst.frc.team1731.robot.auto.actions.PickUpAction;
 import org.usfirst.frc.team1731.robot.auto.actions.ResetPoseFromPathAction;
 import org.usfirst.frc.team1731.robot.auto.actions.RotateIntakeActionUp;
 import org.usfirst.frc.team1731.robot.auto.actions.SpitAction;
+import org.usfirst.frc.team1731.robot.auto.actions.TurnToHeadingAction;
 import org.usfirst.frc.team1731.robot.auto.actions.WaitAction;
 import org.usfirst.frc.team1731.robot.paths.*;
 
@@ -29,19 +31,6 @@ public class TestAuto extends AutoModeBase {
     @Override
     protected void routine() throws AutoModeEndedException {
         System.out.println("Executing TestAuto");
-        runAction(new WaitAction(2));
-        PathContainer autoPath = new PatrickPath();
-        runAction(new ResetPoseFromPathAction(autoPath));
-        runAction(new DrivePathAction(autoPath));
-        runAction(new SpitAction());
-        runAction(new PickUpAction());
-        runAction(new ParallelAction(Arrays.asList(new Action[] {
-        		new ElevatorUp(), 
-        		new RotateIntakeActionUp()
-        })));
-        runAction(new SpitAction());
-        runAction(new ElevatorHome());
-        runAction(new WaitAction(15));
-
+        runAction(new TurnToHeadingAction(Rotation2d.fromDegrees(180.0)));
     }
 }

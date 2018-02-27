@@ -53,7 +53,7 @@ public class Intake extends Subsystem {
     	mVictor1 = new VictorSPX(Constants.kIntakeVictor1);
     	mVictor2 = new VictorSPX(Constants.kIntakeVictor2);
     	mIRSensor1 = new AnalogInput(1);
-    	mIRSensor1 = new AnalogInput(2);
+    	mIRSensor2 = new AnalogInput(4);
     }
 
 
