@@ -65,7 +65,7 @@ public class LeftPutCubeOnLeftScaleAndLeftSwitch extends AutoModeBase {
         		new ElevatorUp(), 
         		new RotateIntakeActionUp(),
         		new DrivePathAction(Path),
-        		new WaitAction(2)
+        		new WaitAction(1)
         		
         })));
 

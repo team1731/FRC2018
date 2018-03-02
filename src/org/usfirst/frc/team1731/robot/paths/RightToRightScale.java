@@ -16,15 +16,15 @@ public class RightToRightScale implements PathContainer {
         ArrayList<Waypoint> sWaypoints = new ArrayList<Waypoint>();
         sWaypoints.add(new Waypoint(19,47,0,0));
         sWaypoints.add(new Waypoint(199,47,40,110));
-        sWaypoints.add(new Waypoint(281,87,0,110,"spit"));     
-        sWaypoints.add(new Waypoint(284,87,0,110));
+        sWaypoints.add(new Waypoint(281,85,0,110,"spit"));     
+        sWaypoints.add(new Waypoint(285,83,0,110));
 
         return PathBuilder.buildPathFromWaypoints(sWaypoints);
     }
     
     @Override
     public RigidTransform2d getStartPose() {
-        return new RigidTransform2d(new Translation2d(25, 50), Rotation2d.fromDegrees(180.0)); 
+        return new RigidTransform2d(new Translation2d(19, 47), Rotation2d.fromDegrees(180.0)); 
     }
 
     @Override

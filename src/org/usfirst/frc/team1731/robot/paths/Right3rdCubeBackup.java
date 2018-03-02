@@ -14,15 +14,15 @@ public class Right3rdCubeBackup implements PathContainer {
     @Override
     public Path buildPath() {
         ArrayList<Waypoint> sWaypoints = new ArrayList<Waypoint>();
-        sWaypoints.add(new Waypoint(220,101,0,0));
-        sWaypoints.add(new Waypoint(254,87,0,60));
+        sWaypoints.add(new Waypoint(218,95,0,0));
+        sWaypoints.add(new Waypoint(274,87,0,60));
         
         return PathBuilder.buildPathFromWaypoints(sWaypoints);
     }
     
     @Override
     public RigidTransform2d getStartPose() {
-        return new RigidTransform2d(new Translation2d(220, 101), Rotation2d.fromDegrees(180.0)); 
+        return new RigidTransform2d(new Translation2d(218, 95), Rotation2d.fromDegrees(180.0)); 
     }
 
     @Override

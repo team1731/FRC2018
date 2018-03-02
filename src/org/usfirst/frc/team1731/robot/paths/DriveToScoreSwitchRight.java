@@ -14,8 +14,8 @@ public class DriveToScoreSwitchRight implements PathContainer {
     @Override
     public Path buildPath() {
         ArrayList<Waypoint> sWaypoints = new ArrayList<Waypoint>();
-        sWaypoints.add(new Waypoint(229,93,0,0));
-        sWaypoints.add(new Waypoint(220,101,0,60));
+        sWaypoints.add(new Waypoint(233,94,0,0));
+        sWaypoints.add(new Waypoint(218,95,0,60));
 
 
         return PathBuilder.buildPathFromWaypoints(sWaypoints);
@@ -23,7 +23,7 @@ public class DriveToScoreSwitchRight implements PathContainer {
     
     @Override
     public RigidTransform2d getStartPose() {
-        return new RigidTransform2d(new Translation2d(280, 70), Rotation2d.fromDegrees(0.0)); 
+        return new RigidTransform2d(new Translation2d(233, 94), Rotation2d.fromDegrees(0.0)); 
     }
 
     @Override

@@ -51,7 +51,7 @@ public class AutoDetectAllianceSwitchThenPlaceMode  {
             } catch (InterruptedException ie) {
                 // Just ignore the interrupted exception
             }
-            gameData = DriverStation.getInstance().getGameSpecificMessage();
+            gameData = DriverStation.getInstance().getGameSpecificMessage().trim();
         }
 
     	

@@ -14,7 +14,7 @@ public class Left3rdCubeScore2 implements PathContainer {
     @Override
     public Path buildPath() {
         ArrayList<Waypoint> sWaypoints = new ArrayList<Waypoint>();
-        sWaypoints.add(new Waypoint(219,207,0,0));
+        sWaypoints.add(new Waypoint(214,214,0,0));
         sWaypoints.add(new Waypoint(249,230,0,60));
         sWaypoints.add(new Waypoint(284,230,0,40));
         
@@ -23,7 +23,7 @@ public class Left3rdCubeScore2 implements PathContainer {
     
     @Override
     public RigidTransform2d getStartPose() {
-        return new RigidTransform2d(new Translation2d(219, 207), Rotation2d.fromDegrees(180.0)); 
+        return new RigidTransform2d(new Translation2d(214, 214), Rotation2d.fromDegrees(180.0)); 
     }
 
     @Override

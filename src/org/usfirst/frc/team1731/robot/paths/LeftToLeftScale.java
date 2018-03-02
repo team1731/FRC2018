@@ -13,17 +13,17 @@ public class LeftToLeftScale implements PathContainer {
     @Override
     public Path buildPath() {
         ArrayList<Waypoint> sWaypoints = new ArrayList<Waypoint>();
-        sWaypoints.add(new Waypoint(16,280,0,0)); //Left
-        sWaypoints.add(new Waypoint(200,290,0,60));
-        sWaypoints.add(new Waypoint(260,250,0,60));
-        sWaypoints.add(new Waypoint(280,245,0,60));
+        sWaypoints.add(new Waypoint(19,277,0,0)); //Left
+        sWaypoints.add(new Waypoint(199,277,40,110));
+        sWaypoints.add(new Waypoint(281,239,0,110));
+        sWaypoints.add(new Waypoint(285,241,0,110));
 
         return PathBuilder.buildPathFromWaypoints(sWaypoints);
     }
     
     @Override
     public RigidTransform2d getStartPose() {
-        return new RigidTransform2d(new Translation2d(16, 280), Rotation2d.fromDegrees(180.0)); 
+        return new RigidTransform2d(new Translation2d(19, 277), Rotation2d.fromDegrees(180.0)); 
     }
 
     @Override

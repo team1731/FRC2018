@@ -24,7 +24,7 @@ public class RightPutCubeOnRightScaleAndRightSwitch extends AutoModeBase {
     protected void routine() throws AutoModeEndedException {
     	System.out.println("executing RightPutCubeOnRightScaleAndRightSwitch");
     	
-    	PathContainer Path = new RightToRightScale();
+    	PathContainer Path = new RightToRightScale(); // PATH #1
     	runAction(new ResetPoseFromPathAction(Path));
         runAction(new ParallelAction(Arrays.asList(new Action[] {
         		new ElevatorUp(), 
@@ -32,43 +32,43 @@ public class RightPutCubeOnRightScaleAndRightSwitch extends AutoModeBase {
         		new DrivePathAction(Path),
         })));
 
-    	runAction(new SpitAction());
-    	Path = new RightScaleToRightSwitch();
+    	runAction(new SpitAction()); // SPIT #1
+    	Path = new RightScaleToRightSwitch(); // PATH #2
         runAction(new ParallelAction(Arrays.asList(new Action[] {
         		new PickUpAction(), 
         		new DrivePathAction(Path)
         		
         })));
   
-    	Path = new DriveToScoreSwitchRight();
+    	Path = new DriveToScoreSwitchRight(); // PATH #3
 		runAction(new DrivePathAction(Path));
 		runAction(new SetElevatorPostition());
-        runAction(new SpitAction()); 
+        runAction(new SpitAction()); // SPIT #2
         // approx 10 sec. to here
 
-    	Path = new Right3rdCubeBackup();
+    	Path = new Right3rdCubeBackup(); // PATH #4
         runAction(new ParallelAction(Arrays.asList(new Action[] { 
         		new RotateIntakeActionUp(false),
         		//new ElevatorDown(),
         		new DrivePathAction(Path)
         })));
         
-    	Path = new Right3rdCubePickup();
+        
+    	Path = new Right3rdCubePickup(); // PATH #5
         runAction(new ParallelAction(Arrays.asList(new Action[] {
         		new PickUpAction(), 
         		new DrivePathAction(Path)
-        		
         })));
         
-    	Path = new Right3rdCubeScore();
+    	Path = new Right3rdCubeScore(); // PATH #6
         runAction(new ParallelAction(Arrays.asList(new Action[] {
         		new ElevatorUp(), 
         		new RotateIntakeActionUp(),
         		new DrivePathAction(Path),
-        		new WaitAction(2)
+        		new WaitAction(1)
         		
         })));
 
-    	runAction(new SpitAction());
+    	runAction(new SpitAction()); // SPIT #3
     }
 }

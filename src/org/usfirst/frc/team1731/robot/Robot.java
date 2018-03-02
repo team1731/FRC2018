@@ -135,8 +135,8 @@ public class Robot extends IterativeRobot {
             SmartDashboard.putData("Starting Position", startingPosition);
             
             areTeammatesCool = new SendableChooser();
-            areTeammatesCool.addDefault("Be cautious", false);
-            areTeammatesCool.addObject("It's fine", true);
+            areTeammatesCool.addDefault("Be cautious (A)", false);
+            areTeammatesCool.addObject("It's fine (B)", true);
             SmartDashboard.putData("How should I react?", areTeammatesCool);
             
  //           AutoModeSelector.initAutoModeSelector();
