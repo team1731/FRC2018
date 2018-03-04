@@ -14,8 +14,8 @@ public class DriveToScoreSwitchLeft2 implements PathContainer {
     @Override
     public Path buildPath() {
         ArrayList<Waypoint> sWaypoints = new ArrayList<Waypoint>();
-        sWaypoints.add(new Waypoint(229,231,0,0));
-        sWaypoints.add(new Waypoint(216,223,0,60));
+        sWaypoints.add(new Waypoint(233,230,0,0));
+        sWaypoints.add(new Waypoint(218,229,0,60));
 
 
         return PathBuilder.buildPathFromWaypoints(sWaypoints);
@@ -23,14 +23,14 @@ public class DriveToScoreSwitchLeft2 implements PathContainer {
     
     @Override
     public RigidTransform2d getStartPose() {
-        return new RigidTransform2d(new Translation2d(229, 231), Rotation2d.fromDegrees(0.0)); 
+        return new RigidTransform2d(new Translation2d(233, 230), Rotation2d.fromDegrees(0.0)); 
     }
 
     @Override
     public boolean isReversed() {
         return false; 
     }
-	// WAYPOINT_DATA: [{"position":{"x":280,"y":70},"speed":0,"radius":0,"comment":""},{"position":{"x":220,"y":85},"speed":30,"radius":0,"comment":""}]
+	// WAYPOINT_DATA: [{"position":{"x":229,"y":231},"speed":0,"radius":0,"comment":""},{"position":{"x":216,"y":223},"speed":60,"radius":0,"comment":""}]
 	// IS_REVERSED: false
-	// FILE_NAME: RightScaleToRightSwitch
+	// FILE_NAME: DriveToScoreSwitchLeft2
 }

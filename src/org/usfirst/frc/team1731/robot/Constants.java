@@ -71,19 +71,25 @@ public class Constants extends ConstantsBase {
     // PID gains for drive velocity loop (LOW GEAR)
     // Units: setpoint, error, and output are in inches per second.
     public static double kDriveLowGearPositionKp = 1.0;
-    public static double kDriveLowGearPositionKi = 0.002;
+    public static double kDriveLowGearPositionKi = 0;
     public static double kDriveLowGearPositionKd = 100.0;
-    public static double kDriveLowGearPositionKf = .45;
-    public static int kDriveLowGearPositionIZone = 700;
+    public static double kDriveLowGearPositionKf = 1.91; // 0.7 * 2.7 gear ratio
+    public static int kDriveLowGearPositionIZone = 0;
     public static double kDriveLowGearPositionRampRate = 0.05; //240.0; // V/s
-    public static double kDriveLowGearNominalOutput = 0.5; // V
+    public static double kDriveLowGearNominalOutput = 0.05; // V
     
     //TODO need to set these velocities and accellerations  This is for the talon motion magic so I think you need to do the tics per 100ms thing
    // public static double kDriveLowGearMaxVelocity = 6.0 * 12.0 * 60.0 / (Math.PI * kDriveWheelDiameterInches); // 6 fps                                                                                                           // in RPM
-    public static int kDriveLowGearMaxVelocity = 3092;  //these are units of units per 100ms - bdl - this number works out to 3.29 ft/sec
+    // 400 ticks per 100mS (400 * 1.26 is how many units of 1023 power units)
+    //
+    // 34 tooth 3/8     36 tooth dog     52 tooth dog    18 tooth 3/8
+    // 6.0:1
+    // 16.37:1
+    // 
+    public static int kDriveLowGearMaxVelocity = 400;  //these are units of units per 100ms - bdl - this number works out to 3.29 ft/sec
     
     //public static double kDriveLowGearMaxAccel = 18.0 * 12.0 * 60.0 / (Math.PI * kDriveWheelDiameterInches); // 18 fps/s
-    public static int kDriveLowGearMaxAccel = 3092;  //These are   in units per 100ms                                                                                                       // in RPM/s
+    public static int kDriveLowGearMaxAccel = 400;  //These are   in units per 100ms                                                                                                       // in RPM/s
 
     public static double kDriveVoltageCompensationRampRate = 0.0;
 

@@ -223,7 +223,7 @@ public class Intake extends Subsystem {
     }
     
     public boolean gotCube() {
-    	 return ((mIRSensor1.getAverageValue() > 400) && (mIRSensor2.getAverageValue() >400)); 
+    	 return ((mIRSensor1.getAverageValue() > 600) && (mIRSensor2.getAverageValue() >600)); 
     }
 
 }

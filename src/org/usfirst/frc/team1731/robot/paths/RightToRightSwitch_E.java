@@ -23,7 +23,7 @@ public class RightToRightSwitch_E implements PathContainer {
     
     @Override
     public RigidTransform2d getStartPose() {
-        return new RigidTransform2d(new Translation2d(20, 50), Rotation2d.fromDegrees(0.0)); 
+        return new RigidTransform2d(new Translation2d(230, 104), Rotation2d.fromDegrees(0.0)); 
     }
 
     @Override

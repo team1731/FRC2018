@@ -30,7 +30,7 @@ public class Left3rdCubeScore2 implements PathContainer {
     public boolean isReversed() {
         return true; 
     }
-	// WAYPOINT_DATA: [{"position":{"x":280,"y":70},"speed":0,"radius":0,"comment":""},{"position":{"x":220,"y":85},"speed":30,"radius":0,"comment":""}]
+	// WAYPOINT_DATA: [{"position":{"x":214,"y":214},"speed":0,"radius":0,"comment":""},{"position":{"x":249,"y":230},"speed":60,"radius":0,"comment":""},{"position":{"x":284,"y":230},"speed":40,"radius":0,"comment":""}]
 	// IS_REVERSED: false
-	// FILE_NAME: RightScaleToRightSwitch
+	// FILE_NAME: Left3rdCubeScore2
 }

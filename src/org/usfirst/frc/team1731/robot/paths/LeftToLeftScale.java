@@ -30,7 +30,7 @@ public class LeftToLeftScale implements PathContainer {
     public boolean isReversed() {
         return false; 
     }
-	// WAYPOINT_DATA: [{"position":{"x":16,"y":280},"speed":0,"radius":0,"comment":"Left"},{"position":{"x":200,"y":290},"speed":60,"radius":0,"comment":""},{"position":{"x":260,"y":250},"speed":60,"radius":0,"comment":""},{"position":{"x":280,"y":245},"speed":60,"radius":0,"comment":""}]
+	// WAYPOINT_DATA: [{"position":{"x":19,"y":277},"speed":0,"radius":0,"comment":"Left"},{"position":{"x":199,"y":277},"speed":110,"radius":40,"comment":""},{"position":{"x":281,"y":239},"speed":110,"radius":0,"comment":""},{"position":{"x":285,"y":241},"speed":110,"radius":0,"comment":""}]
 	// IS_REVERSED: false
 	// FILE_NAME: LeftToLeftScale
 }

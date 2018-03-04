@@ -17,7 +17,7 @@ public class LeftToLeftScale2 implements PathContainer {
         sWaypoints.add(new Waypoint(19,277,0,0)); //Left
         sWaypoints.add(new Waypoint(199,277,40,110));
         sWaypoints.add(new Waypoint(281,239,0,110));
-        sWaypoints.add(new Waypoint(285,241,0,110));
+        sWaypoints.add(new Waypoint(285,236,0,110));
 
         return PathBuilder.buildPathFromWaypoints(sWaypoints);
     }
@@ -31,7 +31,7 @@ public class LeftToLeftScale2 implements PathContainer {
     public boolean isReversed() {
         return true; 
     }
-	// WAYPOINT_DATA: [{"position":{"x":25,"y":50},"speed":0,"radius":0,"comment":""},{"position":{"x":70,"y":50},"speed":60,"radius":0,"comment":""}]
+	// WAYPOINT_DATA: [{"position":{"x":19,"y":277},"speed":0,"radius":0,"comment":""},{"position":{"x":199,"y":277},"speed":110,"radius":40,"comment":""},{"position":{"x":281,"y":239},"speed":110,"radius":0,"comment":""},{"position":{"x":285,"y":236},"speed":110,"radius":0,"comment":""}]
 	// IS_REVERSED: false
-	// FILE_NAME: RightToRightScale
+	// FILE_NAME: LeftToLeftScale2
 }

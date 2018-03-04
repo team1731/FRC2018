@@ -14,16 +14,16 @@ public class RightToRightSwitch_B implements PathContainer {
     @Override
     public Path buildPath() {
         ArrayList<Waypoint> sWaypoints = new ArrayList<Waypoint>();
-        sWaypoints.add(new Waypoint(180,30,0,0));
+        sWaypoints.add(new Waypoint(190,38,0,0));
         sWaypoints.add(new Waypoint(168,50,10,80));
-        sWaypoints.add(new Waypoint(168,69,0,40));
+        sWaypoints.add(new Waypoint(168,79,0,40));
 
         return PathBuilder.buildPathFromWaypoints(sWaypoints);
     }
     
     @Override
     public RigidTransform2d getStartPose() {
-        return new RigidTransform2d(new Translation2d(20, 50), Rotation2d.fromDegrees(0.0)); 
+        return new RigidTransform2d(new Translation2d(190, 38), Rotation2d.fromDegrees(0.0)); 
     }
 
     @Override

@@ -14,9 +14,9 @@ public class LeftScaleToLeftSwitch implements PathContainer {
     @Override
     public Path buildPath() {
         ArrayList<Waypoint> sWaypoints = new ArrayList<Waypoint>();
-        sWaypoints.add(new Waypoint(285,241,0,0));
-        sWaypoints.add(new Waypoint(239,231,0,50));
-        sWaypoints.add(new Waypoint(233,230,0,20));
+        sWaypoints.add(new Waypoint(286,252,0,0));
+        sWaypoints.add(new Waypoint(249,252,10,50));
+        sWaypoints.add(new Waypoint(224,227,0,50));
 
 
 
@@ -32,9 +32,9 @@ public class LeftScaleToLeftSwitch implements PathContainer {
     public boolean isReversed() {
         return false; 
     }
-	// WAYPOINT_DATA: [{"position":{"x":280,"y":70},"speed":0,"radius":0,"comment":""},{"position":{"x":220,"y":85},"speed":30,"radius":0,"comment":""}]
+	// WAYPOINT_DATA: [{"position":{"x":285,"y":241},"speed":0,"radius":0,"comment":""},{"position":{"x":239,"y":231},"speed":50,"radius":0,"comment":""},{"position":{"x":233,"y":230},"speed":20,"radius":0,"comment":""}]
 	// IS_REVERSED: false
-	// FILE_NAME: RightScaleToRightSwitch
+	// FILE_NAME: LeftScaleToLeftSwitch
 
 	public static void main(String[] args) {
 		
