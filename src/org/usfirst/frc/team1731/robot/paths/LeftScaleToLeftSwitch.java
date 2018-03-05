@@ -14,8 +14,8 @@ public class LeftScaleToLeftSwitch implements PathContainer {
     @Override
     public Path buildPath() {
         ArrayList<Waypoint> sWaypoints = new ArrayList<Waypoint>();
-        sWaypoints.add(new Waypoint(286,252,0,0));
-        sWaypoints.add(new Waypoint(249,252,10,50));
+        sWaypoints.add(new Waypoint(286,232,0,0));
+        sWaypoints.add(new Waypoint(249,232,10,50));
         sWaypoints.add(new Waypoint(224,227,0,50));
 
 
@@ -25,7 +25,7 @@ public class LeftScaleToLeftSwitch implements PathContainer {
     
     @Override
     public RigidTransform2d getStartPose() {
-        return new RigidTransform2d(new Translation2d(285, 241), Rotation2d.fromDegrees(0.0)); 
+        return new RigidTransform2d(new Translation2d(286, 232), Rotation2d.fromDegrees(0.0)); 
     }
 
     @Override

@@ -91,11 +91,13 @@ public class AutoDetectAllianceSwitchThenPlaceMode  {
         		if(gameData.charAt(0) == 'R' && gameData.charAt(1) == 'R') {
         			selectedAutoMode = new RightPutCubeOnRightScaleAndRightSwitch();
         		} else if(gameData.charAt(0) == 'R' && gameData.charAt(1) == 'L') {
-        			selectedAutoMode = new RightPutCubeOnRightSwitch();
+ //       			selectedAutoMode = new RightPutCubeOnRightSwitch();
+        			selectedAutoMode = new RightPutCubeOnLeftScale();
         		} else if(gameData.charAt(0) == 'L' && gameData.charAt(1) == 'L') {
         			selectedAutoMode =  new RightPutCubeOnLeftScaleAndLeftSwitch();
         		} else if(gameData.charAt(0) == 'L' && gameData.charAt(1) == 'R') {
-        			selectedAutoMode = isAllianceTrustworthy ? new RightPutCubeOnRightScale() : new RightPutCubeOnRightScaleAndLeftSwitch();
+//        			selectedAutoMode = isAllianceTrustworthy ? new RightPutCubeOnRightScale() : new RightPutCubeOnRightScaleAndLeftSwitch();
+        			selectedAutoMode = new RightPutCubeOnRightScale();
         		}
         	break;
         }
