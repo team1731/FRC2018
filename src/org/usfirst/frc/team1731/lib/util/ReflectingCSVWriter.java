@@ -1,5 +1,6 @@
 package org.usfirst.frc.team1731.lib.util;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.lang.reflect.Field;
@@ -14,6 +15,20 @@ public class ReflectingCSVWriter<T> {
     Field[] mFields;
 
     public ReflectingCSVWriter(String fileName, Class<T> typeClass) {
+    	//
+    	// rename existing file so it's
+    	// available after we cycle power
+    	//
+    	File existingFile = new File(fileName);
+    	if(existingFile.exists()) {
+    		File previousFile = new File(fileName + ".prev");
+    		if(previousFile.exists()) {
+    			previousFile.delete();
+    		}
+    		existingFile.renameTo(previousFile);
+    	}
+    	
+    	
         mFields = typeClass.getFields();
         try {
             mOutput = new PrintWriter(fileName);
