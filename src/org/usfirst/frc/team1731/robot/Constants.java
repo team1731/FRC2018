@@ -62,7 +62,7 @@ public class Constants extends ConstantsBase {
     public static double kDriveHighGearVelocityKp = 3.0;   //cheezy guys had 1.2
     public static double kDriveHighGearVelocityKi = 0.0;
     public static double kDriveHighGearVelocityKd = 30.0;    //cheezy guys had 6.0
-    public static double kDriveHighGearVelocityKf = .7;    //cheezy guys had .15
+    public static double kDriveHighGearVelocityKf = 0.97;    //cheezy guys had .15. Orig: 0.7
     public static int kDriveHighGearVelocityIZone = 0;
     public static double kDriveHighGearVelocityRampRate = 0.05;// 240.0;
     public static double kDriveHighGearNominalOutput = 0.0;   // cheezy gusy had .5
@@ -73,12 +73,12 @@ public class Constants extends ConstantsBase {
     public static double kDriveLowGearPositionKp = 1.0;
     public static double kDriveLowGearPositionKi = 0;
     public static double kDriveLowGearPositionKd = 100.0;
-    public static double kDriveLowGearPositionKf = 1.91; // 0.7 * 2.7 gear ratio
+    public static double kDriveLowGearPositionKf = 2.62; // 0.(9)7 * 2.7 gear ratio. Orig: 1.91
     public static int kDriveLowGearPositionIZone = 0;
     public static double kDriveLowGearPositionRampRate = 0.05; //240.0; // V/s
     public static double kDriveLowGearNominalOutput = 0.05; // V
     
-    //TODO need to set these velocities and accellerations  This is for the talon motion magic so I think you need to do the tics per 100ms thing
+    //TODO need to set these velocities and accelerations  This is for the talon motion magic so I think you need to do the tics per 100ms thing
    // public static double kDriveLowGearMaxVelocity = 6.0 * 12.0 * 60.0 / (Math.PI * kDriveWheelDiameterInches); // 6 fps                                                                                                           // in RPM
     // 400 ticks per 100mS (400 * 1.26 is how many units of 1023 power units)
     //
@@ -222,8 +222,12 @@ public class Constants extends ConstantsBase {
 //    public static final int kHopperSlaveId = 9;
 	public static final int kHopperVictor = 3;
 	
+	//Climber
 	public static int kClimberMasterId = 6;
 	public static int kClimberSlaveId = 16;
+	public static int kClimberContinuousCurrentLimitAmps = 30;
+	public static int kClimberPeakCurrentDurationMs = 200; //Ms
+	public static int kClimberPeakCurrentLimitAmps = 35;
 
     // Shooter
 //    public static final int kRightShooterMasterId = 2;

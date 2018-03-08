@@ -90,14 +90,18 @@ public class AutoDetectAllianceSwitchThenPlaceMode  {
         	case RIGHT:
         		if(gameData.charAt(0) == 'R' && gameData.charAt(1) == 'R') {
         			selectedAutoMode = new RightPutCubeOnRightScaleAndRightSwitch();
+        			//selectedAutoMode = new RightPut2CubesOnRightScale(); //2 cubes
         		} else if(gameData.charAt(0) == 'R' && gameData.charAt(1) == 'L') {
  //       			selectedAutoMode = new RightPutCubeOnRightSwitch();
         			selectedAutoMode = new RightPutCubeOnLeftScale();
+        			//selectedAutoMode = new RightPut2CubesOnLeftScale(); //2 cubes
         		} else if(gameData.charAt(0) == 'L' && gameData.charAt(1) == 'L') {
         			selectedAutoMode =  new RightPutCubeOnLeftScaleAndLeftSwitch();
+        			//selectedAutoMode = new RightPut2CubesOnLeftScale(); //2 cubes
         		} else if(gameData.charAt(0) == 'L' && gameData.charAt(1) == 'R') {
-//        			selectedAutoMode = isAllianceTrustworthy ? new RightPutCubeOnRightScale() : new RightPutCubeOnRightScaleAndLeftSwitch();
-        			selectedAutoMode = new RightPutCubeOnRightScale();
+        			selectedAutoMode = isAllianceTrustworthy ? new RightPutCubeOnRightScale() : new RightPutCubeOnRightScaleAndLeftSwitch();
+        			//selectedAutoMode = new RightPutCubeOnRightScale(); //We did this for Haymarket
+        			//selectedAutoMode = new RightPut2CubesOnRightScale(); //2 cubes
         		}
         	break;
         }

@@ -78,6 +78,9 @@ public class Climber extends Subsystem {
                 mStateChanged = true;
                 mCurrentStateStartTime = timestamp;
                 mTalon.setSelectedSensorPosition(0, 0, 10);
+                mTalon.configContinuousCurrentLimit(Constants.kClimberContinuousCurrentLimitAmps, Constants.kTimeoutMs);
+                mTalon.configPeakCurrentLimit(Constants.kClimberPeakCurrentLimitAmps, Constants.kTimeoutMs);
+                mTalon.configPeakCurrentDuration(Constants.kClimberPeakCurrentDurationMs, Constants.kTimeoutMs);
             }
         }
 
