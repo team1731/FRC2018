@@ -14,7 +14,7 @@ public class MiddleToRightSwitch_B implements PathContainer {
     public Path buildPath() {
         ArrayList<Waypoint> sWaypoints = new ArrayList<Waypoint>();
         
-        sWaypoints.add(new Waypoint(124, 98, 0, 60));
+        sWaypoints.add(new Waypoint(122, 105, 0, 60));
         sWaypoints.add(new Waypoint(110, 98, 10, 60));
         sWaypoints.add(new Waypoint(70, 140, 0, 60));
         sWaypoints.add(new Waypoint(40, 162, 10, 60));
@@ -25,7 +25,7 @@ public class MiddleToRightSwitch_B implements PathContainer {
     
     @Override
     public RigidTransform2d getStartPose() {
-        return new RigidTransform2d(new Translation2d(124, 98), Rotation2d.fromDegrees(180.0)); 
+        return new RigidTransform2d(new Translation2d(122, 105), Rotation2d.fromDegrees(180.0)); 
     }
 
     @Override

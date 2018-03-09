@@ -27,14 +27,15 @@ public class RightPutCubeOnRightSwitch extends AutoModeBase {
     	runAction(new ResetPoseFromPathAction(Path));
         runAction(new ParallelAction(Arrays.asList(new Action[] {
         		new RotateIntakeActionUp(false), //stay down
-        		new DrivePathAction(Path)
+        		new DrivePathAction(Path),
+        		new ElevatorHome()
         })));
         
         //drive forward and spit
     	Path = new RightToRightSwitch_B();
     	runAction(new DrivePathAction(Path));
     	runAction(new SpitAction());
-    	    	
+/*  we still need to debug and tweak the rest of this auto mode! RDB 3-8-18  	    	
     	//back up
     	Path = new RightToRightSwitch_C();
     	runAction(new DrivePathAction(Path));
@@ -47,7 +48,7 @@ public class RightPutCubeOnRightSwitch extends AutoModeBase {
         })));
   
     	Path = new RightToRightSwitch_E();
-
+*/
         
     }
 }

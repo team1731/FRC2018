@@ -14,7 +14,7 @@ public class MiddleToRightSwitch_B2 implements PathContainer {
     public Path buildPath() {
         ArrayList<Waypoint> sWaypoints = new ArrayList<Waypoint>();
         
-        sWaypoints.add(new Waypoint(122, 222, 0, 60));
+        sWaypoints.add(new Waypoint(122, 222, 0, 0));
         sWaypoints.add(new Waypoint(30, 162, 10, 60));
 
         return PathBuilder.buildPathFromWaypoints(sWaypoints);

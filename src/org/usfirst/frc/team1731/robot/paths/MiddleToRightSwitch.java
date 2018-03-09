@@ -24,7 +24,7 @@ public class MiddleToRightSwitch implements PathContainer {
     
     @Override
     public RigidTransform2d getStartPose() {
-        return new RigidTransform2d(new Translation2d(21, 150), Rotation2d.fromDegrees(0.0)); 
+        return new RigidTransform2d(new Translation2d(19, 157), Rotation2d.fromDegrees(0.0)); 
     }
 
     @Override

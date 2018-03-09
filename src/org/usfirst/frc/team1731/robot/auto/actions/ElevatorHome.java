@@ -2,6 +2,7 @@ package org.usfirst.frc.team1731.robot.auto.actions;
 
 import org.usfirst.frc.team1731.robot.subsystems.Elevator;
 import org.usfirst.frc.team1731.robot.subsystems.Intake.WantedState;
+import org.usfirst.frc.team1731.robot.subsystems.Superstructure;
 
 import edu.wpi.first.wpilibj.Timer;
 
@@ -30,6 +31,7 @@ public class ElevatorHome implements Action {
 
     @Override
     public void start() {
+    	Superstructure.getInstance().setWantedState(Superstructure.WantedState.ELEVATOR_TRACKING);
     	mElevator.setWantedPosition(DESIRED_POSITION);
     }
 }

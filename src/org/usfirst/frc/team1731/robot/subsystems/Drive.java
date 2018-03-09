@@ -178,7 +178,7 @@ public class Drive extends Subsystem {
         //mLeftMaster.reverseSensor(true);
         mLeftMaster.setInverted(false);                               //RDB 3/6/18
         //mLeftMaster.reverseOutput(false);
-        mLeftMaster.setSensorPhase(true);
+        mLeftMaster.setSensorPhase(false);
 
         int leftSensorPresent = mLeftMaster.getSensorCollection().getPulseWidthRiseToRiseUs();
 

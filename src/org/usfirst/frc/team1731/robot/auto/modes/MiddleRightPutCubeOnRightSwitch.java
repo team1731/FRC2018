@@ -27,6 +27,7 @@ public class MiddleRightPutCubeOnRightSwitch extends AutoModeBase {
     	PathContainer Path = new MiddleToRightSwitch();
     	runAction(new ResetPoseFromPathAction(Path));
         runAction(new ParallelAction(Arrays.asList(new Action[] {
+        		new ElevatorHome(),
         		new RotateIntakeActionUp(false),
         		new DrivePathAction(Path),
         })));

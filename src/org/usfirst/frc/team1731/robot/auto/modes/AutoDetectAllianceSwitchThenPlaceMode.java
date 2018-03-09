@@ -92,8 +92,8 @@ public class AutoDetectAllianceSwitchThenPlaceMode  {
         			selectedAutoMode = new RightPutCubeOnRightScaleAndRightSwitch();
         			//selectedAutoMode = new RightPut2CubesOnRightScale(); //2 cubes
         		} else if(gameData.charAt(0) == 'R' && gameData.charAt(1) == 'L') {
- //       			selectedAutoMode = new RightPutCubeOnRightSwitch();
-        			selectedAutoMode = new RightPutCubeOnLeftScale();
+        			selectedAutoMode = new RightPutCubeOnRightSwitch();
+        			//selectedAutoMode = new RightPutCubeOnLeftScale();
         			//selectedAutoMode = new RightPut2CubesOnLeftScale(); //2 cubes
         		} else if(gameData.charAt(0) == 'L' && gameData.charAt(1) == 'L') {
         			selectedAutoMode =  new RightPutCubeOnLeftScaleAndLeftSwitch();
