@@ -9,13 +9,13 @@ import org.usfirst.frc.team1731.lib.util.math.Translation2d;
 import org.usfirst.frc.team1731.robot.paths.PathBuilder.Waypoint;
 import org.usfirst.frc.team1731.robot.paths.PathContainer;
 
-public class Right3rdCubePickup implements PathContainer {
+public class Right3rdCubeScoreScale3 implements PathContainer {
     
     @Override
     public Path buildPath() {
         ArrayList<Waypoint> sWaypoints = new ArrayList<Waypoint>();
         sWaypoints.add(new Waypoint(274,87,0,0));  
-        sWaypoints.add(new Waypoint(244,105,0,60));
+        //sWaypoints.add(new Waypoint(244,105,0,60));
         sWaypoints.add(new Waypoint(220,110,0,60));
 
 

@@ -47,6 +47,23 @@ public class LeftPutCubeOnLeftScale extends AutoModeBase {
         })));
         runAction(new SpitAction()); 
 
+    	Path = new Left3rdCubePickup2();
+        runAction(new ParallelAction(Arrays.asList(new Action[] {
+        		new PickUpAction(), 
+        		new DrivePathAction(Path)
+        		
+        })));
+        
+    	Path = new LeftSwitchToLeftScale3();
+        runAction(new ParallelAction(Arrays.asList(new Action[] {
+        		new ElevatorUp(), 
+        		new RotateIntakeActionUp(),
+        		new DrivePathAction(Path)
+        })));
+        runAction(new SpitAction()); 
+
+
+        
     	runAction(new WaitAction(1));
     	
     }

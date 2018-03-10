@@ -18,7 +18,7 @@ import edu.wpi.first.wpilibj.Timer;
  * 
  * @see AutoModeBase
  */
-public class RightPut2CubesOnLeftScale extends AutoModeBase {
+public class RightPut3CubesOnLeftScale extends AutoModeBase {
 
     @Override
     protected void routine() throws AutoModeEndedException {
@@ -27,11 +27,11 @@ public class RightPut2CubesOnLeftScale extends AutoModeBase {
     	PathContainer Path = new RightToLeftScale();
     	runAction(new ResetPoseFromPathAction(Path));
         runAction(new ParallelAction(Arrays.asList(new Action[] {
-        		new ElevatorUp(),
         		new RotateIntakeActionUp(),
         		new DrivePathAction(Path),
         })));
         //runAction(new ElevatorUp()); This was here for some reason. Added it into the ParallelAction
+		runAction(new ElevatorUp());
         runAction(new SpitAction());
 
     	Path = new LeftScaleToLeftSwitch();
@@ -48,6 +48,26 @@ public class RightPut2CubesOnLeftScale extends AutoModeBase {
         })));
         
         runAction(new SpitAction());
+        
+        
+        Path = new Left3rdCubePickup2();
+        runAction(new ParallelAction(Arrays.asList(new Action[] {
+        		new PickUpAction(), 
+        		new DrivePathAction(Path)
+        		
+        })));
+        
+    	Path = new LeftSwitchToLeftScale3();
+        runAction(new ParallelAction(Arrays.asList(new Action[] {
+        		new ElevatorUp(), 
+        		new RotateIntakeActionUp(),
+        		new DrivePathAction(Path)
+        })));
+        runAction(new SpitAction()); 
+
+        
+        
+        
         runAction(new ElevatorHome());
     }
 }

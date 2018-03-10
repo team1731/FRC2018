@@ -26,6 +26,7 @@ import org.usfirst.frc.team1731.robot.paths.RightToRightScale;
  * 
  * @see AutoModeBase
  */
+@Deprecated
 public class RightPut2CubesOnRightScale extends AutoModeBase {
 
     @Override

@@ -47,6 +47,23 @@ public class RightPutCubeOnRightScale extends AutoModeBase {
         })));
         runAction(new SpitAction()); 
 
+    	Path = new Right3rdCubePickup(); // PATH #5
+        runAction(new ParallelAction(Arrays.asList(new Action[] {
+        		new PickUpAction(), 
+        		new DrivePathAction(Path)
+        })));
+        
+        
+    	Path = new Right3rdCubeScoreScale3();
+        runAction(new ParallelAction(Arrays.asList(new Action[] {
+        		new ElevatorUp(), 
+        		new RotateIntakeActionUp(),
+        		new DrivePathAction(Path)
+        })));
+        runAction(new SpitAction()); 
+        
+        
+        
     	runAction(new WaitAction(1));
     	
     }

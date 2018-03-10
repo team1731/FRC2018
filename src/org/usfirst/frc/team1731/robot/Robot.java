@@ -14,8 +14,9 @@ import org.usfirst.frc.team1731.lib.util.math.RigidTransform2d;
 import org.usfirst.frc.team1731.robot.auto.AutoModeBase;
 import org.usfirst.frc.team1731.robot.auto.AutoModeExecuter;
 import org.usfirst.frc.team1731.robot.auto.modes.AutoDetectAllianceSwitchThenPlaceMode;
-import org.usfirst.frc.team1731.robot.auto.modes.RightPut2CubesOnLeftScale;
+import org.usfirst.frc.team1731.robot.auto.modes.RightPut3CubesOnLeftScale;
 import org.usfirst.frc.team1731.robot.auto.modes.RightPut2CubesOnRightScale;
+import org.usfirst.frc.team1731.robot.auto.modes.RightPutCubeOnRightScale;
 import org.usfirst.frc.team1731.robot.auto.modes.StandStillMode;
 import org.usfirst.frc.team1731.robot.auto.modes.TestAuto;
 import org.usfirst.frc.team1731.robot.loops.Looper;
@@ -127,8 +128,8 @@ public class Robot extends IterativeRobot {
             autoChooser.addObject("Drive and do nothing", "DriveOnly");
             autoChooser.addObject("Do Nothing", new StandStillMode());
             autoChooser.addObject("Test", new TestAuto());
-            autoChooser.addObject("2 on Right Scale", new RightPut2CubesOnRightScale());
-            autoChooser.addObject("2 on Left Scale", new RightPut2CubesOnLeftScale());
+            autoChooser.addObject("3 on Right Scale", new RightPutCubeOnRightScale());
+            autoChooser.addObject("3 on Left Scale", new RightPut3CubesOnLeftScale());
             SmartDashboard.putData("Autonomous Mode", autoChooser);
            
             startingPosition = new SendableChooser();
