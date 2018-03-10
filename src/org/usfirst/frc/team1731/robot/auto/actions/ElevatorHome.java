@@ -15,6 +15,7 @@ public class ElevatorHome implements Action {
 
     private static final double DESIRED_POSITION = 0.0;
 	Elevator mElevator = Elevator.getInstance();
+	Superstructure mSuperstructure = Superstructure.getInstance();
 
     @Override
     public boolean isFinished() {
@@ -23,6 +24,7 @@ public class ElevatorHome implements Action {
 
     @Override
     public void update() {
+    	mSuperstructure.setWantedState(Superstructure.WantedState.ELEVATOR_TRACKING);
     }
 
     @Override
@@ -31,7 +33,7 @@ public class ElevatorHome implements Action {
 
     @Override
     public void start() {
-    	Superstructure.getInstance().setWantedState(Superstructure.WantedState.ELEVATOR_TRACKING);
-    	mElevator.setWantedPosition(DESIRED_POSITION);
+    	mSuperstructure.setWantedState(Superstructure.WantedState.ELEVATOR_TRACKING);
+    	//mElevator.setWantedPosition(DESIRED_POSITION);
     }
 }

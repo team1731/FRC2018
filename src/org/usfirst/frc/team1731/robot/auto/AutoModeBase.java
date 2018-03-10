@@ -2,6 +2,8 @@ package org.usfirst.frc.team1731.robot.auto;
 
 import org.usfirst.frc.team1731.robot.auto.actions.Action;
 
+import edu.wpi.first.wpilibj.DriverStation;
+
 /**
  * An abstract class that is the basis of the robot's autonomous routines. This is implemented in auto modes (which are
  * routines that do actions).
@@ -45,6 +47,8 @@ public abstract class AutoModeBase {
     }
 
     public void runAction(Action action) throws AutoModeEndedException {
+    	DriverStation.reportWarning("Auto action = " + action.getClass().getName(), false);
+
         isActiveWithThrow();
         action.start();
 

@@ -104,7 +104,7 @@ public class Climber extends Subsystem {
                 if (newState != mSystemState) {
                     mSystemState = newState;
                     mCurrentStateStartTime = timestamp;
-                    DriverStation.reportWarning("Climber SystemState: " + mSystemState, false);
+                    //DriverStation.reportWarning("Climber SystemState: " + mSystemState, false);
                     mStateChanged = true;
                 } else {
                     mStateChanged = false;
@@ -150,7 +150,7 @@ public class Climber extends Subsystem {
     public synchronized void setWantedState(WantedState state) {
         if (state != mWantedState) {
             mWantedState = state;
-            DriverStation.reportError("Climber WantedState: " + mWantedState, false);
+            //DriverStation.reportError("Climber WantedState: " + mWantedState, false);
         }
     }
 

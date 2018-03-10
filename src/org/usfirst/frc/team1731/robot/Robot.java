@@ -14,6 +14,8 @@ import org.usfirst.frc.team1731.lib.util.math.RigidTransform2d;
 import org.usfirst.frc.team1731.robot.auto.AutoModeBase;
 import org.usfirst.frc.team1731.robot.auto.AutoModeExecuter;
 import org.usfirst.frc.team1731.robot.auto.modes.AutoDetectAllianceSwitchThenPlaceMode;
+import org.usfirst.frc.team1731.robot.auto.modes.RightPut2CubesOnLeftScale;
+import org.usfirst.frc.team1731.robot.auto.modes.RightPut2CubesOnRightScale;
 import org.usfirst.frc.team1731.robot.auto.modes.StandStillMode;
 import org.usfirst.frc.team1731.robot.auto.modes.TestAuto;
 import org.usfirst.frc.team1731.robot.loops.Looper;
@@ -125,6 +127,8 @@ public class Robot extends IterativeRobot {
             autoChooser.addObject("Drive and do nothing", "DriveOnly");
             autoChooser.addObject("Do Nothing", new StandStillMode());
             autoChooser.addObject("Test", new TestAuto());
+            autoChooser.addObject("2 on Right Scale", new RightPut2CubesOnRightScale());
+            autoChooser.addObject("2 on Left Scale", new RightPut2CubesOnLeftScale());
             SmartDashboard.putData("Autonomous Mode", autoChooser);
            
             startingPosition = new SendableChooser();
@@ -197,10 +201,13 @@ public class Robot extends IterativeRobot {
             
 
             if (autoChooser.getSelected().equals("ScoreCubes")) {
-            	autoModeToExecute = AutoDetectAllianceSwitchThenPlaceMode.pickAutoMode((AutoDetectAllianceSwitchThenPlaceMode.startingPositions.valueOf(startingPosition.getSelected().toString())) ,(boolean) areTeammatesCool.getSelected());
+            	autoModeToExecute = AutoDetectAllianceSwitchThenPlaceMode.pickAutoMode(
+            			(AutoDetectAllianceSwitchThenPlaceMode.startingPositions.valueOf(startingPosition.getSelected().toString())),
+            			(boolean) areTeammatesCool.getSelected());
             
             } else if(autoChooser.getSelected().equals("DriveOnly")) {
-            	autoModeToExecute = AutoDetectAllianceSwitchThenPlaceMode.intenseTrust(AutoDetectAllianceSwitchThenPlaceMode.startingPositions.valueOf(startingPosition.getSelected().toString()));
+            	autoModeToExecute = AutoDetectAllianceSwitchThenPlaceMode.intenseTrust(
+            			AutoDetectAllianceSwitchThenPlaceMode.startingPositions.valueOf(startingPosition.getSelected().toString()));
             } else 
             	autoModeToExecute = (AutoModeBase) autoChooser.getSelected();
             

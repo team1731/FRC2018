@@ -163,7 +163,7 @@ public class Elevator extends Subsystem {
                     //System.out.println("Elevator state " + mSystemState + " to " + newState);
                     mSystemState = newState;
                     mCurrentStateStartTime = timestamp;
-                    DriverStation.reportWarning("Elevator SystemState: " + mSystemState, false);
+                    //DriverStation.reportWarning("Elevator SystemState: " + mSystemState, false);
                     mStateChanged = true;
                 } else {
                     mStateChanged = false;
@@ -256,7 +256,7 @@ public class Elevator extends Subsystem {
     public synchronized void setWantedState(WantedState state) {
         if (state != mWantedState) {
             mWantedState = state;
-            DriverStation.reportError("Elevator WantedState: " + mWantedState, false);
+            //DriverStation.reportError("Elevator WantedState: " + mWantedState, false);
         }
     }
     /*

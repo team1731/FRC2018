@@ -168,7 +168,7 @@ public class Drive extends Subsystem {
     };
 
     private Drive() {
-    	  DriverStation.reportError("Drive Constructor", false);
+    	  //DriverStation.reportError("Drive Constructor", false);
         // Start all Talons in open loop mode.
         mLeftMaster = TalonSRXFactory.createDefaultTalon(Constants.kLeftDriveMasterId);
         //  mLeftMaster.changeControlMode(CANTalon.TalonControlMode.PercentVbus);
@@ -259,7 +259,7 @@ public class Drive extends Subsystem {
     public synchronized void setOpenLoop(DriveSignal signal) {
     	//  DriverStation.reportError("setOpenLoop" + signal, false);
         if (mDriveControlState != DriveControlState.OPEN_LOOP) {
-      	  DriverStation.reportError("setOpenLoop inside" + signal, false);
+      	  //DriverStation.reportError("setOpenLoop inside" + signal, false);
            // mLeftMaster.changeControlMode(CANTalon.TalonControlMode.PercentVbus);
             mLeftMaster.set(ControlMode.PercentOutput, signal.getLeft());
             //mRightMaster.changeControlMode(CANTalon.TalonControlMode.PercentVbus);

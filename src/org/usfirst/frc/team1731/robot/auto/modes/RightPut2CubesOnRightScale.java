@@ -2,13 +2,21 @@ package org.usfirst.frc.team1731.robot.auto.modes;
 
 import java.util.Arrays;
 
-import org.usfirst.frc.team1731.lib.util.math.RigidTransform2d;
 import org.usfirst.frc.team1731.robot.auto.AutoModeBase;
 import org.usfirst.frc.team1731.robot.auto.AutoModeEndedException;
-import org.usfirst.frc.team1731.robot.auto.actions.*;
-import org.usfirst.frc.team1731.robot.paths.*;
-
-import edu.wpi.first.wpilibj.Timer;
+import org.usfirst.frc.team1731.robot.auto.actions.Action;
+import org.usfirst.frc.team1731.robot.auto.actions.DrivePathAction;
+import org.usfirst.frc.team1731.robot.auto.actions.ElevatorHome;
+import org.usfirst.frc.team1731.robot.auto.actions.ElevatorUp;
+import org.usfirst.frc.team1731.robot.auto.actions.ParallelAction;
+import org.usfirst.frc.team1731.robot.auto.actions.PickUpAction;
+import org.usfirst.frc.team1731.robot.auto.actions.ResetPoseFromPathAction;
+import org.usfirst.frc.team1731.robot.auto.actions.RotateIntakeActionUp;
+import org.usfirst.frc.team1731.robot.auto.actions.SpitAction;
+import org.usfirst.frc.team1731.robot.paths.PathContainer;
+import org.usfirst.frc.team1731.robot.paths.RightScaleToRightSwitch;
+import org.usfirst.frc.team1731.robot.paths.RightSwitchToRightScale;
+import org.usfirst.frc.team1731.robot.paths.RightToRightScale;
 
 /**
  * Scores the preload gear onto the boiler-side peg then deploys the hopper and shoots all 60 balls (10 preload + 50
