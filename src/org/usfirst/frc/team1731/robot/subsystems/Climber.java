@@ -49,6 +49,7 @@ public class Climber extends Subsystem {
         mTalon = TalonSRXFactory.createDefaultTalon(Constants.kClimberMasterId);
         mTalon.setInverted(false);
         mTalon.setNeutralMode(NeutralMode.Brake);
+        mTalon.enableCurrentLimit(true);
     }
 
     public enum SystemState {
