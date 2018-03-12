@@ -92,16 +92,14 @@ public class AutoDetectAllianceSwitchThenPlaceMode  {
         			selectedAutoMode = new RightPutCubeOnRightScaleAndRightSwitch();
         			//selectedAutoMode = new RightPut2CubesOnRightScale(); //2 cubes
         		} else if(gameData.charAt(0) == 'R' && gameData.charAt(1) == 'L') {
-        			selectedAutoMode = new RightPutCubeOnRightSwitch();
-        			//selectedAutoMode = new RightPutCubeOnLeftScale();
-        			//selectedAutoMode = new RightPut2CubesOnLeftScale(); //2 cubes
+        			//selectedAutoMode = new RightPutCubeOnRightSwitch();
+        			selectedAutoMode = new RightPut3CubesOnLeftScale(); //2 cubes
         		} else if(gameData.charAt(0) == 'L' && gameData.charAt(1) == 'L') {
-        			selectedAutoMode =  new RightPutCubeOnLeftScaleAndLeftSwitch();
-        			//selectedAutoMode = new RightPut2CubesOnLeftScale(); //2 cubes
+        			//selectedAutoMode =  new RightPutCubeOnLeftScaleAndLeftSwitch();
+        			selectedAutoMode = new RightPut3CubesOnLeftScale(); //2 cubes
         		} else if(gameData.charAt(0) == 'L' && gameData.charAt(1) == 'R') {
-        			selectedAutoMode = isAllianceTrustworthy ? new RightPutCubeOnRightScale() : new RightPutCubeOnRightScaleAndLeftSwitch();
-        			//selectedAutoMode = new RightPutCubeOnRightScale(); //We did this for Haymarket
-        			//selectedAutoMode = new RightPut2CubesOnRightScale(); //2 cubes
+        			//selectedAutoMode = isAllianceTrustworthy ? new RightPutCubeOnRightScale() : new RightPutCubeOnRightScaleAndLeftSwitch();
+        			selectedAutoMode = new RightPutCubeOnRightScale(); //2 cubes
         		}
         	break;
         }
