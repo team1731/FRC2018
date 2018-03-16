@@ -14,7 +14,14 @@ import org.usfirst.frc.team1731.lib.util.math.RigidTransform2d;
 import org.usfirst.frc.team1731.robot.auto.AutoModeBase;
 import org.usfirst.frc.team1731.robot.auto.AutoModeExecuter;
 import org.usfirst.frc.team1731.robot.auto.modes.AutoDetectAllianceSwitchThenPlaceMode;
+import org.usfirst.frc.team1731.robot.auto.modes.LeftPutCubeOnLeftScale;
+import org.usfirst.frc.team1731.robot.auto.modes.LeftPutCubeOnLeftScaleAndLeftSwitch;
+import org.usfirst.frc.team1731.robot.auto.modes.LeftPutCubeOnRightScaleAndRightSwitch;
+import org.usfirst.frc.team1731.robot.auto.modes.MiddleRightPutCubeOnLeftSwitch;
+import org.usfirst.frc.team1731.robot.auto.modes.MiddleRightPutCubeOnRightSwitch;
 import org.usfirst.frc.team1731.robot.auto.modes.RightPut3CubesOnLeftScale;
+import org.usfirst.frc.team1731.robot.auto.modes.RightPutCubeOnLeftScale;
+import org.usfirst.frc.team1731.robot.auto.modes.RightPutCubeOnLeftScaleAndLeftSwitch;
 import org.usfirst.frc.team1731.robot.auto.modes.RightPut2CubesOnRightScale;
 import org.usfirst.frc.team1731.robot.auto.modes.RightPutCubeOnRightScale;
 import org.usfirst.frc.team1731.robot.auto.modes.StandStillMode;
@@ -22,6 +29,7 @@ import org.usfirst.frc.team1731.robot.auto.modes.TestAuto;
 import org.usfirst.frc.team1731.robot.loops.Looper;
 import org.usfirst.frc.team1731.robot.loops.RobotStateEstimator;
 import org.usfirst.frc.team1731.robot.loops.VisionProcessor;
+import org.usfirst.frc.team1731.robot.paths.DriveForward;
 import org.usfirst.frc.team1731.robot.paths.profiles.PathAdapter;
 import org.usfirst.frc.team1731.robot.subsystems.ConnectionMonitor;
 import org.usfirst.frc.team1731.robot.subsystems.Drive;
@@ -57,7 +65,16 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  * this project, you must also update the manifest file in the resource directory.
  */
 public class Robot extends IterativeRobot {
-    // Get subsystem instances
+	
+	public static AutoScheme CHOSEN_AUTO_SCHEME = AutoScheme.NEW_SCHEME; // or, AutoScheme.OLD_SCHEME
+	
+	public static enum AutoScheme { 
+									OLD_SCHEME, // Haymarket, Alexandria
+									NEW_SCHEME  // Maryland, Detroit
+								  };
+	private static String autoCode;
+	
+	// Get subsystem instances
     private Drive mDrive = Drive.getInstance();
     private Superstructure mSuperstructure = Superstructure.getInstance();
     private LED mLED = LED.getInstance();
@@ -66,6 +83,22 @@ public class Robot extends IterativeRobot {
 //    private Command autonomousCommand;
     private AutoModeBase autoModeToExecute;
     private SendableChooser autoChooser;
+    
+//    private SendableChooser rightLLautoChooser;
+//    private SendableChooser rightLRautoChooser;
+//    private SendableChooser rightRLautoChooser;
+//    private SendableChooser rightRRautoChooser;
+//    
+//    private SendableChooser middleLLautoChooser;
+//    private SendableChooser middleLRautoChooser;
+//    private SendableChooser middleRLautoChooser;
+//    private SendableChooser middleRRautoChooser;
+//    
+//    private SendableChooser leftLLautoChooser;
+//    private SendableChooser leftLRautoChooser;
+//    private SendableChooser leftRLautoChooser;
+//    private SendableChooser leftRRautoChooser;
+    
 //    private SendableChooser autoMode;
     private SendableChooser startingPosition;
     private SendableChooser areTeammatesCool;
@@ -123,26 +156,47 @@ public class Robot extends IterativeRobot {
             //http://robotrio-NNNN-frc.local:1731/?action=stream
             CameraServer.getInstance().startAutomaticCapture(0);
             
-            autoChooser = new SendableChooser();
-            autoChooser.addDefault("Score Cubes", "ScoreCubes");
-            autoChooser.addObject("Drive and do nothing", "DriveOnly");
-            autoChooser.addObject("Do Nothing", new StandStillMode());
-            autoChooser.addObject("Test", new TestAuto());
-            autoChooser.addObject("3 on Right Scale", new RightPutCubeOnRightScale());
-            autoChooser.addObject("3 on Left Scale", new RightPut3CubesOnLeftScale());
-            SmartDashboard.putData("Autonomous Mode", autoChooser);
-           
-            startingPosition = new SendableChooser();
-            startingPosition.addDefault("Left Position", startingPositions.LEFT);
-//            startingPosition.addObject("Middle-Left Position", startingPositions.MIDDLELEFT);
-            startingPosition.addObject("Middle-Right Position", startingPositions.MIDDLERIGHT);
-            startingPosition.addObject("Right Position", startingPositions.RIGHT);
-            SmartDashboard.putData("Starting Position", startingPosition);
             
-            areTeammatesCool = new SendableChooser();
-            areTeammatesCool.addDefault("Be cautious (A)", false);
-            areTeammatesCool.addObject("It's fine (B)", true);
-            SmartDashboard.putData("How should I react?", areTeammatesCool);
+            switch(CHOSEN_AUTO_SCHEME) {
+            case OLD_SCHEME:
+                autoChooser = new SendableChooser();
+                autoChooser.addDefault("Score Cubes", "ScoreCubes");
+                autoChooser.addObject("Drive and do nothing", "DriveOnly");
+                autoChooser.addObject("Do Nothing", new StandStillMode());
+                autoChooser.addObject("Test", new TestAuto());
+                autoChooser.addObject("3 on Right Scale", new RightPutCubeOnRightScale());
+                autoChooser.addObject("3 on Left Scale", new RightPut3CubesOnLeftScale());
+                SmartDashboard.putData("Autonomous Mode", autoChooser);
+               
+                startingPosition = new SendableChooser();
+                startingPosition.addDefault("Left Position", startingPositions.LEFT);
+//                startingPosition.addObject("Middle-Left Position", startingPositions.MIDDLELEFT);
+                startingPosition.addObject("Middle-Right Position", startingPositions.MIDDLERIGHT);
+                startingPosition.addObject("Right Position", startingPositions.RIGHT);
+                SmartDashboard.putData("Starting Position", startingPosition);
+                
+                areTeammatesCool = new SendableChooser();
+                areTeammatesCool.addDefault("Be cautious (A)", false);
+                areTeammatesCool.addObject("It's fine (B)", true);
+                SmartDashboard.putData("How should I react?", areTeammatesCool);
+                
+            	break;
+            	
+            case NEW_SCHEME:
+//            	rightLLautoChooser = new SendableChooser();
+//            	rightLLautoChooser.addObject("1 - Far SC X2",                new RightPut3CubesOnLeftScale());
+//            	rightLLautoChooser.addObject("2 - Far SC X3",                new RightPut3CubesOnLeftScale());
+//            	rightLLautoChooser.addObject("3 - Far SC - Far SW - Far SC", new RightPutCubeOnLeftScaleAndLeftSwitch());
+//            	rightLLautoChooser.addObject("4 - Far SC - Far SW",          new RightPutCubeOnLeftScaleAndLeftSwitch());
+//            	rightLLautoChooser.addObject("5 - Drive FWD",                new DriveForward());
+//              SmartDashboard.putData("RIGHT - LL", rightLLautoChooser);
+               
+                //repeat the above set of lines for 11 more choosers...
+               
+            	autoCode = SmartDashboard.getString("AutoCode", "1 6 13 16");
+            	
+            	break;
+            }
             
  //           AutoModeSelector.initAutoModeSelector();
             
@@ -200,21 +254,43 @@ public class Robot extends IterativeRobot {
             mEnabledLooper.start();
             mSuperstructure.reloadConstants();
             
+            switch(CHOSEN_AUTO_SCHEME) {
+            case OLD_SCHEME:
 
-            if (autoChooser.getSelected().equals("ScoreCubes")) {
-            	autoModeToExecute = AutoDetectAllianceSwitchThenPlaceMode.pickAutoMode(
-            			(AutoDetectAllianceSwitchThenPlaceMode.startingPositions.valueOf(startingPosition.getSelected().toString())),
-            			(boolean) areTeammatesCool.getSelected());
-            
-            } else if(autoChooser.getSelected().equals("DriveOnly")) {
-            	autoModeToExecute = AutoDetectAllianceSwitchThenPlaceMode.intenseTrust(
-            			AutoDetectAllianceSwitchThenPlaceMode.startingPositions.valueOf(startingPosition.getSelected().toString()));
-            } else 
-            	autoModeToExecute = (AutoModeBase) autoChooser.getSelected();
+	            if (autoChooser.getSelected().equals("ScoreCubes")) {
+	            	autoModeToExecute = AutoDetectAllianceSwitchThenPlaceMode.pickAutoMode(
+	            			(AutoDetectAllianceSwitchThenPlaceMode.startingPositions.valueOf(startingPosition.getSelected().toString())),
+	            			(boolean) areTeammatesCool.getSelected());
+	            
+	            } else if(autoChooser.getSelected().equals("DriveOnly")) {
+	            	autoModeToExecute = AutoDetectAllianceSwitchThenPlaceMode.intenseTrust(
+	            			AutoDetectAllianceSwitchThenPlaceMode.startingPositions.valueOf(startingPosition.getSelected().toString()));
+	            } else 
+	            	autoModeToExecute = (AutoModeBase) autoChooser.getSelected();
+	            
+	  //          mAutoModeExecuter.setAutoMode(AutoModeSelector.getSelectedAutoMode());
+	            break;
+	            
+            case NEW_SCHEME:
+            	
+            	String gameData = DriverStation.getInstance().getGameSpecificMessage();
+                int retries = 100;
+                  	
+                while (gameData.length() < 2 && retries > 0) {
+                    retries--;
+                    try {
+                        Thread.sleep(5);
+                    } catch (InterruptedException ie) {
+                        // Just ignore the interrupted exception
+                    }
+                    gameData = DriverStation.getInstance().getGameSpecificMessage().trim();
+                }
+                autoModeToExecute = determineAutoModeToExecute(gameData);
+            	break;
+            }
             
             mAutoModeExecuter = new AutoModeExecuter();
             mAutoModeExecuter.setAutoMode(autoModeToExecute);
-  //          mAutoModeExecuter.setAutoMode(AutoModeSelector.getSelectedAutoMode());
             mAutoModeExecuter.start();
             
             //WPILIB WAY TO GET AUTONOMOUS MODE...
@@ -230,7 +306,56 @@ public class Robot extends IterativeRobot {
         }
     }
 
-    /**
+    private AutoModeBase determineAutoModeToExecute(String gameData) {
+    	String[] autoCodes = autoCode.split(" ");
+    	String LLcode = autoCodes[0];
+    	String LRcode = autoCodes[1];
+    	String RLcode = autoCodes[2];
+    	String RRcode = autoCodes[3];
+    	
+    	AutoModeBase defaultFallbackMode = new StandStillMode();
+        AutoModeBase selectedAutoMode = defaultFallbackMode;
+
+        switch(gameData.substring(0, 2)) {
+        case "LL":
+        	selectedAutoMode = lookupMode(LLcode);
+        	break;
+        case "LR":
+        	selectedAutoMode = lookupMode(LRcode);
+        	break;
+        case "RL":
+        	selectedAutoMode = lookupMode(RLcode);
+        	break;
+        case "RR":
+        	selectedAutoMode = lookupMode(RRcode);
+        	break;
+        }
+        
+        System.out.println("selected auto mode: " + selectedAutoMode);
+        
+		return selectedAutoMode;
+	}
+
+    AutoModeBase[] AUTO_MODES = {
+
+    		/*  0 N/A  placeholder          */  new StandStillMode(),
+    		/*  1 R-LL Far SC x2            */  new RightPutCubeOnLeftScale(), 
+    		/*  2 R-LL Far SC x3            */  new RightPut3CubesOnLeftScale(),
+    		/*  3 R-LL Far SC-Far SW-Far SC */  new RightPutCubeOnLeftScaleAndLeftSwitch(),
+    		/*  4 R-LL Far SC-Far SW        */  new RightPutCubeOnLeftScaleAndLeftSwitch(),
+    		//  .
+    		//  .
+    		//  .
+    		/* 39 M-RR SW-EX                */  new MiddleRightPutCubeOnRightSwitch()
+    		
+          };
+    
+	private AutoModeBase lookupMode(String autoCode) {
+		int code = Integer.parseInt(autoCode);
+		return AUTO_MODES[code];
+	}
+
+	/**
      * This function is called periodically during autonomous
      */
     @Override
