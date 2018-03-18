@@ -1,6 +1,7 @@
 package org.usfirst.frc.team1731.robot;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.usfirst.frc.team1731.lib.util.CheesyDriveHelper;
@@ -26,6 +27,41 @@ import org.usfirst.frc.team1731.robot.auto.modes.RightPut2CubesOnRightScale;
 import org.usfirst.frc.team1731.robot.auto.modes.RightPutCubeOnRightScale;
 import org.usfirst.frc.team1731.robot.auto.modes.StandStillMode;
 import org.usfirst.frc.team1731.robot.auto.modes.TestAuto;
+import org.usfirst.frc.team1731.robot.auto.modes._new.LeftDriveForward;
+import org.usfirst.frc.team1731.robot.auto.modes._new.LeftPut1LeftScale1RightSwitchEnd;
+import org.usfirst.frc.team1731.robot.auto.modes._new.LeftPut1LeftScaleEnd;
+import org.usfirst.frc.team1731.robot.auto.modes._new.LeftPut1LeftScaleEnd1RightSwitch;
+import org.usfirst.frc.team1731.robot.auto.modes._new.LeftPut1LeftSwitchEnd1LeftScaleEnd;
+import org.usfirst.frc.team1731.robot.auto.modes._new.LeftPut1LeftSwitchEnd1LeftSwitch;
+import org.usfirst.frc.team1731.robot.auto.modes._new.LeftPut1LeftSwitchEnd1RightScale;
+import org.usfirst.frc.team1731.robot.auto.modes._new.LeftPut1RightScale2RightSwitch;
+import org.usfirst.frc.team1731.robot.auto.modes._new.LeftPut2LeftScale1LeftSwitch;
+import org.usfirst.frc.team1731.robot.auto.modes._new.LeftPut2LeftScale1RightSwitch;
+import org.usfirst.frc.team1731.robot.auto.modes._new.LeftPut2LeftScaleEnd;
+import org.usfirst.frc.team1731.robot.auto.modes._new.LeftPut2RightScale1RightSwitch;
+import org.usfirst.frc.team1731.robot.auto.modes._new.LeftPut3LeftScale;
+import org.usfirst.frc.team1731.robot.auto.modes._new.LeftPut3RightScale;
+import org.usfirst.frc.team1731.robot.auto.modes._new.MiddleDriveForward;
+import org.usfirst.frc.team1731.robot.auto.modes._new.MiddlePut1LeftSwitch;
+import org.usfirst.frc.team1731.robot.auto.modes._new.MiddlePut1LeftSwitch1Exchange;
+import org.usfirst.frc.team1731.robot.auto.modes._new.MiddlePut1RightSwitch;
+import org.usfirst.frc.team1731.robot.auto.modes._new.MiddlePut1RightSwitch1Exchange;
+import org.usfirst.frc.team1731.robot.auto.modes._new.MiddlePut2LeftSwitch;
+import org.usfirst.frc.team1731.robot.auto.modes._new.MiddlePut2RightSwitch;
+import org.usfirst.frc.team1731.robot.auto.modes._new.RightDriveForward;
+import org.usfirst.frc.team1731.robot.auto.modes._new.RightPut1LeftScale2LeftSwitch;
+import org.usfirst.frc.team1731.robot.auto.modes._new.RightPut1RightScale1LeftSwitchEnd;
+import org.usfirst.frc.team1731.robot.auto.modes._new.RightPut1RightScaleEnd;
+import org.usfirst.frc.team1731.robot.auto.modes._new.RightPut1RightScaleEnd1LeftSwitch;
+import org.usfirst.frc.team1731.robot.auto.modes._new.RightPut1RightSwitchEnd1LeftScale;
+import org.usfirst.frc.team1731.robot.auto.modes._new.RightPut1RightSwitchEnd1RightScaleEnd;
+import org.usfirst.frc.team1731.robot.auto.modes._new.RightPut1RightSwitchEnd1RightSwitch;
+import org.usfirst.frc.team1731.robot.auto.modes._new.RightPut2LeftScale1LeftSwitch;
+import org.usfirst.frc.team1731.robot.auto.modes._new.RightPut2RightScale1LeftSwitch;
+import org.usfirst.frc.team1731.robot.auto.modes._new.RightPut2RightScale1RightSwitch;
+import org.usfirst.frc.team1731.robot.auto.modes._new.RightPut2RightScaleEnd;
+import org.usfirst.frc.team1731.robot.auto.modes._new.RightPut3LeftScale;
+import org.usfirst.frc.team1731.robot.auto.modes._new.RightPut3RightScale;
 import org.usfirst.frc.team1731.robot.loops.Looper;
 import org.usfirst.frc.team1731.robot.loops.RobotStateEstimator;
 import org.usfirst.frc.team1731.robot.loops.VisionProcessor;
@@ -66,13 +102,36 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  */
 public class Robot extends IterativeRobot {
 	
+	public static enum AutoScheme { 
+		OLD_SCHEME, // Haymarket, Alexandria
+		NEW_SCHEME  // Maryland, Detroit
+	};
 	public static AutoScheme CHOSEN_AUTO_SCHEME = AutoScheme.NEW_SCHEME; // or, AutoScheme.OLD_SCHEME
 	
-	public static enum AutoScheme { 
-									OLD_SCHEME, // Haymarket, Alexandria
-									NEW_SCHEME  // Maryland, Detroit
-								  };
-	private static String autoCode;
+	private static String autoCode; // JUSTIN types-in 4 numbers
+	
+    private static Map<Integer, AutoModeBase> AUTO_MODES; // 35 modes defined in Mark's "BIBLE"
+	static {
+		initAutoModes();
+	}
+	
+	public static String getGameDataFromField() {     // "LLR" for example
+        String gameData = DriverStation.getInstance().getGameSpecificMessage().trim();
+        int retries = 100;
+          	
+        while (gameData.length() < 2 && retries > 0) {
+            retries--;
+            try {
+                Thread.sleep(5);
+            } catch (InterruptedException ie) {
+                // Just ignore the interrupted exception
+            }
+            gameData = DriverStation.getInstance().getGameSpecificMessage().trim();
+        }
+        return gameData;
+	}
+	
+
 	
 	// Get subsystem instances
     private Drive mDrive = Drive.getInstance();
@@ -84,22 +143,6 @@ public class Robot extends IterativeRobot {
     private AutoModeBase autoModeToExecute;
     private SendableChooser autoChooser;
     
-//    private SendableChooser rightLLautoChooser;
-//    private SendableChooser rightLRautoChooser;
-//    private SendableChooser rightRLautoChooser;
-//    private SendableChooser rightRRautoChooser;
-//    
-//    private SendableChooser middleLLautoChooser;
-//    private SendableChooser middleLRautoChooser;
-//    private SendableChooser middleRLautoChooser;
-//    private SendableChooser middleRRautoChooser;
-//    
-//    private SendableChooser leftLLautoChooser;
-//    private SendableChooser leftLRautoChooser;
-//    private SendableChooser leftRLautoChooser;
-//    private SendableChooser leftRRautoChooser;
-    
-//    private SendableChooser autoMode;
     private SendableChooser startingPosition;
     private SendableChooser areTeammatesCool;
     private enum startingPositions {
@@ -153,12 +196,14 @@ public class Robot extends IterativeRobot {
             //mVisionServer.addVisionUpdateReceiver(VisionProcessor.getInstance());
             
             
-            //http://robotrio-NNNN-frc.local:1731/?action=stream
+            //http://roborio-1731-frc.local:1181/?action=stream
+            //   /CameraPublisher/<camera name>/streams=["mjpeg:http://roborio-1731-frc.local:1181/?action=stream", "mjpeg:http://10.17.31.2:1181/?action=stream"]
             CameraServer.getInstance().startAutomaticCapture(0);
             
             
             switch(CHOSEN_AUTO_SCHEME) {
-            case OLD_SCHEME:
+            
+            case OLD_SCHEME: // Haymarket, Alexandria
                 autoChooser = new SendableChooser();
                 autoChooser.addDefault("Score Cubes", "ScoreCubes");
                 autoChooser.addObject("Drive and do nothing", "DriveOnly");
@@ -182,31 +227,10 @@ public class Robot extends IterativeRobot {
                 
             	break;
             	
-            case NEW_SCHEME:
-//            	rightLLautoChooser = new SendableChooser();
-//            	rightLLautoChooser.addObject("1 - Far SC X2",                new RightPut3CubesOnLeftScale());
-//            	rightLLautoChooser.addObject("2 - Far SC X3",                new RightPut3CubesOnLeftScale());
-//            	rightLLautoChooser.addObject("3 - Far SC - Far SW - Far SC", new RightPutCubeOnLeftScaleAndLeftSwitch());
-//            	rightLLautoChooser.addObject("4 - Far SC - Far SW",          new RightPutCubeOnLeftScaleAndLeftSwitch());
-//            	rightLLautoChooser.addObject("5 - Drive FWD",                new DriveForward());
-//              SmartDashboard.putData("RIGHT - LL", rightLLautoChooser);
-               
-                //repeat the above set of lines for 11 more choosers...
-               
-            	autoCode = SmartDashboard.getString("AutoCode", "1 6 13 16");
-            	
+            case NEW_SCHEME: // Maryland, Detroit             //LL LR RL RR
+            	autoCode = SmartDashboard.getString("AutoCode", "3  8 12 15");// JUSTIN's numbers
             	break;
             }
-            
- //           AutoModeSelector.initAutoModeSelector();
-            
-            //WPILIB WAY TO SET AUTONOMOUS MODES AND SEND TO DASHBOARD...
-            //
-            //
-            //autoChooser = new SendableChooser();
-            //autoChooser.addDefault("Default Program", new TestAuto());
-            //autoChooser.addDefault("_1_NearSwitch_Side", new TestAuto());
-            //SmartDashboard.putData("Autonomous Mode Chooser", autoChooser);
             
           //  mDelayedAimButton = new DelayedBoolean(Timer.getFPGATimestamp(), 0.1);
             // Force an true update now to prevent robot from running at start.
@@ -255,7 +279,8 @@ public class Robot extends IterativeRobot {
             mSuperstructure.reloadConstants();
             
             switch(CHOSEN_AUTO_SCHEME) {
-            case OLD_SCHEME:
+            
+            case OLD_SCHEME: // Haymarket, Alexandria
 
 	            if (autoChooser.getSelected().equals("ScoreCubes")) {
 	            	autoModeToExecute = AutoDetectAllianceSwitchThenPlaceMode.pickAutoMode(
@@ -271,20 +296,9 @@ public class Robot extends IterativeRobot {
 	  //          mAutoModeExecuter.setAutoMode(AutoModeSelector.getSelectedAutoMode());
 	            break;
 	            
-            case NEW_SCHEME:
+            case NEW_SCHEME: // Maryland, Detroit
             	
-            	String gameData = DriverStation.getInstance().getGameSpecificMessage();
-                int retries = 100;
-                  	
-                while (gameData.length() < 2 && retries > 0) {
-                    retries--;
-                    try {
-                        Thread.sleep(5);
-                    } catch (InterruptedException ie) {
-                        // Just ignore the interrupted exception
-                    }
-                    gameData = DriverStation.getInstance().getGameSpecificMessage().trim();
-                }
+            	String gameData = Robot.getGameDataFromField(); //RRL for example
                 autoModeToExecute = determineAutoModeToExecute(gameData);
             	break;
             }
@@ -305,16 +319,17 @@ public class Robot extends IterativeRobot {
             throw t;
         }
     }
-
+                                                  // RRL for example
     private AutoModeBase determineAutoModeToExecute(String gameData) {
-    	String[] autoCodes = autoCode.split(" ");
+    	
+    	                                         //LL LR RL RR
+    	String[] autoCodes = autoCode.split(" ");//"3  8 12 15" for example
     	String LLcode = autoCodes[0];
     	String LRcode = autoCodes[1];
     	String RLcode = autoCodes[2];
     	String RRcode = autoCodes[3];
     	
-    	AutoModeBase defaultFallbackMode = new StandStillMode();
-        AutoModeBase selectedAutoMode = defaultFallbackMode;
+        AutoModeBase selectedAutoMode = null;
 
         switch(gameData.substring(0, 2)) {
         case "LL":
@@ -331,28 +346,54 @@ public class Robot extends IterativeRobot {
         	break;
         }
         
-        System.out.println("selected auto mode: " + selectedAutoMode);
+        System.out.println("running auto mode: " + selectedAutoMode);
         
 		return selectedAutoMode;
 	}
 
-    AutoModeBase[] AUTO_MODES = {
-
-    		/*  0 N/A  placeholder          */  new StandStillMode(),
-    		/*  1 R-LL Far SC x2            */  new RightPutCubeOnLeftScale(), 
-    		/*  2 R-LL Far SC x3            */  new RightPut3CubesOnLeftScale(),
-    		/*  3 R-LL Far SC-Far SW-Far SC */  new RightPutCubeOnLeftScaleAndLeftSwitch(),
-    		/*  4 R-LL Far SC-Far SW        */  new RightPutCubeOnLeftScaleAndLeftSwitch(),
-    		//  .
-    		//  .
-    		//  .
-    		/* 39 M-RR SW-EX                */  new MiddleRightPutCubeOnRightSwitch()
-    		
-          };
+    private static void initAutoModes() {
+    	AUTO_MODES = new HashMap<Integer, AutoModeBase>();//THESE ARE FROM MARK'S "BIBLE"
+        AUTO_MODES.put(2,  /*   Far SC X3 				 */ new RightPut3LeftScale());
+        AUTO_MODES.put(3,  /* 	Far SC-Far SW-Far SC 	 */ new RightPut2LeftScale1LeftSwitch());
+        AUTO_MODES.put(5,  /* 	Drive Forward 			 */ new RightDriveForward());
+        AUTO_MODES.put(7,  /* 	SC x3 					 */ new RightPut3RightScale());
+        AUTO_MODES.put(8,  /* 	SC-Far SW 				 */ new RightPut1RightScale1LeftSwitchEnd());
+        AUTO_MODES.put(9,  /* 	SC x2-Far SW 			 */ new RightPut2RightScale1LeftSwitch());
+        AUTO_MODES.put(11, /* 	SW x2 					 */ new RightPut1RightSwitchEnd1RightSwitch());
+        AUTO_MODES.put(12, /* 	SW- Far SC 				 */ new RightPut1RightSwitchEnd1LeftScale());
+        AUTO_MODES.put(15, /* 	SC - SW - SC	 		 */ new RightPut2RightScale1RightSwitch());
+        AUTO_MODES.put(19, /* 	Far SC X3		 		 */ new LeftPut3RightScale());
+        AUTO_MODES.put(20, /* 	Far SC - Far SW - Far SC */ new LeftPut2RightScale1RightSwitch());
+        AUTO_MODES.put(23, /* 	SC x3					 */ new LeftPut3LeftScale());
+        AUTO_MODES.put(24, /* 	SC - Far SW				 */ new LeftPut1LeftScale1RightSwitchEnd());
+        AUTO_MODES.put(25, /* 	SC X2 - Far SW			 */ new LeftPut2LeftScale1RightSwitch());
+        AUTO_MODES.put(27, /* 	SW x2					 */ new LeftPut1LeftSwitchEnd1LeftSwitch());
+        AUTO_MODES.put(28, /* 	SW - Far SC				 */ new LeftPut1LeftSwitchEnd1RightScale());
+        AUTO_MODES.put(31, /* 	SC - SW - SC			 */ new LeftPut2LeftScale1LeftSwitch());
+        AUTO_MODES.put(34, /* 	SW						 */ new MiddlePut1LeftSwitch());
+        AUTO_MODES.put(35, /* 	SW x2					 */ new MiddlePut2LeftSwitch());
+        AUTO_MODES.put(36, /* 	SW - EX					 */ new MiddlePut1LeftSwitch1Exchange());
+        AUTO_MODES.put(37, /* 	SW						 */ new MiddlePut1RightSwitch());
+        AUTO_MODES.put(38, /* 	SW x2					 */ new MiddlePut2RightSwitch());
+        AUTO_MODES.put(39, /* 	SW - EX					 */ new MiddlePut1RightSwitch1Exchange());
+        AUTO_MODES.put(40, /* 	Far SC-Far SW x2		 */ new RightPut1LeftScale2LeftSwitch());
+        AUTO_MODES.put(41, /* 	SC End					 */ new RightPut1RightScaleEnd());
+        AUTO_MODES.put(42, /* 	SC End-Far SW			 */ new RightPut1RightScaleEnd1LeftSwitch());
+        AUTO_MODES.put(43, /* 	SC End x2				 */ new RightPut2RightScaleEnd());
+        AUTO_MODES.put(46, /* 	SW - SC End		 		 */ new RightPut1RightSwitchEnd1RightScaleEnd());
+        AUTO_MODES.put(47, /* 	Drive FWD				 */ new MiddleDriveForward());
+        AUTO_MODES.put(48, /* 	SC End x2				 */ new LeftPut2LeftScaleEnd());
+        AUTO_MODES.put(49, /* 	SC End					 */ new LeftPut1LeftScaleEnd());
+        AUTO_MODES.put(50, /* 	SW - SC End				 */ new LeftPut1LeftSwitchEnd1LeftScaleEnd());
+        AUTO_MODES.put(52, /* 	SC End - Far SW			 */ new LeftPut1LeftScaleEnd1RightSwitch());
+        AUTO_MODES.put(54, /* 	Far SC - Far SW X2		 */ new LeftPut1RightScale2RightSwitch());
+        AUTO_MODES.put(55, /* 	Drive Forward			 */ new LeftDriveForward());
+    }
     
 	private AutoModeBase lookupMode(String autoCode) {
 		int code = Integer.parseInt(autoCode);
-		return AUTO_MODES[code];
+		AutoModeBase mode = AUTO_MODES.get(code);
+		return mode == null ? new StandStillMode() : mode;
 	}
 
 	/**

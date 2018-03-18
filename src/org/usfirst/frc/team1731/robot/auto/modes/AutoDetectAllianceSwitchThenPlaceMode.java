@@ -1,5 +1,6 @@
 package org.usfirst.frc.team1731.robot.auto.modes;
 
+import org.usfirst.frc.team1731.robot.Robot;
 import org.usfirst.frc.team1731.robot.auto.AutoModeBase;
 import org.usfirst.frc.team1731.robot.auto.AutoModeEndedException;
 
@@ -40,20 +41,7 @@ public class AutoDetectAllianceSwitchThenPlaceMode  {
 	}
 	
     public static AutoModeBase pickAutoMode(startingPositions startingPos, boolean isAllianceTrustworthy)  {
-    	String gameData = null;
-        gameData = DriverStation.getInstance().getGameSpecificMessage();
-        int retries = 100;
-          	
-        while (gameData.length() < 2 && retries > 0) {
-            retries--;
-            try {
-                Thread.sleep(5);
-            } catch (InterruptedException ie) {
-                // Just ignore the interrupted exception
-            }
-            gameData = DriverStation.getInstance().getGameSpecificMessage().trim();
-        }
-
+    	String gameData = Robot.getGameDataFromField();
     	
     	AutoModeBase defaultFallbackMode = new StandStillMode();
         AutoModeBase selectedAutoMode = defaultFallbackMode;
