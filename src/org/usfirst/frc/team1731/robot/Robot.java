@@ -358,7 +358,7 @@ public class Robot extends IterativeRobot {
         AUTO_MODES.put(5,  /* 	Drive Forward 			 */ new _05_RightDriveForward());
         AUTO_MODES.put(7,  /* 	SC x3 					 */ new _07_RightPut3RightScale());
         AUTO_MODES.put(8,  /* 	SC-Far SW 				 */ new _08_RightPut1RightScale1LeftSwitchEnd());
-        AUTO_MODES.put(9,  /* 	SC x2-Far SW 			 */ new _09_RightPut2RightScale1LeftSwitch());
+        AUTO_MODES.put(9,  /* 	SC x2-Far SW 			 */ null); //new _09_RightPut2RightScale1LeftSwitch());
         AUTO_MODES.put(11, /* 	SW x2 					 */ new _11_RightPut1RightSwitchEnd1RightSwitch());
         AUTO_MODES.put(12, /* 	SW- Far SC 				 */ new _12_RightPut1RightSwitchEnd1LeftScale());
         AUTO_MODES.put(15, /* 	SC - SW - SC	 		 */ new _15_RightPut2RightScale1RightSwitch());
@@ -376,7 +376,7 @@ public class Robot extends IterativeRobot {
         AUTO_MODES.put(37, /* 	SW						 */ new _37_MiddlePut1RightSwitch());
         AUTO_MODES.put(38, /* 	SW x2					 */ new _38_MiddlePut2RightSwitch());
         AUTO_MODES.put(39, /* 	SW - EX					 */ new _39_MiddlePut1RightSwitch1Exchange());
-        AUTO_MODES.put(40, /* 	Far SC-Far SW x2		 */ new _40_RightPut1LeftScale2LeftSwitch());
+        AUTO_MODES.put(40, /* 	Far SC-Far SW x2		 */ null); //new _40_RightPut1LeftScale2LeftSwitch());
         AUTO_MODES.put(41, /* 	SC End					 */ new _41_RightPut1RightScaleEnd());
         AUTO_MODES.put(42, /* 	SC End-Far SW			 */ new _42_RightPut1RightScaleEnd1LeftSwitch());
         AUTO_MODES.put(43, /* 	SC End x2				 */ new _43_RightPut2RightScaleEnd());

@@ -14,9 +14,10 @@ public class Left3rdCubePickup2 implements PathContainer {
     @Override
     public Path buildPath() {
         ArrayList<Waypoint> sWaypoints = new ArrayList<Waypoint>();
-        sWaypoints.add(new Waypoint(274,237,0,0));  
-        sWaypoints.add(new Waypoint(244,219,0,60));
-        sWaypoints.add(new Waypoint(214,214,0,60));
+        sWaypoints.add(new Waypoint(288,242,0,0));  
+        sWaypoints.add(new Waypoint(237,242,10,30));
+        sWaypoints.add(new Waypoint(237,205,10,60));
+        sWaypoints.add(new Waypoint(220,205,0,60));
 
 
         return PathBuilder.buildPathFromWaypoints(sWaypoints);
@@ -24,7 +25,7 @@ public class Left3rdCubePickup2 implements PathContainer {
     
     @Override
     public RigidTransform2d getStartPose() {
-        return new RigidTransform2d(new Translation2d(274, 237), Rotation2d.fromDegrees(0.0)); 
+        return new RigidTransform2d(new Translation2d(288, 242), Rotation2d.fromDegrees(0.0)); 
     }
 
     @Override
