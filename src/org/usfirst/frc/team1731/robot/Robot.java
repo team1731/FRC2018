@@ -60,6 +60,7 @@ import org.usfirst.frc.team1731.robot.auto.modes._new._03_RightPut2LeftScale1Lef
 import org.usfirst.frc.team1731.robot.auto.modes._new._09_RightPut2RightScale1LeftSwitch;
 import org.usfirst.frc.team1731.robot.auto.modes._new._15_RightPut2RightScale1RightSwitch;
 import org.usfirst.frc.team1731.robot.auto.modes._new._43_RightPut2RightScaleEnd;
+import org.usfirst.frc.team1731.robot.auto.modes._new._00_DO_NOTHING;
 import org.usfirst.frc.team1731.robot.auto.modes._new._02_RightPut3LeftScale;
 import org.usfirst.frc.team1731.robot.auto.modes._new._07_RightPut3RightScale;
 import org.usfirst.frc.team1731.robot.loops.Looper;
@@ -111,6 +112,8 @@ public class Robot extends IterativeRobot {
 	private static String autoCode; // JUSTIN types-in 4 numbers
 	
     private static Map<Integer, AutoModeBase> AUTO_MODES; // 35 modes defined in Mark's "BIBLE"
+    private static Map<String, String[]> ALLOWABLE_AUTO_MODES; //  as defined in Mark's "BIBLE"
+    
 	static {
 		initAutoModes();
 	}
@@ -330,8 +333,8 @@ public class Robot extends IterativeRobot {
     	String RRcode = autoCodes[3];
     	
         AutoModeBase selectedAutoMode = null;
-
-        switch(gameData.substring(0, 2)) {
+        String fieldSetup = gameData.substring(0, 2);//"RR" for example
+        switch(fieldSetup) {
         case "LL":
         	selectedAutoMode = lookupMode(LLcode);
         	break;
@@ -346,19 +349,30 @@ public class Robot extends IterativeRobot {
         	break;
         }
         
+        selectedAutoMode = performSanityCheck(selectedAutoMode, fieldSetup);
+        
         System.out.println("running auto mode: " + selectedAutoMode);
         
 		return selectedAutoMode;
 	}
 
-    private static void initAutoModes() {
+    private AutoModeBase performSanityCheck(AutoModeBase selectedAutoMode, String fieldSetup) {
+    	String humanSelectedAutoModeName = selectedAutoMode.getClass().getSimpleName();
+    	String[] allowedAutoModeNamesForThisFieldSetup = ALLOWABLE_AUTO_MODES.get(fieldSetup);
+    	if(!Arrays.asList(allowedAutoModeNamesForThisFieldSetup).contains(humanSelectedAutoModeName)) {
+    		return new _00_DO_NOTHING();
+    	}
+		return selectedAutoMode;
+	}
+
+	private static void initAutoModes() {
     	AUTO_MODES = new HashMap<Integer, AutoModeBase>();//THESE ARE FROM MARK'S "BIBLE"
         AUTO_MODES.put(2,  /*   Far SC X3 				 */ new _02_RightPut3LeftScale());
         AUTO_MODES.put(3,  /* 	Far SC-Far SW-Far SC 	 */ new _03_RightPut2LeftScale1LeftSwitch());
         AUTO_MODES.put(5,  /* 	Drive Forward 			 */ new _05_RightDriveForward());
         AUTO_MODES.put(7,  /* 	SC x3 					 */ new _07_RightPut3RightScale());
         AUTO_MODES.put(8,  /* 	SC-Far SW 				 */ new _08_RightPut1RightScale1LeftSwitchEnd());
-        AUTO_MODES.put(9,  /* 	SC x2-Far SW 			 */ null); //new _09_RightPut2RightScale1LeftSwitch());
+        AUTO_MODES.put(9,  /* 	SC x2-Far SW 			 */ new _00_DO_NOTHING()); //new _09_RightPut2RightScale1LeftSwitch());
         AUTO_MODES.put(11, /* 	SW x2 					 */ new _11_RightPut1RightSwitchEnd1RightSwitch());
         AUTO_MODES.put(12, /* 	SW- Far SC 				 */ new _12_RightPut1RightSwitchEnd1LeftScale());
         AUTO_MODES.put(15, /* 	SC - SW - SC	 		 */ new _15_RightPut2RightScale1RightSwitch());
@@ -376,7 +390,7 @@ public class Robot extends IterativeRobot {
         AUTO_MODES.put(37, /* 	SW						 */ new _37_MiddlePut1RightSwitch());
         AUTO_MODES.put(38, /* 	SW x2					 */ new _38_MiddlePut2RightSwitch());
         AUTO_MODES.put(39, /* 	SW - EX					 */ new _39_MiddlePut1RightSwitch1Exchange());
-        AUTO_MODES.put(40, /* 	Far SC-Far SW x2		 */ null); //new _40_RightPut1LeftScale2LeftSwitch());
+        AUTO_MODES.put(40, /* 	Far SC-Far SW x2		 */ new _00_DO_NOTHING()); //new _40_RightPut1LeftScale2LeftSwitch());
         AUTO_MODES.put(41, /* 	SC End					 */ new _41_RightPut1RightScaleEnd());
         AUTO_MODES.put(42, /* 	SC End-Far SW			 */ new _42_RightPut1RightScaleEnd1LeftSwitch());
         AUTO_MODES.put(43, /* 	SC End x2				 */ new _43_RightPut2RightScaleEnd());
@@ -396,6 +410,78 @@ public class Robot extends IterativeRobot {
 		return mode == null ? new StandStillMode() : mode;
 	}
 
+	private static void initAllowableAutoModes() {
+		ALLOWABLE_AUTO_MODES = new HashMap<String, String[]>();// as defined in Mark's "BIBLE"
+		ALLOWABLE_AUTO_MODES.put("LL", new String[]{"_00_DO_NOTHING",
+													"_02_RightPut3LeftScale",
+													"_03_RightPut2LeftScale1LeftSwitch",
+													"_40_RightPut1LeftScale2LeftSwitch",
+													"_05_RightDriveForward",
+													"_35_MiddlePut2LeftSwitch",
+													"_34_MiddlePut1LeftSwitch",
+													"_36_MiddlePut1LeftSwitch1Exchange",
+													"_47_MiddleDriveForward",
+													"_31_LeftPut2LeftScale1LeftSwitch",
+													"_23_LeftPut3LeftScale",
+													"_48_LeftPut2LeftScaleEnd",
+													"_49_LeftPut1LeftScaleEnd",
+													"_50_LeftPut1LeftSwitchEnd1LeftScaleEnd",
+													"_55_LeftDriveForward"
+													});
+		
+		ALLOWABLE_AUTO_MODES.put("LR", new String[]{"_00_DO_NOTHING", 
+													"_08_RightPut1RightScale1LeftSwitchEnd",
+													"_07_RightPut3RightScale",
+													"_09_RightPut2RightScale1LeftSwitch",
+													"_41_RightPut1RightScaleEnd",
+													"_42_RightPut1RightScaleEnd1LeftSwitch",
+													"_43_RightPut2RightScaleEnd",
+													"_05_RightDriveForward",
+													"_34_MiddlePut1LeftSwitch",
+													"_35_MiddlePut2LeftSwitch",
+													"_47_MiddleDriveForward",
+													"_27_LeftPut1LeftSwitchEnd1LeftSwitch",
+													"_19_LeftPut3RightScale",
+													"_28_LeftPut1LeftSwitchEnd1RightScale",
+													"_55_LeftDriveForward"
+													});
+		
+		ALLOWABLE_AUTO_MODES.put("RL", new String[]{"_00_DO_NOTHING", 
+													"_11_RightPut1RightSwitchEnd1RightSwitch",
+													"_02_RightPut3LeftScale",
+													"_12_RightPut1RightSwitchEnd1LeftScale",
+													"_05_RightDriveForward",
+													"_37_MiddlePut1RightSwitch",
+													"_38_MiddlePut2RightSwitch",
+													"_39_MiddlePut1RightSwitch1Exchange",
+													"_47_MiddleDriveForward",
+													"_24_LeftPut1LeftScale1RightSwitchEnd",
+													"_23_LeftPut3LeftScale",
+													"_25_LeftPut2LeftScale1RightSwitch",
+													"_49_LeftPut1LeftScaleEnd",
+													"_52_LeftPut1LeftScaleEnd1RightSwitch",
+													"_48_LeftPut2LeftScaleEnd",
+													"_55_LeftDriveForward"
+													});
+		
+		ALLOWABLE_AUTO_MODES.put("RR", new String[]{"_00_DO_NOTHING", 
+													"_15_RightPut2RightScale1RightSwitch",
+													"_07_RightPut3RightScale",
+													"_43_RightPut2RightScaleEnd",
+													"_41_RightPut1RightScaleEnd",
+													"_46_RightPut1RightSwitchEnd1RightScaleEnd",
+													"_05_RightDriveForward",
+													"_37_MiddlePut1RightSwitch",
+													"_38_MiddlePut2RightSwitch",
+													"_39_MiddlePut1RightSwitch1Exchange",
+													"_47_MiddleDriveForward",
+													"_19_LeftPut3RightScale",
+													"_20_LeftPut2RightScale1RightSwitch",
+													"_54_LeftPut1RightScale2RightSwitch",
+													"_55_LeftDriveForward"
+													});
+	}
+	
 	/**
      * This function is called periodically during autonomous
      */
