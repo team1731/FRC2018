@@ -33,8 +33,4 @@ public class MiddleToLeftSwitch implements PathContainer {
 		// WAYPOINT_DATA: [{"position":{"x":280,"y":70},"speed":0,"radius":0,"comment":""},{"position":{"x":220,"y":85},"speed":30,"radius":0,"comment":""}]
 		// IS_REVERSED: false
 		// FILE_NAME: RightScaleToRightSwitch
-
-		public static void main(String[] args) {
-			
-		}
 	}

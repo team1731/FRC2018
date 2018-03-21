@@ -394,9 +394,9 @@ public class Robot extends IterativeRobot {
         AUTO_MODES.put(41, /* 	SC End					 */ new _41_RightPut1RightScaleEnd());
         AUTO_MODES.put(42, /* 	SC End-Far SW			 */ new _42_RightPut1RightScaleEnd1LeftSwitch());
         AUTO_MODES.put(43, /* 	SC End x2				 */ new _43_RightPut2RightScaleEnd());
-        AUTO_MODES.put(46, /* 	SW - SC End		 		 */ new _46_RightPut1RightSwitchEnd1RightScaleEnd());
+        AUTO_MODES.put(46, /* 	SW - SC End		 		 */ new _00_DO_NOTHING()); //new _46_RightPut1RightSwitchEnd1RightScaleEnd());
         AUTO_MODES.put(47, /* 	Drive FWD				 */ new _47_MiddleDriveForward());
-        AUTO_MODES.put(48, /* 	SC End x2				 */ new _48_LeftPut2LeftScaleEnd());
+        AUTO_MODES.put(48, /* 	SC End x2				 */ new _00_DO_NOTHING()); //new _48_LeftPut2LeftScaleEnd());
         AUTO_MODES.put(49, /* 	SC End					 */ new _49_LeftPut1LeftScaleEnd());
         AUTO_MODES.put(50, /* 	SW - SC End				 */ new _50_LeftPut1LeftSwitchEnd1LeftScaleEnd());
         AUTO_MODES.put(52, /* 	SC End - Far SW			 */ new _52_LeftPut1LeftScaleEnd1RightSwitch());
