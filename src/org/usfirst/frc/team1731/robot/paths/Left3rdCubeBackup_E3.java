@@ -9,32 +9,27 @@ import org.usfirst.frc.team1731.lib.util.math.Translation2d;
 import org.usfirst.frc.team1731.robot.paths.PathBuilder.Waypoint;
 import org.usfirst.frc.team1731.robot.paths.PathContainer;
 
-public class RightScaleToRightSwitch implements PathContainer {
+public class Left3rdCubeBackup_E3 implements PathContainer {
     
     @Override
     public Path buildPath() {
         ArrayList<Waypoint> sWaypoints = new ArrayList<Waypoint>();
-        sWaypoints.add(new Waypoint(285,87,0,0));
-        sWaypoints.add(new Waypoint(239,89,0,50));
-        sWaypoints.add(new Waypoint(230,90,0,20));  // changed 234 to 230
-
+        sWaypoints.add(new Waypoint(215,235,0,0));
+        sWaypoints.add(new Waypoint(274,237,0,60));
+        
         return PathBuilder.buildPathFromWaypoints(sWaypoints);
     }
     
     @Override
     public RigidTransform2d getStartPose() {
-        return new RigidTransform2d(new Translation2d(285, 87), Rotation2d.fromDegrees(0.0)); 
+        return new RigidTransform2d(new Translation2d(215, 235), Rotation2d.fromDegrees(180.0)); 
     }
 
     @Override
     public boolean isReversed() {
-        return false; 
+        return true; 
     }
-	// WAYPOINT_DATA: [{"position":{"x":280,"y":70},"speed":0,"radius":0,"comment":""},{"position":{"x":220,"y":85},"speed":30,"radius":0,"comment":""}]
+	// WAYPOINT_DATA: [{"position":{"x":218,"y":229},"speed":0,"radius":0,"comment":""},{"position":{"x":274,"y":237},"speed":60,"radius":0,"comment":""}]
 	// IS_REVERSED: false
-	// FILE_NAME: RightScaleToRightSwitch
-
-	public static void main(String[] args) {
-		
-	}
+	// FILE_NAME: Left3rdCubeBackup2
 }

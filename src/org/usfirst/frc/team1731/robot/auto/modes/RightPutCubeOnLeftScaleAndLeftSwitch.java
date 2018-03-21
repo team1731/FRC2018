@@ -22,30 +22,60 @@ public class RightPutCubeOnLeftScaleAndLeftSwitch extends AutoModeBase {
 
     @Override
     protected void routine() throws AutoModeEndedException {
-    	System.out.println("Executing RightPutCubeOnLeftScale");
+    	System.out.println("Executing RightPutCubeOnLeftScaleAndLeftSwitch");
     	
     	PathContainer Path = new RightToLeftScale();
     	runAction(new ResetPoseFromPathAction(Path));
-        runAction(new ParallelAction(Arrays.asList(new Action[] { 
+        runAction(new ParallelAction(Arrays.asList(new Action[] {
         		new RotateIntakeActionUp(),
         		new DrivePathAction(Path),
         })));
-        runAction(new ElevatorUp());
+        //runAction(new ElevatorUp()); This was here for some reason. Added it into the ParallelAction
+		runAction(new ElevatorUp());
         runAction(new SpitAction());
-        
 
     	Path = new LeftScaleToLeftSwitch();
         runAction(new ParallelAction(Arrays.asList(new Action[] {
         		new PickUpAction(), 
         		new DrivePathAction(Path)
+        })));
+        
+        Path = new LeftToLeftSwitch_E3();
+        runAction(new ParallelAction(Arrays.asList(new Action[] {
+        		new ElevatorUp(),
+        		new RotateIntakeActionUp(),
+        		new DrivePathAction(Path)
+        })));
+        
+        runAction(new SpitAction());
+        
+        Path = new Left3rdCubeBackup_E3();
+        runAction(new ParallelAction(Arrays.asList(new Action[] {
+        		new ElevatorUp(),
+        		new RotateIntakeActionUp(),
+        		new DrivePathAction(Path)
+        })));
+        
+        
+        Path = new Left3rdCubePickup_E3();
+        runAction(new ParallelAction(Arrays.asList(new Action[] {
+        		new PickUpAction(), 
+        		new DrivePathAction(Path)
         		
         })));
-  
-    	Path = new DriveToScoreSwitchLeft();
-		runAction(new DrivePathAction(Path));
+        
+    	Path = new LeftSwitchToLeftScale3();
+        runAction(new ParallelAction(Arrays.asList(new Action[] {
+        		new ElevatorUp(), 
+        		new RotateIntakeActionUp(),
+        		new DrivePathAction(Path)
+        })));
         runAction(new SpitAction()); 
-        // approx 10 sec. to here
 
+        
+        
+        
+        runAction(new ElevatorHome());
     	runAction(new WaitAction(1));
     	
     }

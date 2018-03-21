@@ -19,6 +19,7 @@ import org.usfirst.frc.team1731.robot.paths.Right3rdCubeScoreScale3;
 import org.usfirst.frc.team1731.robot.paths.RightScaleEndToRightSwitch;
 import org.usfirst.frc.team1731.robot.paths.RightScaleToRightSwitch;
 import org.usfirst.frc.team1731.robot.paths.RightSwitchToRightScale;
+import org.usfirst.frc.team1731.robot.paths.RightSwitchToRightScaleEnd;
 import org.usfirst.frc.team1731.robot.paths.RightToRightScaleEnd;
 
 public class _43_RightPut2RightScaleEnd extends AutoModeBase {
@@ -43,7 +44,7 @@ public class _43_RightPut2RightScaleEnd extends AutoModeBase {
         		new DrivePathAction(Path)
         })));
   
-    	Path = new RightSwitchToRightScale();
+    	Path = new RightSwitchToRightScaleEnd();
         runAction(new ParallelAction(Arrays.asList(new Action[] {
         		new ElevatorUp(), 
         		new RotateIntakeActionUp(),

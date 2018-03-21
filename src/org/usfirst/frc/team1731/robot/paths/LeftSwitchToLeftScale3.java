@@ -26,12 +26,12 @@ public class LeftSwitchToLeftScale3 implements PathContainer {
     
     @Override
     public RigidTransform2d getStartPose() {
-        return new RigidTransform2d(new Translation2d(220, 205), Rotation2d.fromDegrees(0.0)); 
+        return new RigidTransform2d(new Translation2d(220, 205), Rotation2d.fromDegrees(180.0)); 
     }
 
     @Override
     public boolean isReversed() {
-        return false; 
+        return true; 
     }
 	// WAYPOINT_DATA: [{"position":{"x":274,"y":237},"speed":0,"radius":0,"comment":""},{"position":{"x":244,"y":219},"speed":60,"radius":0,"comment":""},{"position":{"x":214,"y":214},"speed":60,"radius":0,"comment":""}]
 	// IS_REVERSED: false

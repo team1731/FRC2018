@@ -14,7 +14,7 @@ public class RightSwitchToLeftSwitchBackup implements PathContainer {
     @Override
     public Path buildPath() {
         ArrayList<Waypoint> sWaypoints = new ArrayList<Waypoint>();
-        sWaypoints.add(new Waypoint(229,93,0,0));
+        sWaypoints.add(new Waypoint(230,90,0,0));
         sWaypoints.add(new Waypoint(249,77,0,60));
         
         return PathBuilder.buildPathFromWaypoints(sWaypoints);
@@ -22,7 +22,7 @@ public class RightSwitchToLeftSwitchBackup implements PathContainer {
     
     @Override
     public RigidTransform2d getStartPose() {
-        return new RigidTransform2d(new Translation2d(229, 104), Rotation2d.fromDegrees(180.0)); 
+        return new RigidTransform2d(new Translation2d(230, 90), Rotation2d.fromDegrees(180.0)); 
     }
 
     @Override
