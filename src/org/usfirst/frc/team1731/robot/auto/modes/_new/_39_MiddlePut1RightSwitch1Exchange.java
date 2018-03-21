@@ -1,13 +1,54 @@
 package org.usfirst.frc.team1731.robot.auto.modes._new;
 
+import java.util.Arrays;
+
 import org.usfirst.frc.team1731.robot.auto.AutoModeBase;
 import org.usfirst.frc.team1731.robot.auto.AutoModeEndedException;
+import org.usfirst.frc.team1731.robot.auto.actions.Action;
+import org.usfirst.frc.team1731.robot.auto.actions.DrivePathAction;
+import org.usfirst.frc.team1731.robot.auto.actions.ElevatorHome;
+import org.usfirst.frc.team1731.robot.auto.actions.ParallelAction;
+import org.usfirst.frc.team1731.robot.auto.actions.ResetPoseFromPathAction;
+import org.usfirst.frc.team1731.robot.auto.actions.RotateIntakeActionUp;
+import org.usfirst.frc.team1731.robot.auto.actions.SpitAction;
+import org.usfirst.frc.team1731.robot.paths.MiddleToLeftSwitch;
+import org.usfirst.frc.team1731.robot.paths.PathContainer;
 
 public class _39_MiddlePut1RightSwitch1Exchange extends AutoModeBase {
 
 	@Override
 	protected void routine() throws AutoModeEndedException {
-		// TODO Auto-generated method stub
+    	System.out.println("Executing _39_MiddlePut1RightSwitch1Exchange");
+    	PathContainer Path = new MiddleToLeftSwitch();
+    	runAction(new ResetPoseFromPathAction(Path));
+        runAction(new ParallelAction(Arrays.asList(new Action[] {
+        		new ElevatorHome(),
+        		new RotateIntakeActionUp(false),
+        		new DrivePathAction(Path),
+        })));
+
+    	runAction(new SpitAction());
+    	
+//    	PathContainer Path2 = new MiddleToRightSwitch_B2();
+//    	runAction(new DrivePathAction(Path2));
+//    	
+//    	PathContainer Path3 = new MiddleToRightSwitch_C();
+//    	runAction(new ParallelAction(Arrays.asList(new Action[] {
+//    			 new DrivePathAction(Path3),
+//    			 new PickUpAction()
+//    	 })));
+//    	runAction(new ElevatorDown());
+//    	
+//    	PathContainer Path4 = new MiddleToRightSwitch_D();
+//    	runAction(new DrivePathAction(Path4));
+//    	
+//    	runAction(new TurnToHeadingAction(Rotation2d.fromDegrees(180.0)));
+//    	
+//    	PathContainer Path5 = new MiddleToRightSwitch_E();
+//    	runAction(new DrivePathAction(Path5));
+//    	
+//    	runAction(new SpitAction());
+    	
 
 	}
 
