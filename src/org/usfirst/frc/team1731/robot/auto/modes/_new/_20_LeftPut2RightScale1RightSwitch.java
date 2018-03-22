@@ -18,10 +18,12 @@ import org.usfirst.frc.team1731.robot.auto.actions.WaitAction;
 import org.usfirst.frc.team1731.robot.paths.DriveToScoreSwitchRight;
 import org.usfirst.frc.team1731.robot.paths.DriveToScoreSwitchRight2;
 import org.usfirst.frc.team1731.robot.paths.LeftToRightScale2;
+import org.usfirst.frc.team1731.robot.paths.LeftToRightScale3;
 import org.usfirst.frc.team1731.robot.paths.PathContainer;
 import org.usfirst.frc.team1731.robot.paths.Right3rdCubeBackup;
 import org.usfirst.frc.team1731.robot.paths.Right3rdCubePickup;
 import org.usfirst.frc.team1731.robot.paths.Right3rdCubeScore;
+import org.usfirst.frc.team1731.robot.paths.RightScaleToRightSwitch;
 import org.usfirst.frc.team1731.robot.paths.RightScaleToRightSwitch2;
 
 public class _20_LeftPut2RightScale1RightSwitch extends AutoModeBase {
@@ -30,7 +32,7 @@ public class _20_LeftPut2RightScale1RightSwitch extends AutoModeBase {
 	protected void routine() throws AutoModeEndedException {
     	System.out.println("Executing _20_LeftPut2RightScale1RightSwitch");
     	
-    	PathContainer Path = new LeftToRightScale2();
+    	PathContainer Path = new LeftToRightScale3();
     	runAction(new ResetPoseFromPathAction(Path));
         runAction(new ParallelAction(Arrays.asList(new Action[] { 
         		new RotateIntakeActionUp(),
@@ -40,6 +42,13 @@ public class _20_LeftPut2RightScale1RightSwitch extends AutoModeBase {
         runAction(new SpitAction());
         
 
+    	Path = new RightScaleToRightSwitch(); // PATH #2
+        runAction(new ParallelAction(Arrays.asList(new Action[] {
+        		new PickUpAction(), 
+        		new DrivePathAction(Path)
+        		
+        })));
+  
     	Path = new DriveToScoreSwitchRight(); // PATH #3
 		runAction(new DrivePathAction(Path));
 		runAction(new SetElevatorPostition());

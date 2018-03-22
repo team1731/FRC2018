@@ -16,6 +16,7 @@ import org.usfirst.frc.team1731.robot.auto.actions.SpitAction;
 import org.usfirst.frc.team1731.robot.auto.actions.WaitAction;
 import org.usfirst.frc.team1731.robot.paths.DriveToScoreSwitchRight;
 import org.usfirst.frc.team1731.robot.paths.LeftToRightScale2;
+import org.usfirst.frc.team1731.robot.paths.LeftToRightScale3;
 import org.usfirst.frc.team1731.robot.paths.PathContainer;
 import org.usfirst.frc.team1731.robot.paths.Right3rdCubeBackup;
 import org.usfirst.frc.team1731.robot.paths.Right3rdCubePickup;
@@ -31,7 +32,7 @@ public class _19_LeftPut3RightScale extends AutoModeBase {
 	protected void routine() throws AutoModeEndedException {
     	System.out.println("Executing _19_LeftPut3RightScale");
     	
-    	PathContainer Path = new LeftToRightScale2();
+    	PathContainer Path = new LeftToRightScale3();
     	runAction(new ResetPoseFromPathAction(Path));
         runAction(new ParallelAction(Arrays.asList(new Action[] { 
         		new RotateIntakeActionUp(),
