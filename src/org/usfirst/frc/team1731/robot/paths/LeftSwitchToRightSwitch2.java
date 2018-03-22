@@ -19,7 +19,6 @@ public class LeftSwitchToRightSwitch2 implements PathContainer {
         sWaypoints.add(new Waypoint(249,67,10,100));
         sWaypoints.add(new Waypoint(219,27,10,80));
         sWaypoints.add(new Waypoint(169,27,10,80));
-    //    sWaypoints.add(new Waypoint(165,290,0,50));
         sWaypoints.add(new Waypoint(164,59,0,60));
         
 

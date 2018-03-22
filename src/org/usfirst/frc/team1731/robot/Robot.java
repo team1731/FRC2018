@@ -380,7 +380,7 @@ public class Robot extends IterativeRobot {
         AUTO_MODES.put(20, /* 	Far SC - Far SW - Far SC */ new _20_LeftPut2RightScale1RightSwitch());
         AUTO_MODES.put(23, /* 	SC x3					 */ new _23_LeftPut3LeftScale());
         AUTO_MODES.put(24, /* 	SC - Far SW				 */ new _24_LeftPut1LeftScale1RightSwitchEnd());
-        AUTO_MODES.put(25, /* 	SC X2 - Far SW			 */ new _25_LeftPut2LeftScale1RightSwitch());
+        AUTO_MODES.put(25, /* 	SC X2 - Far SW			 */ new _00_DO_NOTHING()); //new _25_LeftPut2LeftScale1RightSwitch());
         AUTO_MODES.put(27, /* 	SW x2					 */ new _27_LeftPut1LeftSwitchEnd1LeftSwitch());
         AUTO_MODES.put(28, /* 	SW - Far SC				 */ new _28_LeftPut1LeftSwitchEnd1RightScale());
         AUTO_MODES.put(31, /* 	SC - SW - SC			 */ new _31_LeftPut2LeftScale1LeftSwitch());
@@ -396,11 +396,11 @@ public class Robot extends IterativeRobot {
         AUTO_MODES.put(43, /* 	SC End x2				 */ new _43_RightPut2RightScaleEnd());
         AUTO_MODES.put(46, /* 	SW - SC End		 		 */ new _00_DO_NOTHING()); //new _46_RightPut1RightSwitchEnd1RightScaleEnd());
         AUTO_MODES.put(47, /* 	Drive FWD				 */ new _47_MiddleDriveForward());
-        AUTO_MODES.put(48, /* 	SC End x2				 */ new _00_DO_NOTHING()); //new _48_LeftPut2LeftScaleEnd());
+        AUTO_MODES.put(48, /* 	SC End x2				 */ new _48_LeftPut2LeftScaleEnd());
         AUTO_MODES.put(49, /* 	SC End					 */ new _49_LeftPut1LeftScaleEnd());
-        AUTO_MODES.put(50, /* 	SW - SC End				 */ new _50_LeftPut1LeftSwitchEnd1LeftScaleEnd());
+        AUTO_MODES.put(50, /* 	SW - SC End				 */ new _00_DO_NOTHING()); //new _50_LeftPut1LeftSwitchEnd1LeftScaleEnd());
         AUTO_MODES.put(52, /* 	SC End - Far SW			 */ new _52_LeftPut1LeftScaleEnd1RightSwitch());
-        AUTO_MODES.put(54, /* 	Far SC - Far SW X2		 */ new _54_LeftPut1RightScale2RightSwitch());
+        AUTO_MODES.put(54, /* 	Far SC - Far SW X2		 */ new _00_DO_NOTHING()); //new _54_LeftPut1RightScale2RightSwitch());
         AUTO_MODES.put(55, /* 	Drive Forward			 */ new _55_LeftDriveForward());
     }
     

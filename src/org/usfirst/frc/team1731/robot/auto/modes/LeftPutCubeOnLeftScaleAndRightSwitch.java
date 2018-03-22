@@ -30,10 +30,6 @@ public class LeftPutCubeOnLeftScaleAndRightSwitch extends AutoModeBase {
         		new ElevatorUp(), 
         		new RotateIntakeActionUp(),
         		new DrivePathAction(Path)
-        		 //       		new SeriesAction (Arrays.asList(new Action[] {
-        		 //               		new WaitForPathMarkerAction("spit"), 
-        		 //               		new SpitAction()
-        		 //       		}))
         })));
 
     	runAction(new SpitAction());
