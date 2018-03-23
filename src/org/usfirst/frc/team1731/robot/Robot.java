@@ -106,16 +106,16 @@ public class Robot extends IterativeRobot {
 	public static enum AutoScheme { 
 		OLD_SCHEME, // Haymarket, Alexandria
 		NEW_SCHEME  // Maryland, Detroit
-	};
+	}
 	public static AutoScheme CHOSEN_AUTO_SCHEME = AutoScheme.NEW_SCHEME; // or, AutoScheme.OLD_SCHEME
-	
-	private static String autoCode; // JUSTIN types-in 4 numbers
-	
+		
+	private static final String AUTO_CODES = "AutoCodes";
     private static Map<Integer, AutoModeBase> AUTO_MODES; // 35 modes defined in Mark's "BIBLE"
     private static Map<String, String[]> ALLOWABLE_AUTO_MODES; //  as defined in Mark's "BIBLE"
     
 	static {
 		initAutoModes();
+        initAllowableAutoModes();
 	}
 	
 	public static String getGameDataFromField() {     // "LLR" for example
@@ -130,6 +130,9 @@ public class Robot extends IterativeRobot {
                 // Just ignore the interrupted exception
             }
             gameData = DriverStation.getInstance().getGameSpecificMessage().trim();
+        }
+        if(gameData.length() < 2) {
+        	gameData = "LR";
         }
         return gameData;
 	}
@@ -191,7 +194,7 @@ public class Robot extends IterativeRobot {
     public void robotInit() {
         try {
             CrashTracker.logRobotInit();
-
+            
             mSubsystemManager.registerEnabledLoops(mEnabledLooper);
           //  mEnabledLooper.register(VisionProcessor.getInstance());
             mEnabledLooper.register(RobotStateEstimator.getInstance());
@@ -231,7 +234,7 @@ public class Robot extends IterativeRobot {
             	break;
             	
             case NEW_SCHEME: // Maryland, Detroit             //LL LR RL RR
-            	autoCode = SmartDashboard.getString("AutoCode", "3  8 12 15");// JUSTIN's numbers
+            	SmartDashboard.putString(AUTO_CODES, "3  8 12 15");
             	break;
             }
             
@@ -302,7 +305,9 @@ public class Robot extends IterativeRobot {
             case NEW_SCHEME: // Maryland, Detroit
             	
             	String gameData = Robot.getGameDataFromField(); //RRL for example
-                autoModeToExecute = determineAutoModeToExecute(gameData);
+            	String autoCodes = SmartDashboard.getString("AutoCodes", "3  8 12 15");// JUSTIN's numbers
+
+                autoModeToExecute = determineAutoModeToExecute(gameData, autoCodes);
             	break;
             }
             
@@ -323,14 +328,21 @@ public class Robot extends IterativeRobot {
         }
     }
                                                   // RRL for example
-    private AutoModeBase determineAutoModeToExecute(String gameData) {
-    	
+    private AutoModeBase determineAutoModeToExecute(String gameData, String autoCodes) {
+    	System.out.println("Got field configuration: " + gameData);
+    	System.out.println("Got these auto modes from the dashboard: " + autoCodes);
     	                                         //LL LR RL RR
-    	String[] autoCodes = autoCode.split(" ");//"3  8 12 15" for example
-    	String LLcode = autoCodes[0];
-    	String LRcode = autoCodes[1];
-    	String RLcode = autoCodes[2];
-    	String RRcode = autoCodes[3];
+    	String[] autoCodeArray = autoCodes.split(" ");//"3  8 12 15" for example
+    	String LLcode = "3";
+    	String LRcode = "8";
+    	String RLcode = "12";
+    	String RRcode = "15";
+    	if(autoCodeArray.length == 4) {
+        	LLcode = autoCodeArray[0];
+        	LRcode = autoCodeArray[1];
+        	RLcode = autoCodeArray[2];
+        	RRcode = autoCodeArray[3];
+    	}
     	
         AutoModeBase selectedAutoMode = null;
         String fieldSetup = gameData.substring(0, 2);//"RR" for example
@@ -403,10 +415,16 @@ public class Robot extends IterativeRobot {
         AUTO_MODES.put(54, /* 	Far SC - Far SW X2		 */ new _00_DO_NOTHING()); //new _54_LeftPut1RightScale2RightSwitch());
         AUTO_MODES.put(55, /* 	Drive Forward			 */ new _55_LeftDriveForward());
     }
-    
+                                        //   41 for example
 	private AutoModeBase lookupMode(String autoCode) {
-		int code = Integer.parseInt(autoCode);
-		AutoModeBase mode = AUTO_MODES.get(code);
+		AutoModeBase mode = null;
+		if(autoCode != null && autoCode.length() > 0) {
+			try {
+				mode = AUTO_MODES.get(Integer.parseInt(autoCode));
+			} catch (NumberFormatException e) {
+				System.err.println("UNABLE TO PARSE DESIRED AUTO MODE!!!");
+			}
+		}
 		return mode == null ? new StandStillMode() : mode;
 	}
 
