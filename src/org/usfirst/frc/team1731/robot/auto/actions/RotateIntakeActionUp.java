@@ -4,6 +4,7 @@ import org.usfirst.frc.team1731.robot.subsystems.Drive;
 import org.usfirst.frc.team1731.robot.subsystems.Intake;
 import org.usfirst.frc.team1731.robot.subsystems.Superstructure;
 import org.usfirst.frc.team1731.robot.Constants;
+import org.usfirst.frc.team1731.robot.Constants.GRABBER_POSITION;
 
 /**
  * Action to begin shooting.
@@ -27,9 +28,9 @@ public class RotateIntakeActionUp extends RunOnceAction implements Action {
 
         //Superstructure.getInstance().setOverTheTop(up);
         if (!up) {
-        	Superstructure.getInstance.setOverTheTop(Constants.kElevatorFlipDown);
+        	Superstructure.getInstance().setOverTheTop(GRABBER_POSITION.FLIP_DOWN);
         } else {
-        	Superstructure.getInstance.setOverTheTop(Constants.kElevatorFlipUp);        	
+        	Superstructure.getInstance().setOverTheTop(GRABBER_POSITION.FLIP_UP);        	
         }
 
     }

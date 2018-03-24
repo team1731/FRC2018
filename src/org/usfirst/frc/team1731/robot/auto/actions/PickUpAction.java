@@ -1,5 +1,7 @@
 package org.usfirst.frc.team1731.robot.auto.actions;
 
+import org.usfirst.frc.team1731.robot.Constants;
+import org.usfirst.frc.team1731.robot.Constants.GRABBER_POSITION;
 import org.usfirst.frc.team1731.robot.subsystems.Elevator;
 import org.usfirst.frc.team1731.robot.subsystems.Intake;
 import org.usfirst.frc.team1731.robot.subsystems.Intake.WantedState;
@@ -48,7 +50,7 @@ public class PickUpAction implements Action {
         startTime = Timer.getFPGATimestamp();
         mSuperstructure.setWantedState(Superstructure.WantedState.AUTOINTAKING);
         //Superstructure.getInstance().setOverTheTop(false);
-        Superstructure.getInstance().setOverTheTop(Constants.kElevatorFlipDown);
+        Superstructure.getInstance().setOverTheTop(GRABBER_POSITION.FLIP_DOWN);
     	System.out.println("started pickup action"); 	
     }
 }

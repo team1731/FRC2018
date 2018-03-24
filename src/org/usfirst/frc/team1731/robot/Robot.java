@@ -12,6 +12,7 @@ import org.usfirst.frc.team1731.lib.util.InterpolatingDouble;
 import org.usfirst.frc.team1731.lib.util.InterpolatingTreeMap;
 import org.usfirst.frc.team1731.lib.util.LatchedBoolean;
 import org.usfirst.frc.team1731.lib.util.math.RigidTransform2d;
+import org.usfirst.frc.team1731.robot.Constants.GRABBER_POSITION;
 import org.usfirst.frc.team1731.robot.auto.AutoModeBase;
 import org.usfirst.frc.team1731.robot.auto.AutoModeExecuter;
 import org.usfirst.frc.team1731.robot.auto.modes.AutoDetectAllianceSwitchThenPlaceMode;
@@ -592,11 +593,11 @@ public class Robot extends IterativeRobot {
             }
             	
             if (flipUp) {
-                mSuperstructure.setOverTheTop(Constants.kElevatorFlipUp);
+                mSuperstructure.setOverTheTop(GRABBER_POSITION.FLIP_UP);
             } else if (flipDown) {
-                mSuperstructure.setOverTheTop(Constants.kElevatorFlipDown);
+                mSuperstructure.setOverTheTop(GRABBER_POSITION.FLIP_DOWN);
             } else {
-                mSuperstructure.setOverTheTop(Constants.kElevatorFlipNone);
+                mSuperstructure.setOverTheTop(GRABBER_POSITION.FLIP_NONE);
             }
 
             // Drive base

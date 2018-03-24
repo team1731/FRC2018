@@ -146,10 +146,16 @@ public class Constants extends ConstantsBase {
     public static double kFeederSensorGearReduction = 3.0;
     
    //Elevator
-    public static int kElevatorFlipUnInit = 3;
-    public static int kElevatorFlipUp = 2;
-    public static int kElevatorFlipNone = 1;
-    public static int kElevatorFlipDown = 0;
+    public static enum GRABBER_POSITION {
+    	FLIP_DOWN,
+    	FLIP_NONE,
+    	FLIP_UP,
+    	FLIP_UN_INIT
+    }
+//    public static int kElevatorFlipUnInit = 3;
+//    public static int kElevatorFlipUp = 2;
+//    public static int kElevatorFlipNone = 1;
+//    public static int kElevatorFlipDown = 0;
     public static double kElevatorTalonKP = 2;
     public static double kElevatorTalonKI = 0.0;
     public static double kElevatorTalonKD = 0.0;

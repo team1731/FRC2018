@@ -6,6 +6,7 @@ import org.usfirst.frc.team1731.lib.util.CircularBuffer;
 import org.usfirst.frc.team1731.lib.util.InterpolatingDouble;
 import org.usfirst.frc.team1731.lib.util.drivers.RevRoboticsAirPressureSensor;
 import org.usfirst.frc.team1731.robot.Constants;
+import org.usfirst.frc.team1731.robot.Constants.GRABBER_POSITION;
 import org.usfirst.frc.team1731.robot.Robot;
 import org.usfirst.frc.team1731.robot.RobotState;
 import org.usfirst.frc.team1731.robot.ShooterAimingParameters;
@@ -101,7 +102,7 @@ public class Superstructure extends Subsystem {
     private double mCurrentStateStartTime;
     private boolean mStateChanged;
     private double mElevatorJoystickPosition = 0;
-    private int mIsOverTheTop = Constants.kElevatorFlipUnInit; // Set to unknown to force it to be set
+    private GRABBER_POSITION mIsOverTheTop = GRABBER_POSITION.FLIP_UN_INIT; // Set to unknown to force it to be set
 
 
     private Loop mLoop = new Loop() {
@@ -275,12 +276,12 @@ public class Superstructure extends Subsystem {
         	mElevator.setWantedPosition(1);
         	mElevator.setWantedState(Elevator.WantedState.ELEVATORTRACKING);
         	mIntake.setIdle();
-        	setOverTheTop(Constants.kElevatorFlipUp);
+        	setOverTheTop(GRABBER_POSITION.FLIP_UP);
         
        
             switch (mWantedState) {
             case CLIMBINGUP:
-            	setOverTheTop(Constants.kElevatorFlipDown);
+            	setOverTheTop(GRABBER_POSITION.FLIP_DOWN);
                 return SystemState.CLIMBINGUP;
             case CLIMBINGDOWN:
                 return SystemState.CLIMBINGDOWN;
@@ -562,17 +563,17 @@ public class Superstructure extends Subsystem {
   //      mGrabber2.set(!grab);
   //  }
 
-    public synchronized void setOverTheTop(int wantsOverTheTop) {
+    public synchronized void setOverTheTop(GRABBER_POSITION wantsOverTheTop) {
         if (wantsOverTheTop != mIsOverTheTop) {
             mIsOverTheTop = wantsOverTheTop;
             // mOverTheTop1.set(!wantsOverTheTop);
             // mOverTheTop2.set(wantsOverTheTop);
 
             switch (mIsOverTheTop) {
-                case Constants.kElevatorFlipUp:
+                case FLIP_UP:
                     mOverTheTop1.set(false);
                     mOverTheTop2.set(true);
-                case Constants.kElevatorFlipDown:
+                case FLIP_DOWN:
                     mOverTheTop1.set(true);
                     mOverTheTop2.set(false);
                 default: // Constants.kElevatorFlipNone
