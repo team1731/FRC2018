@@ -15,10 +15,10 @@ public class RightSwitchToRightScaleEnd implements PathContainer {
     public Path buildPath() {
         ArrayList<Waypoint> sWaypoints = new ArrayList<Waypoint>();
         sWaypoints.add(new Waypoint(220,90,0,0));
-        sWaypoints.add(new Waypoint(230,90,10,60));
-        sWaypoints.add(new Waypoint(240,75,12,60));
-        sWaypoints.add(new Waypoint(300,40,10,60));
-        sWaypoints.add(new Waypoint(325,30,10,60));
+        sWaypoints.add(new Waypoint(230,90,0, 60)); //10,60));
+        sWaypoints.add(new Waypoint(240,75,0, 60)); //12,60));
+        sWaypoints.add(new Waypoint(300,40,0, 60)); //10,60));
+        sWaypoints.add(new Waypoint(325,30,0, 60)); //10,60));
         sWaypoints.add(new Waypoint(325,50,0,60));
         
         return PathBuilder.buildPathFromWaypoints(sWaypoints);
