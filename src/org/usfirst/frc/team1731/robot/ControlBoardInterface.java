@@ -9,6 +9,10 @@ public interface ControlBoardInterface {
 
 		boolean getElevatorButton();
 
+		boolean getFlipUpButton();
+
+		boolean getFlipDownButton();
+
 		double getElevatorControl();
 
 		double getThrottle();

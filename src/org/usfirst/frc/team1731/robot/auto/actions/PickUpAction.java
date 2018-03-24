@@ -47,7 +47,8 @@ public class PickUpAction implements Action {
     	gotCube = false;
         startTime = Timer.getFPGATimestamp();
         mSuperstructure.setWantedState(Superstructure.WantedState.AUTOINTAKING);
-        Superstructure.getInstance().setOverTheTop(false);
+        //Superstructure.getInstance().setOverTheTop(false);
+        Superstructure.getInstance().setOverTheTop(Constants.kElevatorFlipDown);
     	System.out.println("started pickup action"); 	
     }
 }

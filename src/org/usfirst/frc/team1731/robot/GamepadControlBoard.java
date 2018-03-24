@@ -118,6 +118,16 @@ public class GamepadControlBoard implements ControlBoardInterface {
 		return mOperator.getRawButton(2); // getButtonB
 	}
 
+    @Override
+    public boolean getFlipDownButton() {
+        return mOperator.getRawButton(3); // getButtonX
+    }
+
+    @Override
+    public boolean getFlipUpButton() {
+        return mOperator.getRawButton(4); // getButtonY
+    }
+
 	@Override
 	public double getElevatorControl() {
 		return mOperator.getRawAxis(1);

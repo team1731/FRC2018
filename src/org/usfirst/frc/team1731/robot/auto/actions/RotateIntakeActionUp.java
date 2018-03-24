@@ -3,6 +3,7 @@ package org.usfirst.frc.team1731.robot.auto.actions;
 import org.usfirst.frc.team1731.robot.subsystems.Drive;
 import org.usfirst.frc.team1731.robot.subsystems.Intake;
 import org.usfirst.frc.team1731.robot.subsystems.Superstructure;
+import org.usfirst.frc.team1731.robot.Constants;
 
 /**
  * Action to begin shooting.
@@ -24,8 +25,13 @@ public class RotateIntakeActionUp extends RunOnceAction implements Action {
     @Override
     public void runOnce() {
 
-        Superstructure.getInstance().setOverTheTop(up);
- 
+        //Superstructure.getInstance().setOverTheTop(up);
+        if (!up) {
+        	Superstructure.getInstance.setOverTheTop(Constants.kElevatorFlipDown);
+        } else {
+        	Superstructure.getInstance.setOverTheTop(Constants.kElevatorFlipUp);        	
+        }
+
     }
 
 }

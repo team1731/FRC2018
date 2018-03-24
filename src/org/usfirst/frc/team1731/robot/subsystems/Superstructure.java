@@ -101,7 +101,7 @@ public class Superstructure extends Subsystem {
     private double mCurrentStateStartTime;
     private boolean mStateChanged;
     private double mElevatorJoystickPosition = 0;
-    private boolean mIsOverTheTop = false;
+    private int mIsOverTheTop = Constants.kElevatorFlipUnInit; // Set to unknown to force it to be set
 
 
     private Loop mLoop = new Loop() {
@@ -275,12 +275,12 @@ public class Superstructure extends Subsystem {
         	mElevator.setWantedPosition(1);
         	mElevator.setWantedState(Elevator.WantedState.ELEVATORTRACKING);
         	mIntake.setIdle();
-        	setOverTheTop(true);
+        	setOverTheTop(Constants.kElevatorFlipUp);
         
        
             switch (mWantedState) {
             case CLIMBINGUP:
-            	setOverTheTop(false);
+            	setOverTheTop(Constants.kElevatorFlipDown);
                 return SystemState.CLIMBINGUP;
             case CLIMBINGDOWN:
                 return SystemState.CLIMBINGDOWN;
@@ -562,12 +562,24 @@ public class Superstructure extends Subsystem {
   //      mGrabber2.set(!grab);
   //  }
 
-    public synchronized void setOverTheTop(boolean wantsOverTheTop) {
-      //  if (wantsOverTheTop != mIsOverTheTop) {
+    public synchronized void setOverTheTop(int wantsOverTheTop) {
+        if (wantsOverTheTop != mIsOverTheTop) {
             mIsOverTheTop = wantsOverTheTop;
-            mOverTheTop1.set(!wantsOverTheTop);
-            mOverTheTop2.set(wantsOverTheTop);
-      //  }
+            // mOverTheTop1.set(!wantsOverTheTop);
+            // mOverTheTop2.set(wantsOverTheTop);
+
+            switch (mIsOverTheTop) {
+                case Constants.kElevatorFlipUp:
+                    mOverTheTop1.set(false);
+                    mOverTheTop2.set(true);
+                case Constants.kElevatorFlipDown:
+                    mOverTheTop1.set(true);
+                    mOverTheTop2.set(false);
+                default: // Constants.kElevatorFlipNone
+                    mOverTheTop1.set(false);
+                    mOverTheTop2.set(false);
+            }
+        }
     }
     
 
