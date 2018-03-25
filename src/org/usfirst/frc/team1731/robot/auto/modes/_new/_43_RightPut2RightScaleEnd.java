@@ -20,6 +20,7 @@ import org.usfirst.frc.team1731.robot.paths.RightScaleEndToRightSwitch;
 import org.usfirst.frc.team1731.robot.paths.RightScaleToRightSwitch;
 import org.usfirst.frc.team1731.robot.paths.RightSwitchToRightScale;
 import org.usfirst.frc.team1731.robot.paths.RightSwitchToRightScaleEnd;
+import org.usfirst.frc.team1731.robot.paths.RightToRightScale;
 import org.usfirst.frc.team1731.robot.paths.RightToRightScaleEnd;
 
 public class _43_RightPut2RightScaleEnd extends AutoModeBase {
@@ -27,22 +28,23 @@ public class _43_RightPut2RightScaleEnd extends AutoModeBase {
 	@Override
 	protected void routine() throws AutoModeEndedException {
     	System.out.println("Executing _43_RightPut2RightScaleEnd");
-    	
-    	PathContainer Path = new RightToRightScaleEnd();
+
+    	PathContainer Path = new RightToRightScale(); // PATH #1
     	runAction(new ResetPoseFromPathAction(Path));
         runAction(new ParallelAction(Arrays.asList(new Action[] {
         		new ElevatorUp(), 
         		new RotateIntakeActionUp(),
-        		new DrivePathAction(Path)
+        		new DrivePathAction(Path),
         })));
 
-    	runAction(new SpitAction());
-
-    	Path = new RightScaleEndToRightSwitch();
+    	runAction(new SpitAction()); // SPIT #1
+    	Path = new RightScaleToRightSwitch(); // PATH #2
         runAction(new ParallelAction(Arrays.asList(new Action[] {
         		new PickUpAction(), 
         		new DrivePathAction(Path)
+        		
         })));
+        
   
     	Path = new RightSwitchToRightScaleEnd();
         runAction(new ParallelAction(Arrays.asList(new Action[] {

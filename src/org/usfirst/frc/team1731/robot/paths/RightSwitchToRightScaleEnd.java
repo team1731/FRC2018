@@ -14,7 +14,7 @@ public class RightSwitchToRightScaleEnd implements PathContainer {
     @Override
     public Path buildPath() {
         ArrayList<Waypoint> sWaypoints = new ArrayList<Waypoint>();
-        sWaypoints.add(new Waypoint(220,90,0,0));
+        sWaypoints.add(new Waypoint(230,90,0,0));
         sWaypoints.add(new Waypoint(230,90,0, 60)); //10,60));
         sWaypoints.add(new Waypoint(240,75,0, 60)); //12,60));
         sWaypoints.add(new Waypoint(300,40,0, 60)); //10,60));
@@ -26,7 +26,7 @@ public class RightSwitchToRightScaleEnd implements PathContainer {
     
     @Override
     public RigidTransform2d getStartPose() {
-        return new RigidTransform2d(new Translation2d(220, 90), Rotation2d.fromDegrees(180.0)); 
+        return new RigidTransform2d(new Translation2d(230, 90), Rotation2d.fromDegrees(180.0)); 
     }
 
     @Override

@@ -38,13 +38,14 @@ public class _42_RightPut1RightScaleEnd1LeftSwitch extends AutoModeBase {
 	protected void routine() throws AutoModeEndedException {
     	System.out.println("Executing _42_RightPut1RightScaleEnd1LeftSwitch");
     	
-    	PathContainer Path = new RightToRightScale();
+    	PathContainer Path = new RightToRightScale(); // PATH #1
     	runAction(new ResetPoseFromPathAction(Path));
         runAction(new ParallelAction(Arrays.asList(new Action[] {
         		new ElevatorUp(), 
         		new RotateIntakeActionUp(),
-        		new DrivePathAction(Path)
+        		new DrivePathAction(Path),
         })));
+
 
     	runAction(new SpitAction());
     	
