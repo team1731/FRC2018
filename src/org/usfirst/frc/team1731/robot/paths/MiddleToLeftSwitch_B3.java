@@ -15,9 +15,9 @@ public class MiddleToLeftSwitch_B3 implements PathContainer {
         ArrayList<Waypoint> sWaypoints = new ArrayList<Waypoint>();
         
         sWaypoints.add(new Waypoint( 30, 182,  0, 0));
-        sWaypoints.add(new Waypoint( 60, 175, 10, 30));
-        sWaypoints.add(new Waypoint( 80, 168, 10, 30));
-        sWaypoints.add(new Waypoint(100, 162,  0, 30));
+        sWaypoints.add(new Waypoint( 60, 175, 10, 80));
+        sWaypoints.add(new Waypoint( 80, 168, 10, 80));
+        sWaypoints.add(new Waypoint(100, 162,  0, 80));
 
         return PathBuilder.buildPathFromWaypoints(sWaypoints);
     }

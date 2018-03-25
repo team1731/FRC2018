@@ -34,7 +34,7 @@ public class _43_RightPut2RightScaleEnd extends AutoModeBase {
         runAction(new ParallelAction(Arrays.asList(new Action[] {
         		new ElevatorUp(), 
         		new RotateIntakeActionUp(),
-        		new DrivePathAction(Path),
+        		new DrivePathAction(Path)
         })));
 
     	runAction(new SpitAction()); // SPIT #1
@@ -46,14 +46,17 @@ public class _43_RightPut2RightScaleEnd extends AutoModeBase {
         })));
         
   
+        System.out.println("Running final ParallelAction");
     	Path = new RightSwitchToRightScaleEnd();
         runAction(new ParallelAction(Arrays.asList(new Action[] {
         		new ElevatorUp(), 
         		new RotateIntakeActionUp(),
         		new DrivePathAction(Path)
         })));
+        System.out.println("SPITTT");
         runAction(new SpitAction());         
         
+        System.out.println("Waiting 1 second");
     	runAction(new WaitAction(1));
 	
 	}

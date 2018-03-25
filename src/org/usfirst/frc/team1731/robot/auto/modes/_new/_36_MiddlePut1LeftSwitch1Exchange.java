@@ -19,6 +19,8 @@ import org.usfirst.frc.team1731.robot.paths.MiddleToExchange_1;
 import org.usfirst.frc.team1731.robot.paths.MiddleToLeftSwitch;
 import org.usfirst.frc.team1731.robot.paths.MiddleToLeftSwitch_B2;
 import org.usfirst.frc.team1731.robot.paths.MiddleToLeftSwitch_B3;
+import org.usfirst.frc.team1731.robot.paths.MiddleToLeftSwitch_B3_1;
+import org.usfirst.frc.team1731.robot.paths.MiddleToLeftSwitch_B3_2;
 import org.usfirst.frc.team1731.robot.paths.MiddleToLeftSwitch_B4;
 import org.usfirst.frc.team1731.robot.paths.MiddleToLeftSwitch_B5;
 import org.usfirst.frc.team1731.robot.paths.PathContainer;
@@ -49,10 +51,13 @@ public class _36_MiddlePut1LeftSwitch1Exchange extends AutoModeBase {
     	 })));
 
     	
-    	runAction(new TurnToHeadingAction(Rotation2d.fromDegrees(180.0)));
+    	//DO NOT USE !!! runAction(new TurnToHeadingAction(Rotation2d.fromDegrees(180.0)));
+    	
+    	Path = new MiddleToLeftSwitch_B3_1();
+    	runAction(new DrivePathAction(Path));
     	
     	
-    	Path = new MiddleToExchange_1();
+    	Path = new MiddleToLeftSwitch_B3_2();
         runAction(new ParallelAction(Arrays.asList(new Action[] {
         		new ElevatorDown(),
         		new RotateIntakeActionUp(false),
