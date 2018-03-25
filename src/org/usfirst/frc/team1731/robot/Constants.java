@@ -36,7 +36,7 @@ public class Constants extends ConstantsBase {
     /* ROBOT PHYSICAL CONSTANTS */
     // encoder has 4096 /3 tics per revolution
     // Wheels  was 3.4149
-    public static double kDriveWheelDiameterInches = 15;  //divide by three because gear ratio on encoder is 3:1
+    public static double kDriveWheelDiameterInches = 4;  //divide by three because gear ratio on encoder is 3:1
     public static double kTrackWidthInches = 22.00;
     public static double kTrackScrubFactor = 0.924;
 
@@ -62,7 +62,7 @@ public class Constants extends ConstantsBase {
     public static double kDriveHighGearVelocityKp = 3.0;   //cheezy guys had 1.2
     public static double kDriveHighGearVelocityKi = 0.0;
     public static double kDriveHighGearVelocityKd = 30.0;    //cheezy guys had 6.0
-    public static double kDriveHighGearVelocityKf = 0.97;    //cheezy guys had .15. Orig: 0.7
+    public static double kDriveHighGearVelocityKf = 0.2157;    //cheezy guys had .15. Orig: 0.7
     public static int kDriveHighGearVelocityIZone = 0;
     public static double kDriveHighGearVelocityRampRate = 0.05;// 240.0;
     public static double kDriveHighGearNominalOutput = 0.0;   // cheezy gusy had .5

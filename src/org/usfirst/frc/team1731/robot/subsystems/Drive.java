@@ -178,7 +178,7 @@ public class Drive extends Subsystem {
         //mLeftMaster.reverseSensor(true);
         mLeftMaster.setInverted(false);                               //RDB 3/6/18
         //mLeftMaster.reverseOutput(false);
-        mLeftMaster.setSensorPhase(false);
+        mLeftMaster.setSensorPhase(true);
 
         int leftSensorPresent = mLeftMaster.getSensorCollection().getPulseWidthRiseToRiseUs();
 
@@ -200,7 +200,7 @@ public class Drive extends Subsystem {
         //mRightMaster.reverseSensor(false);
         mRightMaster.setInverted(true); // was true);
        // mRightMaster.reverseOutput(true);
-        mRightMaster.setSensorPhase(false);
+        mRightMaster.setSensorPhase(true);
         //mRightMaster.setFeedbackDevice(CANTalon.FeedbackDevice.CtreMagEncoder_Relative);
         mRightMaster.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, Constants.kTimeoutMs);
         

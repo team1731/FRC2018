@@ -14,7 +14,9 @@ import org.usfirst.frc.team1731.robot.auto.actions.RotateIntakeActionUp;
 import org.usfirst.frc.team1731.robot.auto.actions.SpitAction;
 import org.usfirst.frc.team1731.robot.auto.actions.WaitAction;
 import org.usfirst.frc.team1731.robot.paths.LeftScaleEndToLeftSwitch;
+import org.usfirst.frc.team1731.robot.paths.LeftScaleToLeftSwitch;
 import org.usfirst.frc.team1731.robot.paths.LeftSwitchToLeftScaleEnd;
+import org.usfirst.frc.team1731.robot.paths.LeftToLeftScale;
 import org.usfirst.frc.team1731.robot.paths.LeftToLeftScaleEnd;
 import org.usfirst.frc.team1731.robot.paths.PathContainer;
 import org.usfirst.frc.team1731.robot.paths.RightScaleEndToRightSwitch;
@@ -27,7 +29,7 @@ public class _48_LeftPut2LeftScaleEnd extends AutoModeBase {
 	protected void routine() throws AutoModeEndedException {
     	System.out.println("Executing _48_LeftPut2LeftScaleEnd");
     	
-    	PathContainer Path = new LeftToLeftScaleEnd();
+    	PathContainer Path = new LeftToLeftScale();
     	runAction(new ResetPoseFromPathAction(Path));
         runAction(new ParallelAction(Arrays.asList(new Action[] {
         		new ElevatorUp(), 
@@ -37,7 +39,7 @@ public class _48_LeftPut2LeftScaleEnd extends AutoModeBase {
 
     	runAction(new SpitAction());
 
-    	Path = new LeftScaleEndToLeftSwitch();
+    	Path = new LeftScaleToLeftSwitch();
         runAction(new ParallelAction(Arrays.asList(new Action[] {
         		new PickUpAction(), 
         		new DrivePathAction(Path)

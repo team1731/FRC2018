@@ -28,7 +28,7 @@ public class LeftToLeftScale implements PathContainer {
 
     @Override
     public boolean isReversed() {
-        return false; 
+        return true; 
     }
 	// WAYPOINT_DATA: [{"position":{"x":19,"y":277},"speed":0,"radius":0,"comment":"Left"},{"position":{"x":199,"y":277},"speed":110,"radius":40,"comment":""},{"position":{"x":281,"y":239},"speed":110,"radius":0,"comment":""},{"position":{"x":285,"y":241},"speed":110,"radius":0,"comment":""}]
 	// IS_REVERSED: false

@@ -14,12 +14,13 @@ public class LeftSwitchToLeftScaleEnd implements PathContainer {
     @Override
     public Path buildPath() {
         ArrayList<Waypoint> sWaypoints = new ArrayList<Waypoint>();
-        sWaypoints.add(new Waypoint(220,235,0,0));  
-        sWaypoints.add(new Waypoint(240,235,10,60));
-        sWaypoints.add(new Waypoint(240,286,10,60));
-        sWaypoints.add(new Waypoint(325,286,10,60));
-        sWaypoints.add(new Waypoint(325,274,0,60));
-
+        sWaypoints.add(new Waypoint(220,238,0,0));  
+        sWaypoints.add(new Waypoint(230,238,10,90));
+        sWaypoints.add(new Waypoint(230,277,12,90));
+        sWaypoints.add(new Waypoint(260,297,10,60));
+        sWaypoints.add(new Waypoint(290,299,0,60));
+        sWaypoints.add(new Waypoint(310,292,0,60));
+        sWaypoints.add(new Waypoint(315,282,0,60));
 
         return PathBuilder.buildPathFromWaypoints(sWaypoints);
     }
