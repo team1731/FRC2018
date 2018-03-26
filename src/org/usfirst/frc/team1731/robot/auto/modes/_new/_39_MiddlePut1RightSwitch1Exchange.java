@@ -40,7 +40,11 @@ public class _39_MiddlePut1RightSwitch1Exchange extends AutoModeBase {
     	runAction(new SpitAction());
     	
     	Path = new MiddleToRightSwitch_B2();
-    	runAction(new DrivePathAction(Path));
+        runAction(new ParallelAction(Arrays.asList(new Action[] {
+        		new ElevatorDown(),
+        		new RotateIntakeActionUp(false),
+        		new DrivePathAction(Path),
+        })));
     	
     	Path = new MiddleToRightSwitch_B3();
     	runAction(new ParallelAction(Arrays.asList(new Action[] {
@@ -52,7 +56,11 @@ public class _39_MiddlePut1RightSwitch1Exchange extends AutoModeBase {
     	// DO NOT USE !!! runAction(new TurnToHeadingAction(Rotation2d.fromDegrees(180.0)));
     	
     	Path = new MiddleToRightSwitch_B3_1();
-    	runAction(new DrivePathAction(Path));
+        runAction(new ParallelAction(Arrays.asList(new Action[] {
+        		new ElevatorDown(),
+        		new RotateIntakeActionUp(false),
+        		new DrivePathAction(Path),
+        })));
     	
     	
     	Path = new MiddleToRightSwitch_B3_2();
