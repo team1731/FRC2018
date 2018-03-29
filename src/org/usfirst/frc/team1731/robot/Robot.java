@@ -450,7 +450,7 @@ public class Robot extends IterativeRobot {
 													"_35_MiddlePut2LeftSwitch",
 													"_34_MiddlePut1LeftSwitch",
 													"_36_MiddlePut1LeftSwitch1Exchange",
-						"_43_RightPut2RightScaleEnd", //TEST ONLY - comment-out for competitions
+						//"_43_RightPut2RightScaleEnd", //TEST ONLY - comment-out for competitions
 													"_47_MiddleDriveForward",
 													"_31_LeftPut2LeftScale1LeftSwitch",
 													"_23_LeftPut3LeftScale",
@@ -473,7 +473,7 @@ public class Robot extends IterativeRobot {
 													"_34_MiddlePut1LeftSwitch",
 													"_35_MiddlePut2LeftSwitch",
 													"_47_MiddleDriveForward",
-						"_48_LeftPut2LeftScaleEnd",	//TEST ONLY - comment-out for competitions												
+						//"_48_LeftPut2LeftScaleEnd",	//TEST ONLY - comment-out for competitions												
 													"_27_LeftPut1LeftSwitchEnd1LeftSwitch",
 													"_19_LeftPut3RightScale",
 													"_28_LeftPut1LeftSwitchEnd1RightScale",
@@ -488,7 +488,7 @@ public class Robot extends IterativeRobot {
 													"_37_MiddlePut1RightSwitch",
 													"_38_MiddlePut2RightSwitch",
 													"_39_MiddlePut1RightSwitch1Exchange",
-						"_43_RightPut2RightScaleEnd", //TEST ONLY - comment-out for competitions
+						//"_43_RightPut2RightScaleEnd", //TEST ONLY - comment-out for competitions
 													"_47_MiddleDriveForward",
 													"_24_LeftPut1LeftScale1RightSwitchEnd",
 													"_23_LeftPut3LeftScale",
@@ -510,7 +510,7 @@ public class Robot extends IterativeRobot {
 													"_38_MiddlePut2RightSwitch",
 													"_39_MiddlePut1RightSwitch1Exchange",
 													"_47_MiddleDriveForward",
-						"_48_LeftPut2LeftScaleEnd",	//TEST ONLY - comment-out for competitions													
+						//"_48_LeftPut2LeftScaleEnd",	//TEST ONLY - comment-out for competitions													
 													"_19_LeftPut3RightScale",
 													"_20_LeftPut2RightScale1RightSwitch",
 													"_54_LeftPut1RightScale2RightSwitch",
