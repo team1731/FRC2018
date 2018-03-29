@@ -52,8 +52,8 @@ public class Superstructure extends Subsystem {
     private final Climber mClimber = Climber.getInstance();
     private final Intake mIntake = Intake.getInstance();
     private final LED mLED = LED.getInstance();
-    private final Solenoid mOverTheTop1 = Constants.makeSolenoidForId(Constants.kOverTheTopSolenoid1);
-    private final Solenoid mOverTheTop2 = Constants.makeSolenoidForId(Constants.kOverTheTopSolenoid2);
+    private final Solenoid mOverTheTop1 = Constants.makeSolenoidForId(11, Constants.kOverTheTopSolenoid1);
+    private final Solenoid mOverTheTop2 = Constants.makeSolenoidForId(11, Constants.kOverTheTopSolenoid2);
     //private final Solenoid mGrabber1 = Constants.makeSolenoidForId(Constants.kGrabberSolenoid1);
     //private final Solenoid mGrabber2 = Constants.makeSolenoidForId(Constants.kGrabberSolenoid2);
     private final Compressor mCompressor = new Compressor(0);

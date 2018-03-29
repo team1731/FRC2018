@@ -86,6 +86,7 @@ import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.IterativeRobot;
+import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
@@ -181,6 +182,8 @@ public class Robot extends IterativeRobot {
     //private DelayedBoolean mDelayedAimButton;
 
     private InterpolatingTreeMap<InterpolatingDouble, InterpolatingDouble> mTuningFlywheelMap = new InterpolatingTreeMap<>();
+
+	private static Solenoid _24vSolenoid = Constants.makeSolenoidForId(11, 2);
 
     public Robot() {
         CrashTracker.logRobotConstruction();
@@ -608,13 +611,15 @@ public class Robot extends IterativeRobot {
             	mSuperstructure.setWantedState(Superstructure.WantedState.ELEVATOR_TRACKING);
             }
             	
-            //if (flipUp) {
-            //    mSuperstructure.setOverTheTop(true); //GRABBER_POSITION.FLIP_UP);
-            //} else { //if (flipDown) {
-            //    mSuperstructure.setOverTheTop(false); //GRABBER_POSITION.FLIP_DOWN);
-            //} else {
-            //    mSuperstructure.setOverTheTop(GRABBER_POSITION.FLIP_NONE);
-            //}
+            if (flipUp) {
+            	_24vSolenoid.set(true);
+                //mSuperstructure.setOverTheTop(true); //GRABBER_POSITION.FLIP_UP);
+            //} else if (flipDown) {
+                //mSuperstructure.setOverTheTop(false); //GRABBER_POSITION.FLIP_DOWN);
+            } else {
+            	_24vSolenoid.set(false);
+                //mSuperstructure.setOverTheTop(GRABBER_POSITION.FLIP_NONE);
+            }
 
             // Drive base
             double throttle = mControlBoard.getThrottle();
