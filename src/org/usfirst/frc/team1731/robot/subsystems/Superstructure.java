@@ -102,8 +102,8 @@ public class Superstructure extends Subsystem {
     private double mCurrentStateStartTime;
     private boolean mStateChanged;
     private double mElevatorJoystickPosition = 0;
-    private boolean mIsOverTheTop = false; //GRABBER_POSITION.FLIP_UN_INIT; // Set to unknown to force it to be set
-
+    //private boolean mIsOverTheTop = false;
+    private GRABBER_POSITION mIsOverTheTop = GRABBER_POSITION.FLIP_UN_INIT; // Set to unknown to force it to be set
 
     private Loop mLoop = new Loop() {
 
@@ -276,12 +276,12 @@ public class Superstructure extends Subsystem {
         	mElevator.setWantedPosition(1);
         	mElevator.setWantedState(Elevator.WantedState.ELEVATORTRACKING);
         	mIntake.setIdle();
-        	setOverTheTop(true); //GRABBER_POSITION.FLIP_UP);
+        	setOverTheTop(GRABBER_POSITION.FLIP_UP);
         
        
             switch (mWantedState) {
             case CLIMBINGUP:
-            	setOverTheTop(false); //GRABBER_POSITION.FLIP_DOWN);
+            	setOverTheTop(GRABBER_POSITION.FLIP_DOWN);
                 return SystemState.CLIMBINGUP;
             case CLIMBINGDOWN:
                 return SystemState.CLIMBINGDOWN;
@@ -563,27 +563,29 @@ public class Superstructure extends Subsystem {
   //      mGrabber2.set(!grab);
   //  }
 
-    public synchronized void setOverTheTop(boolean wantsOverTheTop) {
+    public synchronized void setOverTheTop(GRABBER_POSITION wantsOverTheTop) {
         if (wantsOverTheTop != mIsOverTheTop) {
             mIsOverTheTop = wantsOverTheTop;
-            mOverTheTop1.set(!wantsOverTheTop);
-            mOverTheTop2.set(wantsOverTheTop);
-/*
+            //mOverTheTop1.set(!wantsOverTheTop);
+            //mOverTheTop2.set(wantsOverTheTop);
+//
             switch (mIsOverTheTop) {
                 case FLIP_UP:
                 	//System.out.println("flip up");
                     mOverTheTop1.set(false);
                     mOverTheTop2.set(true);
+                    break;
                 case FLIP_DOWN:
                 	//System.out.println("flip down");
                     mOverTheTop1.set(true);
                     mOverTheTop2.set(false);
+                    break;
                 default: // Constants.kElevatorFlipNone
                 	//System.out.println("flip default");
                     mOverTheTop1.set(false);
                     mOverTheTop2.set(false);
             }
-*/
+//
         }
     }
     

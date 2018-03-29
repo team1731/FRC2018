@@ -28,9 +28,9 @@ public class RotateIntakeActionUp extends RunOnceAction implements Action {
 
         //Superstructure.getInstance().setOverTheTop(up);
         if (!up) {
-        	Superstructure.getInstance().setOverTheTop(false); //GRABBER_POSITION.FLIP_DOWN);
+        	Superstructure.getInstance().setOverTheTop(GRABBER_POSITION.FLIP_DOWN);
         } else {
-        	Superstructure.getInstance().setOverTheTop(true); //GRABBER_POSITION.FLIP_UP);        	
+        	Superstructure.getInstance().setOverTheTop(GRABBER_POSITION.FLIP_UP);        	
         }
 
     }

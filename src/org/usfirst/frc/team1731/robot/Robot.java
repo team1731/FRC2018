@@ -582,12 +582,12 @@ public class Robot extends IterativeRobot {
             boolean pickUp = mControlBoard.getAutoPickUp();
             
             if (mControlBoard.getElevatorButton()) {
-                if (overTheTop) {
-                    mSuperstructure.setOverTheTop(true);
-                }
-                else {
-                    mSuperstructure.setOverTheTop(false);
-                }
+//                if (overTheTop) {
+//                    mSuperstructure.setOverTheTop(true);
+//                }
+//                else {
+//                    mSuperstructure.setOverTheTop(false);
+//                }
                 mSuperstructure.setWantedElevatorPosition(-1 * mControlBoard.getElevatorControl());
             } else {
                 mSuperstructure.setWantedElevatorPosition(0);
@@ -612,13 +612,13 @@ public class Robot extends IterativeRobot {
             }
             	
             if (flipUp) {
-            	_24vSolenoid.set(true);
-                //mSuperstructure.setOverTheTop(true); //GRABBER_POSITION.FLIP_UP);
-            //} else if (flipDown) {
-                //mSuperstructure.setOverTheTop(false); //GRABBER_POSITION.FLIP_DOWN);
+            	//_24vSolenoid.set(true);
+                mSuperstructure.setOverTheTop(GRABBER_POSITION.FLIP_UP);
+            } else if (flipDown) {
+                mSuperstructure.setOverTheTop(GRABBER_POSITION.FLIP_DOWN);
             } else {
-            	_24vSolenoid.set(false);
-                //mSuperstructure.setOverTheTop(GRABBER_POSITION.FLIP_NONE);
+            	//_24vSolenoid.set(false);
+                mSuperstructure.setOverTheTop(GRABBER_POSITION.FLIP_NONE);
             }
 
             // Drive base
