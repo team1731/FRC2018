@@ -50,7 +50,7 @@ public class PickUpAction implements Action {
         startTime = Timer.getFPGATimestamp();
         mSuperstructure.setWantedState(Superstructure.WantedState.AUTOINTAKING);
         //Superstructure.getInstance().setOverTheTop(false);
-        Superstructure.getInstance().setOverTheTop(GRABBER_POSITION.FLIP_DOWN);
+        Superstructure.getInstance().setOverTheTop(false); //GRABBER_POSITION.FLIP_DOWN);
     	System.out.println("started pickup action"); 	
     }
 }

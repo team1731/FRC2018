@@ -569,7 +569,7 @@ public class Robot extends IterativeRobot {
                 
             boolean climbUp = mControlBoard.getClimbUp();
             boolean climbDown = mControlBoard.getClimbDown();
-            //boolean overTheTop = mControlBoard.getOverTheTopButton();
+            boolean overTheTop = mControlBoard.getOverTheTopButton();
             boolean flipUp = mControlBoard.getFlipUpButton();
             boolean flipDown = mControlBoard.getFlipDownButton();
             boolean grabCube = mControlBoard.getGrabCubeButton();
@@ -579,12 +579,12 @@ public class Robot extends IterativeRobot {
             boolean pickUp = mControlBoard.getAutoPickUp();
             
             if (mControlBoard.getElevatorButton()) {
-                //if (overTheTop) {
-                //    mSuperstructure.setOverTheTop(true);
-                //}
-                //else {
-                //    mSuperstructure.setOverTheTop(false);
-                //}
+                if (overTheTop) {
+                    mSuperstructure.setOverTheTop(true);
+                }
+                else {
+                    mSuperstructure.setOverTheTop(false);
+                }
                 mSuperstructure.setWantedElevatorPosition(-1 * mControlBoard.getElevatorControl());
             } else {
                 mSuperstructure.setWantedElevatorPosition(0);
@@ -608,13 +608,13 @@ public class Robot extends IterativeRobot {
             	mSuperstructure.setWantedState(Superstructure.WantedState.ELEVATOR_TRACKING);
             }
             	
-            if (flipUp) {
-                mSuperstructure.setOverTheTop(GRABBER_POSITION.FLIP_UP);
-            } else if (flipDown) {
-                mSuperstructure.setOverTheTop(GRABBER_POSITION.FLIP_DOWN);
-            } else {
-                mSuperstructure.setOverTheTop(GRABBER_POSITION.FLIP_NONE);
-            }
+            //if (flipUp) {
+            //    mSuperstructure.setOverTheTop(true); //GRABBER_POSITION.FLIP_UP);
+            //} else { //if (flipDown) {
+            //    mSuperstructure.setOverTheTop(false); //GRABBER_POSITION.FLIP_DOWN);
+            //} else {
+            //    mSuperstructure.setOverTheTop(GRABBER_POSITION.FLIP_NONE);
+            //}
 
             // Drive base
             double throttle = mControlBoard.getThrottle();

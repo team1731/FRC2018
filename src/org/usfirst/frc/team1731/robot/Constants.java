@@ -253,8 +253,8 @@ public class Constants extends ConstantsBase {
     public static final int kShifterSolenoidId1 = 1; //was 0 // PCM 0, Solenoid 0
     public static final int kShifterSolenoidId2 = 6;
     
-    public static final int kOverTheTopSolenoid1 = 11; // was 3; // now PCM 1, solenoid 3
-    public static final int kOverTheTopSolenoid2 = 12; // was 4; // now PCM 1, solenoid 4
+    public static final int kOverTheTopSolenoid1 = 3; // was 3; // now PCM 1, solenoid 3
+    public static final int kOverTheTopSolenoid2 = 4; // was 4; // now PCM 1, solenoid 4
     
     public static final int kPincherSolenoid1 = 2; 
     public static final int kPincherSolenoid2 = 5;
@@ -378,7 +378,19 @@ public class Constants extends ConstantsBase {
      *            One of the kXyzSolenoidId constants
      */
     public static Solenoid makeSolenoidForId(int solenoidId) {
+    	System.out.println("creating solenoid id " + solenoidId + " PCM " + solenoidId/8 + " CHAN " + solenoidId%8);
         return new Solenoid(solenoidId / 8, solenoidId % 8);
+    }
+
+    /**
+     * Make an {@link Solenoid} instance for the single-number ID of the solenoid
+     * 
+     * @param solenoidId
+     *            One of the kXyzSolenoidId constants
+     */
+    public static Solenoid makeSolenoidForId(int pcmChannel, int solenoidId) {
+    	System.out.println("creating solenoid id " + solenoidId + " PCM " + pcmChannel + " CHAN " + solenoidId);
+        return new Solenoid(pcmChannel, solenoidId);
     }
 
     @Override
