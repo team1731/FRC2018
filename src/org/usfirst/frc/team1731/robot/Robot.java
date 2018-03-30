@@ -242,7 +242,7 @@ public class Robot extends IterativeRobot {
             	break;
             	
             case NEW_SCHEME: // Maryland, Detroit             //LL LR RL RR
-            	SmartDashboard.putString(AUTO_CODES, "3  8 12 15");
+            	SmartDashboard.putString(AUTO_CODES, "3 7 2 15");
             	break;
             }
             
