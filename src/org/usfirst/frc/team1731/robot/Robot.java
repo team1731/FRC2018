@@ -369,7 +369,7 @@ public class Robot extends IterativeRobot {
         	break;
         }
         
-        selectedAutoMode = performSanityCheck(selectedAutoMode, fieldSetup);
+        selectedAutoMode = selectedAutoMode; //temporarily disable sanity check for auto testing!!!     performSanityCheck(selectedAutoMode, fieldSetup);
         
         System.out.println("running auto mode: " + selectedAutoMode);
         
@@ -581,7 +581,7 @@ public class Robot extends IterativeRobot {
             boolean spitting = mControlBoard.getSpit();
             boolean pickUp = mControlBoard.getAutoPickUp();
             
-            if (mControlBoard.getElevatorButton()) {
+            //if (mControlBoard.getElevatorButton()) {  Lydia doesn't want to hold the button
 //                if (overTheTop) {
 //                    mSuperstructure.setOverTheTop(true);
 //                }
@@ -589,9 +589,9 @@ public class Robot extends IterativeRobot {
 //                    mSuperstructure.setOverTheTop(false);
 //                }
                 mSuperstructure.setWantedElevatorPosition(-1 * mControlBoard.getElevatorControl());
-            } else {
-                mSuperstructure.setWantedElevatorPosition(0);
-            }
+            //} else {
+            //    mSuperstructure.setWantedElevatorPosition(0);
+            //}
 
             if (climbUp) {
             	mSuperstructure.setWantedState(Superstructure.WantedState.CLIMBINGUP);
