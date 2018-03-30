@@ -369,7 +369,7 @@ public class Robot extends IterativeRobot {
         	break;
         }
         
-        selectedAutoMode = selectedAutoMode; //temporarily disable sanity check for auto testing!!!     performSanityCheck(selectedAutoMode, fieldSetup);
+        selectedAutoMode = performSanityCheck(selectedAutoMode, fieldSetup);
         
         System.out.println("running auto mode: " + selectedAutoMode);
         
