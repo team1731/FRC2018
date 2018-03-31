@@ -313,7 +313,7 @@ public class Robot extends IterativeRobot {
             case NEW_SCHEME: // Maryland, Detroit
             	
             	String gameData = Robot.getGameDataFromField(); //RRL for example
-            	String autoCodes = SmartDashboard.getString("AutoCodes", "3  8 12 15");// JUSTIN's numbers
+            	String autoCodes = SmartDashboard.getString("AutoCodes", "3 7 2 15");// JUSTIN's numbers
 
                 autoModeToExecute = determineAutoModeToExecute(gameData, autoCodes);
             	break;
@@ -342,8 +342,8 @@ public class Robot extends IterativeRobot {
     	                                         //LL LR RL RR
     	String[] autoCodeArray = autoCodes.split(" ");//"3  8 12 15" for example
     	String LLcode = "3";
-    	String LRcode = "8";
-    	String RLcode = "12";
+    	String LRcode = "7";
+    	String RLcode = "2";
     	String RRcode = "15";
     	if(autoCodeArray.length == 4) {
         	LLcode = autoCodeArray[0];

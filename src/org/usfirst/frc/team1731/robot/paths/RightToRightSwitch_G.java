@@ -15,8 +15,8 @@ public class RightToRightSwitch_G implements PathContainer {
     public Path buildPath() {
         ArrayList<Waypoint> sWaypoints = new ArrayList<Waypoint>();
         sWaypoints.add(new Waypoint(254,38,0,0));
-        sWaypoints.add(new Waypoint(254,92,10,60));
-        sWaypoints.add(new Waypoint(224,92,0,60));
+        sWaypoints.add(new Waypoint(254,65,10,40));
+        sWaypoints.add(new Waypoint(220,77,0,40));
 
         return PathBuilder.buildPathFromWaypoints(sWaypoints);
     }
