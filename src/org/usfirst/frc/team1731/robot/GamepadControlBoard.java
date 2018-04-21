@@ -1,6 +1,7 @@
 package org.usfirst.frc.team1731.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.XboxController;
 
 /**
  * Contains the button mappings for the Gamepad control board.  Like the drive code, one instance of the GamepadControlBoard 
@@ -13,6 +14,7 @@ public class GamepadControlBoard implements ControlBoardInterface {
 
     private final Joystick mDriver;
     private final Joystick mOperator;
+    
     private static ControlBoardInterface mInstance = null;
     
     public static ControlBoardInterface getInstance() {
@@ -23,8 +25,8 @@ public class GamepadControlBoard implements ControlBoardInterface {
     }
 
     protected GamepadControlBoard() {
-    	mOperator = new Joystick(1);
         mDriver = new Joystick(0);
+    	mOperator = new Joystick(1);
     }
     
     @Override
@@ -107,6 +109,65 @@ public class GamepadControlBoard implements ControlBoardInterface {
         //return mOperator.getRawButton(1);
     }
 
+    @Override
+    public boolean getFishingPoleExtend() {
+        // A
+		//    	Get the angle in degrees of a POV on the HID. 
+		//
+		//    	The POV angles start at 0 in the up direction, and increase clockwise
+    	//		(eg right is 90, upper-left is 315).
+		//    	Parameters:pov The index of the POV to read (starting at 0)
+    	//		Returns:the angle of the POV in degrees, or -1 if the POV is not pressed.
+		//
+        int pov = mOperator.getPOV(0);    	
+        return ((pov != -1) && (pov > 310 || pov < 50)) && fishingPoleEnabled();
+    }
+    
+    @Override
+    public boolean getFishingPoleRetract() {
+        // A
+		//    	Get the angle in degrees of a POV on the HID. 
+		//
+		//    	The POV angles start at 0 in the up direction, and increase clockwise
+    	//		(eg right is 90, upper-left is 315).
+		//    	Parameters:pov The index of the POV to read (starting at 0)
+    	//		Returns:the angle of the POV in degrees, or -1 if the POV is not pressed.
+		//  
+    	int pov = mOperator.getPOV(0);
+        return ((pov !=1) && (pov > 130) && (pov < 230)) && fishingPoleEnabled();
+        //return mOperator.getRawButton(1);
+    }
+    
+    @Override
+    public boolean getFishingPoleUp() {
+        // A
+		//    	Get the angle in degrees of a POV on the HID. 
+		//
+		//    	The POV angles start at 0 in the up direction, and increase clockwise
+    	//		(eg right is 90, upper-left is 315).
+		//    	Parameters:pov The index of the POV to read (starting at 0)
+    	//		Returns:the angle of the POV in degrees, or -1 if the POV is not pressed.
+		//
+        int pov = mOperator.getPOV(0);    	
+        return ((pov != -1) && (pov > 45 && pov < 135)) && fishingPoleEnabled();
+        //return mOperator.getRawButton(1);
+    }
+    
+    @Override
+    public boolean getFishingPoleDown() {
+        // A
+		//    	Get the angle in degrees of a POV on the HID. 
+		//
+		//    	The POV angles start at 0 in the up direction, and increase clockwise
+    	//		(eg right is 90, upper-left is 315).
+		//    	Parameters:pov The index of the POV to read (starting at 0)
+    	//		Returns:the angle of the POV in degrees, or -1 if the POV is not pressed.
+		//  
+    	int pov = mOperator.getPOV(0);
+        return ((pov !=1) && (pov > 225) && (pov < 315)) && fishingPoleEnabled();
+        //return mOperator.getRawButton(1);
+    }
+
   
     @Override
     public boolean getBlinkLEDButton() {
@@ -133,8 +194,14 @@ public class GamepadControlBoard implements ControlBoardInterface {
 		return mOperator.getRawAxis(1);
 		//return 0.3;
 	}
-	   public boolean getAutoPickUp() {
-	        // R1
-	        return mOperator.getRawButton(6);
-	    }
+	
+	@Override
+    public boolean getAutoPickUp() {
+        // R1
+        return mOperator.getRawButton(6);
+    }
+	
+	private boolean fishingPoleEnabled() {
+		return mOperator.getRawButton(10);
+	}
 }

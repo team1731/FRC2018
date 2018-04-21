@@ -72,6 +72,7 @@ import org.usfirst.frc.team1731.robot.paths.profiles.PathAdapter;
 import org.usfirst.frc.team1731.robot.subsystems.ConnectionMonitor;
 import org.usfirst.frc.team1731.robot.subsystems.Drive;
 import org.usfirst.frc.team1731.robot.subsystems.Elevator;
+import org.usfirst.frc.team1731.robot.subsystems.FishingPole;
 import org.usfirst.frc.team1731.robot.subsystems.Climber;
 import org.usfirst.frc.team1731.robot.subsystems.Intake;
 import org.usfirst.frc.team1731.robot.subsystems.LED;
@@ -161,7 +162,7 @@ public class Robot extends IterativeRobot {
 
     private final SubsystemManager mSubsystemManager = new SubsystemManager(
                             Arrays.asList(Drive.getInstance(), Superstructure.getInstance(),
-                                    Elevator.getInstance(), Intake.getInstance(), Climber.getInstance(),
+                                    Elevator.getInstance(), Intake.getInstance(), Climber.getInstance(), FishingPole.getInstance(),
                                     ConnectionMonitor.getInstance(), LED.getInstance() ));
 
     // Initialize other helper objects
@@ -561,6 +562,10 @@ public class Robot extends IterativeRobot {
             boolean calibrateUp = mControlBoard.getCalibrateUp();
             boolean spitting = mControlBoard.getSpit();
             boolean pickUp = mControlBoard.getAutoPickUp();
+            boolean fishingPoleUp = mControlBoard.getFishingPoleUp();
+            boolean fishingPoleDown = mControlBoard.getFishingPoleDown();
+            boolean fishingPoleExtend = mControlBoard.getFishingPoleExtend();
+            boolean fishingPoleRetract =mControlBoard.getFishingPoleRetract();
             
             if (mControlBoard.getElevatorButton()) {
                 //if (overTheTop) {
@@ -598,6 +603,22 @@ public class Robot extends IterativeRobot {
                 mSuperstructure.setOverTheTop(GRABBER_POSITION.FLIP_DOWN);
             } else {
                 mSuperstructure.setOverTheTop(GRABBER_POSITION.FLIP_NONE);
+            }
+            
+            if (fishingPoleUp) {
+            	mSuperstructure.setFishingPoleUpdown(Superstructure.FISHING_POLE_UPDOWN.UP);
+            } else if (fishingPoleDown) {
+            	mSuperstructure.setFishingPoleUpdown(Superstructure.FISHING_POLE_UPDOWN.DOWN);
+            } else {
+            	mSuperstructure.setFishingPoleUpdown(Superstructure.FISHING_POLE_UPDOWN.NONE);
+            }
+            
+            if (fishingPoleExtend) {
+            	mSuperstructure.setFishingPoleExtendRetract(Superstructure.FISHING_POLE_EXTEND_RETRACT.EXTEND);
+            } else if (fishingPoleRetract) {
+            	mSuperstructure.setFishingPoleExtendRetract(Superstructure.FISHING_POLE_EXTEND_RETRACT.RETRACT);
+            } else {
+            	mSuperstructure.setFishingPoleExtendRetract(Superstructure.FISHING_POLE_EXTEND_RETRACT.NONE);
             }
 
             // Drive base

@@ -238,6 +238,13 @@ public class Constants extends ConstantsBase {
 	public static int kClimberContinuousCurrentLimitAmps = 30;
 	public static int kClimberPeakCurrentDurationMs = 200; //Ms
 	public static int kClimberPeakCurrentLimitAmps = 35;
+	
+	//FishingPole
+	public static int kFishingPoleId = 15;
+	public static int kFishingPoleLimitAmps = 30;
+	public static int kFishingPoleContinuousCurrentLimitAmps = 30;
+	public static int kFishingPolePeakCurrentDurationMs = 200; //Ms
+	public static int kFishingPolePeakCurrentLimitAmps = 35;
 
     // Shooter
 //    public static final int kRightShooterMasterId = 2;
@@ -259,10 +266,13 @@ public class Constants extends ConstantsBase {
     public static final int kPincherSolenoid1 = 2; 
     public static final int kPincherSolenoid2 = 5;
     
+    public static final int kFishingPoleSolenoid1 = 0; 
+    public static final int kFishingPoleSolenoid2 = 7;  
+    
     
 //    public static final int kIntakeDeploySolenoidId = 1; // PCM 0, Solenoid 1
 //    public static final int kHopperSolenoidId = 2; // PCM 0, Solenoid 2
-    public static final int kGearWristSolenoid = 7; // PCM 0, Solenoid 7
+//    public static final int kGearWristSolenoid = 7; // PCM 0, Solenoid 7
 
 //	public static final int kEjectSolenoid = 3; //was 1
 
@@ -352,7 +362,6 @@ public class Constants extends ConstantsBase {
     };
   
 	public static int kPidIdx = 0;
-
 
 
 	
