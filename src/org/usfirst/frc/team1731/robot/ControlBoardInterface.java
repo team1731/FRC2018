@@ -40,4 +40,10 @@ public interface ControlBoardInterface {
 		boolean getClimbDown();
 
 		boolean getAutoPickUp();
+
+		boolean getFishingPoleDown();
+		boolean getFishingPoleUp();
+		boolean getFishingPoleExtend();
+		boolean getFishingPoleRetract();
+
 }

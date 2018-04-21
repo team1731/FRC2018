@@ -39,7 +39,20 @@ import edu.wpi.first.wpilibj.DriverStation;
  */
 public class Superstructure extends Subsystem {
 
-    static Superstructure mInstance = null;
+    public enum FISHING_POLE_UPDOWN {
+    	UP,
+    	DOWN,
+    	NONE
+    }
+    
+    public enum FISHING_POLE_EXTEND_RETRACT{
+    	EXTEND,
+    	RETRACT,
+    	NONE
+    }
+    
+    
+	static Superstructure mInstance = null;
 
     public static Superstructure getInstance() {
         if (mInstance == null) {
@@ -50,14 +63,19 @@ public class Superstructure extends Subsystem {
 
     private final Elevator mElevator = Elevator.getInstance();
     private final Climber mClimber = Climber.getInstance();
+    private final FishingPole mFishingPole = FishingPole.getInstance();
     private final Intake mIntake = Intake.getInstance();
     private final LED mLED = LED.getInstance();
     private final Solenoid mOverTheTop1 = Constants.makeSolenoidForId(11, Constants.kOverTheTopSolenoid1);
     private final Solenoid mOverTheTop2 = Constants.makeSolenoidForId(11, Constants.kOverTheTopSolenoid2);
+    private final Solenoid mFishingPole1 = Constants.makeSolenoidForId(Constants.kFishingPoleSolenoid1);
+    private final Solenoid mFishingPole2 = Constants.makeSolenoidForId(Constants.kFishingPoleSolenoid2);
     //private final Solenoid mGrabber1 = Constants.makeSolenoidForId(Constants.kGrabberSolenoid1);
     //private final Solenoid mGrabber2 = Constants.makeSolenoidForId(Constants.kGrabberSolenoid2);
     private final Compressor mCompressor = new Compressor(0);
     private final RevRoboticsAirPressureSensor mAirPressureSensor = new RevRoboticsAirPressureSensor(3);
+    
+    
 
     // Superstructure doesn't own the drive, but needs to access it
     private final Drive mDrive = Drive.getInstance();
@@ -104,7 +122,6 @@ public class Superstructure extends Subsystem {
     private double mElevatorJoystickPosition = 0;
     //private boolean mIsOverTheTop = false;
     private GRABBER_POSITION mIsOverTheTop = GRABBER_POSITION.FLIP_UN_INIT; // Set to unknown to force it to be set
-
     private Loop mLoop = new Loop() {
 
         // Every time we transition states, we update the current state start
@@ -621,4 +638,35 @@ public class Superstructure extends Subsystem {
     public void reloadConstants() {
  //       mShooter.refreshControllerConsts();
     }
+
+
+	public void setFishingPoleUpdown(FISHING_POLE_UPDOWN updown) {
+		// TODO Auto-generated method stub
+        switch (updown) {
+        case DOWN:
+            mFishingPole1.set(false);
+            mFishingPole2.set(true);
+            break;
+        case UP:
+            mFishingPole1.set(true);
+            mFishingPole2.set(false);
+            break;
+        default: // Constants.kElevatorFlipNone
+            mFishingPole1.set(false);
+            mFishingPole2.set(false);
+        }
+	}
+
+
+
+	public void setFishingPoleExtendRetract(FISHING_POLE_EXTEND_RETRACT extendRetract) {
+		if (extendRetract == FISHING_POLE_EXTEND_RETRACT.EXTEND) {
+			mFishingPole.setWantedState(FishingPole.WantedState.MECHANISM_UP);
+		} else if (extendRetract == FISHING_POLE_EXTEND_RETRACT.RETRACT)
+			mFishingPole.setWantedState(FishingPole.WantedState.MECHANISM_DOWN);	
+		else {
+			mFishingPole.setWantedState(FishingPole.WantedState.IDLE);
+		}
+		
+	}
 }
