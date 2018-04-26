@@ -266,7 +266,7 @@ public class Constants extends ConstantsBase {
     public static final int kPincherSolenoid1 = 2; 
     public static final int kPincherSolenoid2 = 5;
     
-    public static final int kFishingPoleSolenoid1 = 0; 
+    public static final int kFishingPoleSolenoid1 = 3; 
     public static final int kFishingPoleSolenoid2 = 7;  
     
     

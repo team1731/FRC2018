@@ -315,7 +315,7 @@ public class Robot extends IterativeRobot {
             	
             	String gameData = Robot.getGameDataFromField(); //RRL for example
             	String autoCodes = SmartDashboard.getString("AutoCodes", "3 7 2 15");// JUSTIN's numbers
-
+            	System.out.println("Stephen: There's no logical reason for it to be doing this! The codes being sent are "+autoCodes+", but we put in "+SmartDashboard.getString("AutoCodes", "CODES NOT FOUND, USING DEFAULTS"));
                 autoModeToExecute = determineAutoModeToExecute(gameData, autoCodes);
             	break;
             }
