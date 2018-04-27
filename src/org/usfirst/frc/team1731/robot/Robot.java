@@ -734,7 +734,8 @@ public class Robot extends IterativeRobot {
         mSubsystemManager.writeToLog();
         mEnabledLooper.outputToSmartDashboard();
         //SmartDashboard.putBoolean("camera_connected", mVisionServer.isConnected());
-
+        String autoCodes = SmartDashboard.getString("AutoCodes", "3 7 2 15");
+        SmartDashboard.putString("AutoCodesReceived", autoCodes);
         ConnectionMonitor.getInstance().setLastPacketTime(Timer.getFPGATimestamp());
     }
 }
