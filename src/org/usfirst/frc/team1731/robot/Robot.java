@@ -34,6 +34,7 @@ import org.usfirst.frc.team1731.robot.auto.modes._new._57_RightPut2Exchange;
 import org.usfirst.frc.team1731.robot.auto.modes._new._58_LeftPut1Exchange;
 import org.usfirst.frc.team1731.robot.auto.modes._new._59_LeftPut2Exchange;
 import org.usfirst.frc.team1731.robot.auto.modes._new._60_RightPut3LeftScale;
+import org.usfirst.frc.team1731.robot.auto.modes._new._61_RightPut3RightScaleChamps;
 import org.usfirst.frc.team1731.robot.auto.modes._new._24_LeftPut1LeftScale1RightSwitchEnd;
 import org.usfirst.frc.team1731.robot.auto.modes._new._49_LeftPut1LeftScaleEnd;
 import org.usfirst.frc.team1731.robot.auto.modes._new._52_LeftPut1LeftScaleEnd1RightSwitch;
@@ -429,6 +430,8 @@ public class Robot extends IterativeRobot {
         AUTO_MODES.put(58, /* 	Drive-EX  				 */ new _58_LeftPut1Exchange());
         AUTO_MODES.put(59, /* 	Drive-EX x2				 */ new _59_LeftPut2Exchange());
         AUTO_MODES.put(60, /* 	Thunder Auto			 */ new _60_RightPut3LeftScale());
+        AUTO_MODES.put(61,  /* 	SC x3 sped up			 */ new _61_RightPut3RightScaleChamps());
+        
     }
                                         //   41 for example
 	private AutoModeBase lookupMode(String autoCode) {
@@ -481,7 +484,8 @@ public class Robot extends IterativeRobot {
 													"_27_LeftPut1LeftSwitchEnd1LeftSwitch",
 													"_19_LeftPut3RightScale",
 													"_28_LeftPut1LeftSwitchEnd1RightScale",
-													"_55_LeftDriveForward"
+													"_55_LeftDriveForward",
+													"_61_RightPut3RightScaleChamps"
 													});
 		
 		ALLOWABLE_AUTO_MODES.put("RL", new String[]{"_00_DO_NOTHING", 
@@ -521,7 +525,8 @@ public class Robot extends IterativeRobot {
 													"_54_LeftPut1RightScale2RightSwitch",
 													"_55_LeftDriveForward",
 													"_58_LeftPut1Exchange",
-													"_59_LeftPut2Exchange"
+													"_59_LeftPut2Exchange",
+													"_61_RightPut3RightScaleChamps"
 													});
 	}
 	
